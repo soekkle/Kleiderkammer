@@ -19,7 +19,7 @@ public:
     
 private:
     Ui::MainWindow *ui;
-    DatenQuelle *Daten;
+    SQLiteQuelle *Daten;
 };
 
 #endif // MAINWINDOW_H

@@ -20,7 +20,7 @@ public:
     //! Fügt einen Person den Datenbestand hinzu.
     int addPerson(QString Nachname, QString Vorname,int Gruppe);
     //! Fügt ein Kleidngsstück den Datenbestand hinzu.
-    int addKleiderstueck(int Typ, QString Groesse, int Nummer=-1);
+    int addKleiderstueck(int Typ, int Groesse, int Nummer=-1);
     int freieNummer(int Typ);
 private:
     QSqlDatabase Datenbank;

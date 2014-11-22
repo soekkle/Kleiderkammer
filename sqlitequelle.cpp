@@ -19,7 +19,7 @@ SQLiteQuelle::SQLiteQuelle(QString Pfad)
 }
 
 
-int SQLiteQuelle::addKleiderstueck(int Typ, QString Groesse, int Nummer)
+int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
 {
     QSqlQuery Abfrage("",Datenbank);
     QString SQLString;
@@ -36,7 +36,7 @@ int SQLiteQuelle::addKleiderstueck(int Typ, QString Groesse, int Nummer)
     {
         Nummer=freieNummer(Typ);
     }
-    SQLString=QString("insert into Kleidungsstuecke ('Nummer','Typ','Groesse','Traeger') Values(%1,%2,'%3',0);").arg(Nummer).arg(Typ).arg(Groesse);
+    SQLString=QString("insert into Kleidungsstuecke ('Nummer','Typ','Groesse','Traeger') Values(%1,%2,%3,0);").arg(Nummer).arg(Typ).arg(Groesse);
     Abfrage.exec(SQLString);
     return Nummer;
 }
@@ -56,10 +56,11 @@ void SQLiteQuelle::createDB()
 {
     std::clog<<"Die Tabellen werden in der Datenank erzeugt.\n";
     QSqlQuery Abfrage("",Datenbank);
-    Abfrage.exec("create table Kleidungsstuecke(id integer primary key AUTOINCREMENT,Nummer integer,Typ integer,Groesse varchar,Traeger integer)");
+    Abfrage.exec("create table Kleidungsstuecke(id integer primary key AUTOINCREMENT,Nummer integer,Typ integer,Groesse integer,Traeger integer)");
     Abfrage.exec("create table Kleidungsgruppen(id integer primary key AUTOINCREMENT,Name varchar,AnNummer integer,EndNummer integer)");
     Abfrage.exec("create table Personen(id integer primary key AUTOINCREMENT,Nachname varchar,Vorname varchar,Jf integer)");
     Abfrage.exec("create table Jugendfeuerwehr(id integer primary key AUTOINCREMENT,Name varchar)");
+    Abfrage.exec("create table Groessen(id integer primary key AUTOINCREMENT, Groesse varchar,Typ integer)");
     QSqlError Fehler=Abfrage.lastError();
     std::cout<<Fehler.text().toStdString();
 }

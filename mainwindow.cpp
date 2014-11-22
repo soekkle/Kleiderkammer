@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     Daten=new SQLiteQuelle("Test.db");
     Daten->addPerson("Mustermann","Max",1);
-    Daten->addKleiderstueck(1,"XS",500);
+    Daten->addKleiderstueck(1,1,500);
 }
 
 MainWindow::~MainWindow()

@@ -17,10 +17,17 @@ class SQLiteQuelle : public DatenQuelle
 {
 public:
     SQLiteQuelle(QString Pfad);
-    //! Fügt einen Person den Datenbestand hinzu.
-    int addPerson(QString Nachname, QString Vorname,int Gruppe);
+    //! Fügt eine Größe hinzu.
+    int addGroesse(QString Groesse,int Typ);
+    //! Fügt einen JugendFeuerweher hinzu.
+    int addJugendfeuerwehr(QString Name);
     //! Fügt ein Kleidngsstück den Datenbestand hinzu.
     int addKleiderstueck(int Typ, int Groesse, int Nummer=-1);
+    //! Fügt einen Kleidungstyp hinzu.
+    int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer);
+    //! Fügt einen Person den Datenbestand hinzu.
+    int addPerson(QString Nachname, QString Vorname,int Gruppe);
+    //! Liefert die Erste Freie Nummer für den Typ
     int freieNummer(int Typ);
 private:
     QSqlDatabase Datenbank;

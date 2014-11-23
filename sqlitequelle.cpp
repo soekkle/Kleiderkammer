@@ -18,7 +18,33 @@ SQLiteQuelle::SQLiteQuelle(QString Pfad)
     }   
 }
 
+int SQLiteQuelle::addGroesse(QString Groesse, int Typ)
+{
+    QSqlQuery Abfrage("",Datenbank);
+    Abfrage.exec(QString("SELECT * FROM Kleidungstyp WHERE id=%1").arg(Typ));
+    if (Abfrage.next())
+    {
+        Abfrage.clear();
+        Abfrage.exec(QString("INSERT INTO Groessen('Groesse','Typ') VALUES('%1',%2);").arg(Groesse).arg(Typ));
+        return Abfrage.lastInsertId().toInt();
+    }
+    std::cerr<<"Größe \""<<Groesse.toStdString()<<"\"Kann nicht hinzugefügt werden.";
+    return -1;
+}
 
+int SQLiteQuelle::addJugendfeuerwehr(QString Name)
+{
+    QSqlQuery Abfrage(QString("INSERT INTO Jugendfeuerwehr('Name') VALUES ('%1')").arg(Name),Datenbank);
+    return Abfrage.lastInsertId().toInt();
+}
+
+/*!
+ * \brief SQLiteQuelle::addKleiderstueck
+ * \param Typ Typ des Kleidungsstück.
+ * \param Groesse Größe des Kleidungsstücks
+ * \param Nummer Gewünschte Nummer für das Kleidungsstück.
+ * \return Die Nummer des Hinzugefügten Kleidungsstück.
+ */
 int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
 {
     QSqlQuery Abfrage("",Datenbank);
@@ -41,15 +67,18 @@ int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
     return Nummer;
 }
 
+int SQLiteQuelle::addKleidungstyp(QString Name,int AnfangsNummer,int Endnummer)
+{
+    QSqlQuery Abfrage(QString("INSERT INTO Kleidungstyp ('Name','AnNummer','EndNummer')Values('%1',%2,%3)").arg(Name).arg(AnfangsNummer).arg(Endnummer),Datenbank);
+    return Abfrage.lastInsertId().toInt();
+}
 
 int SQLiteQuelle::addPerson(QString Nachname, QString Vorname,int Gruppe)
 {
     QSqlQuery Abfrage("",Datenbank);
     QString SQLString=QString("insert into Personen ('Nachname','Vorname','JF') Values('%1','%2',%3);").arg(Nachname,Vorname).arg(Gruppe);
-    std::cout<<SQLString.toStdString();
     Abfrage.exec(SQLString);
-    std::cout <<Abfrage.value(0).toString().toStdString();
-    return Abfrage.value(0).toInt();
+    return Abfrage.lastInsertId().toInt();
 }
 
 void SQLiteQuelle::createDB()
@@ -57,7 +86,7 @@ void SQLiteQuelle::createDB()
     std::clog<<"Die Tabellen werden in der Datenank erzeugt.\n";
     QSqlQuery Abfrage("",Datenbank);
     Abfrage.exec("create table Kleidungsstuecke(id integer primary key AUTOINCREMENT,Nummer integer,Typ integer,Groesse integer,Traeger integer)");
-    Abfrage.exec("create table Kleidungsgruppen(id integer primary key AUTOINCREMENT,Name varchar,AnNummer integer,EndNummer integer)");
+    Abfrage.exec("create table Kleidungstyp(id integer primary key AUTOINCREMENT,Name varchar,AnNummer integer,EndNummer integer)");
     Abfrage.exec("create table Personen(id integer primary key AUTOINCREMENT,Nachname varchar,Vorname varchar,Jf integer)");
     Abfrage.exec("create table Jugendfeuerwehr(id integer primary key AUTOINCREMENT,Name varchar)");
     Abfrage.exec("create table Groessen(id integer primary key AUTOINCREMENT, Groesse varchar,Typ integer)");
@@ -68,7 +97,7 @@ void SQLiteQuelle::createDB()
 int SQLiteQuelle::freieNummer(int Typ)
 {
     QSqlQuery Abfrage("",Datenbank);
-    Abfrage.exec(QString("SELECT AnNummer,EndNummer FROM Kleidungsgruppen WHERE id=%1").arg(Typ));
+    Abfrage.exec(QString("SELECT AnNummer,EndNummer FROM Kleidungstyp WHERE id=%1").arg(Typ));
     int min=0,max=0;
     if(Abfrage.next())
     {

@@ -4,3 +4,7 @@ DatenQuelle::DatenQuelle()
 {
 }
 
+DatenQuelle::~DatenQuelle()
+{
+
+}

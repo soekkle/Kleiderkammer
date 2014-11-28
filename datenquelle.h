@@ -16,6 +16,12 @@ public:
     virtual int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer)=0;
     virtual int addPerson(QString Nachname, QString Vorname,int Gruppe)=0;
     virtual int freieNummer(int Typ)=0;
+    virtual int getIDByKleidungsNummer(int Nummer)=0;
+    virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
+    virtual bool removeGrosse(int ID)=0;
+    virtual bool removeJugendferweher(int ID)=0;
+    virtual bool removeKleidungstyp(int ID)=0;
+    virtual bool removePerson(int ID)=0;
 };
 
 #endif // DATENQUELLE_H

@@ -29,6 +29,15 @@ public:
     int addPerson(QString Nachname, QString Vorname,int Gruppe);
     //! Liefert die Erste Freie Nummer für den Typ
     int freieNummer(int Typ);
+
+    int getIDByKleidungsNummer(int Nummer);
+    //! Fügt einen Kleidungstück einen Träger hinzu.
+    bool KleidungsstueckzuordnenbyID(int ID, int Traeger);
+
+    bool removeGrosse(int ID);
+    bool removeJugendferweher(int ID);
+    bool removeKleidungstyp(int ID);
+    bool removePerson(int ID);
 private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.

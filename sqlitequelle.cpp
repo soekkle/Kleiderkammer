@@ -78,6 +78,7 @@ int SQLiteQuelle::addPerson(QString Nachname, QString Vorname,int Gruppe)
     QSqlQuery Abfrage("",Datenbank);
     QString SQLString=QString("insert into Personen ('Nachname','Vorname','JF') Values('%1','%2',%3);").arg(Nachname,Vorname).arg(Gruppe);
     Abfrage.exec(SQLString);
+    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return Abfrage.lastInsertId().toInt();
 }
 
@@ -125,4 +126,48 @@ int SQLiteQuelle::freieNummer(int Typ)
         }
     }
     return -1;
+}
+
+int SQLiteQuelle::getIDByKleidungsNummer(int Nummer)
+{
+    QSqlQuery Abfrage(QString("SELECT id FROM Kleidungsstuecke WHERE Nummer=%1").arg(Nummer),Datenbank);
+    if(!Abfrage.next())
+        return -1;
+    return Abfrage.value(0).toInt();
+}
+
+bool SQLiteQuelle::KleidungsstueckzuordnenbyID(int ID, int Traeger)
+{
+    QSqlQuery Abfrage(QString("SELECT Traeger FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
+    if(Abfrage.next())
+    {
+        Abfrage.clear();
+        Abfrage.exec(QString("UPDATE Kleidungsstuecke SET 'Traeger'=%1 WHERE id=%2").arg(Traeger).arg(ID));
+        std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
+        return true;
+    }
+    return false;
+}
+bool SQLiteQuelle::removeGrosse(int ID)
+{
+    QSqlQuery Abfrage(QString("DELETE FROM Grosse WHERE id=%1").arg(ID),Datenbank);
+    return true;
+}
+
+bool SQLiteQuelle::removeJugendferweher(int ID)
+{
+    QSqlQuery Abfrage(QString("DELETE Jugendfeuerweher WHERE id=%1").arg(ID),Datenbank);
+    return true;
+}
+
+bool SQLiteQuelle::removeKleidungstyp(int ID)
+{
+    QSqlQuery Abfrage(QString("DELETE FROM Kleidungstyp WHERE id=%1").arg(ID),Datenbank);
+    return true;
+}
+
+bool SQLiteQuelle::removePerson(int ID)
+{
+    QSqlQuery Abfrage(QString("DELETE FROM Personen WHERE id=%1").arg(ID),Datenbank);
+    return true;
 }

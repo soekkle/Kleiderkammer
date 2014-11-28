@@ -2,6 +2,17 @@
 #define DATENQUELLE_H
 
 #include <QString>
+#include <QVector>
+
+class GroessenTabelle
+{
+public:
+    int Anzahl;
+    QVector<int> IDs;
+    QVector<QString> Namen;
+    QVector<QString> Typ;
+};
+
 
 class DatenQuelle
 {
@@ -16,6 +27,7 @@ public:
     virtual int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer)=0;
     virtual int addPerson(QString Nachname, QString Vorname,int Gruppe)=0;
     virtual int freieNummer(int Typ)=0;
+    virtual GroessenTabelle *GetGroessen(int *Filter, int anz)=0;
     virtual int getIDByKleidungsNummer(int Nummer)=0;
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
     virtual bool removeGrosse(int ID)=0;

@@ -128,6 +128,32 @@ int SQLiteQuelle::freieNummer(int Typ)
     return -1;
 }
 
+GroessenTabelle *SQLiteQuelle::GetGroessen(int *Filter, int anz)
+{
+    GroessenTabelle *Ausgabe=new GroessenTabelle;
+    Ausgabe->Anzahl=0;
+    QString SQLString="SELECT Groessen.id, Groesse,name FROM Groessen,Kleidungstyp WHERE Groessen.Typ=Kleidungstyp.id";
+    if (anz>0)
+    {
+        SQLString=SQLString.append(" AND ( Groessen.Typ= %1").arg(Filter[0]);
+        for (int i=1;i<anz;i++)
+        {
+            SQLString=SQLString.append(" OR Groessen.Typ=%1").arg(Filter[i]);
+        }
+        SQLString=SQLString.append(" );");
+    }
+    std::cout<<SQLString.toStdString()<<endl;
+    QSqlQuery Abfrage(SQLString,Datenbank);
+    while(Abfrage.next())
+    {
+        ++Ausgabe->Anzahl;
+        Ausgabe->IDs.append(Abfrage.value(0).toInt());
+        Ausgabe->Namen.append(Abfrage.value(1).toString());
+        Ausgabe->Typ.append(Abfrage.value(2).toString());
+    }
+    return Ausgabe;
+}
+
 int SQLiteQuelle::getIDByKleidungsNummer(int Nummer)
 {
     QSqlQuery Abfrage(QString("SELECT id FROM Kleidungsstuecke WHERE Nummer=%1").arg(Nummer),Datenbank);

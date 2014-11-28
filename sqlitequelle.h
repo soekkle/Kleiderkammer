@@ -30,6 +30,8 @@ public:
     //! Liefert die Erste Freie Nummer für den Typ
     int freieNummer(int Typ);
 
+    GroessenTabelle *GetGroessen(int *Filter, int anz);
+
     int getIDByKleidungsNummer(int Nummer);
     //! Fügt einen Kleidungstück einen Träger hinzu.
     bool KleidungsstueckzuordnenbyID(int ID, int Traeger);

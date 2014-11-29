@@ -13,6 +13,16 @@ public:
     QVector<QString> Typ;
 };
 
+class Kleidungstypentabelle
+{
+public:
+    int Anzahl;
+    QVector<QString> Name;
+    QVector<int> ID;
+    QVector<int> AnfangsNummer;
+    QVector<int> EndNummer;
+};
+
 
 class DatenQuelle
 {
@@ -28,6 +38,7 @@ public:
     virtual int addPerson(QString Nachname, QString Vorname,int Gruppe)=0;
     virtual int freieNummer(int Typ)=0;
     virtual GroessenTabelle *GetGroessen(int *Filter, int anz)=0;
+    virtual Kleidungstypentabelle *GetKleidungstypen()=0;
     virtual int getIDByKleidungsNummer(int Nummer)=0;
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
     virtual bool removeGrosse(int ID)=0;

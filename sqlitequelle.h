@@ -31,6 +31,7 @@ public:
     int freieNummer(int Typ);
 
     GroessenTabelle *GetGroessen(int *Filter, int anz);
+    Kleidungstypentabelle *GetKleidungstypen();
 
     int getIDByKleidungsNummer(int Nummer);
     //! Fügt einen Kleidungstück einen Träger hinzu.

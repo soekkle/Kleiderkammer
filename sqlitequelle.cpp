@@ -142,7 +142,7 @@ GroessenTabelle *SQLiteQuelle::GetGroessen(int *Filter, int anz)
         }
         SQLString=SQLString.append(" );");
     }
-    std::cout<<SQLString.toStdString()<<endl;
+    std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);
     while(Abfrage.next())
     {
@@ -150,6 +150,23 @@ GroessenTabelle *SQLiteQuelle::GetGroessen(int *Filter, int anz)
         Ausgabe->IDs.append(Abfrage.value(0).toInt());
         Ausgabe->Namen.append(Abfrage.value(1).toString());
         Ausgabe->Typ.append(Abfrage.value(2).toString());
+    }
+    return Ausgabe;
+}
+
+Kleidungstypentabelle *SQLiteQuelle::GetKleidungstypen()
+{
+    Kleidungstypentabelle *Ausgabe=new Kleidungstypentabelle;
+    QString SQLString="SELECT id, Name,AnNummer,Endnummer FROM Kleidungstyp";
+    QSqlQuery Abfrage(SQLString,Datenbank);
+    Ausgabe->Anzahl=0;
+    while (Abfrage.next())
+    {
+        ++Ausgabe->Anzahl;
+        Ausgabe->ID.append(Abfrage.value(0).toInt());
+        Ausgabe->Name.append(Abfrage.value(1).toString());
+        Ausgabe->AnfangsNummer.append(Abfrage.value(2).toInt());
+        Ausgabe->EndNummer.append(Abfrage.value(3).toInt());
     }
     return Ausgabe;
 }

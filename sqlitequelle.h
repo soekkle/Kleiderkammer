@@ -30,8 +30,10 @@ public:
     //! Liefert die Erste Freie Nummer für den Typ
     int freieNummer(int Typ);
 
-    GroessenTabelle *GetGroessen(int *Filter, int anz);
-    Kleidungstypentabelle *GetKleidungstypen();
+    GroessenTabelle *getGroessen(int *Filter, int anz);
+    Kleidungstypentabelle *getKleidungstypen();
+    JugendFeuerwehrTabelle *getJugendfeuerwehr();
+    PersonenTabelle *getPersonen(int *JFFilter,int JFans);
 
     int getIDByKleidungsNummer(int Nummer);
     //! Fügt einen Kleidungstück einen Träger hinzu.

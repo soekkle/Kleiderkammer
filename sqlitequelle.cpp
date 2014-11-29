@@ -105,6 +105,10 @@ int SQLiteQuelle::freieNummer(int Typ)
         min=Abfrage.value(0).toInt();
         max=Abfrage.value(1).toInt();
     }
+    else
+    {
+        return -1;
+    }
     Abfrage.clear();
     Abfrage.exec(QString("SELECT Nummer FROM Kleidungsstuecke WHERE Typ=%1 ORDER BY Nummer ASC").arg(Typ));
     if (Abfrage.next())
@@ -125,10 +129,10 @@ int SQLiteQuelle::freieNummer(int Typ)
                 return i;
         }
     }
-    return -1;
+    return min;
 }
 
-GroessenTabelle *SQLiteQuelle::GetGroessen(int *Filter, int anz)
+GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
 {
     GroessenTabelle *Ausgabe=new GroessenTabelle;
     Ausgabe->Anzahl=0;
@@ -154,7 +158,21 @@ GroessenTabelle *SQLiteQuelle::GetGroessen(int *Filter, int anz)
     return Ausgabe;
 }
 
-Kleidungstypentabelle *SQLiteQuelle::GetKleidungstypen()
+JugendFeuerwehrTabelle *SQLiteQuelle::getJugendfeuerwehr()
+{
+    JugendFeuerwehrTabelle *Ausgabe=new JugendFeuerwehrTabelle;
+    Ausgabe->Anzahl=0;
+    QSqlQuery Abfrage("SELECT id,Name FROM Jugendfeuerwehr",Datenbank);
+    while(Abfrage.next())
+    {
+        ++Ausgabe->Anzahl;
+        Ausgabe->ID.append(Abfrage.value(0).toInt());
+        Ausgabe->Name.append(Abfrage.value(1).toString());
+    }
+    return Ausgabe;
+}
+
+Kleidungstypentabelle *SQLiteQuelle::getKleidungstypen()
 {
     Kleidungstypentabelle *Ausgabe=new Kleidungstypentabelle;
     QString SQLString="SELECT id, Name,AnNummer,Endnummer FROM Kleidungstyp";
@@ -191,6 +209,30 @@ bool SQLiteQuelle::KleidungsstueckzuordnenbyID(int ID, int Traeger)
     }
     return false;
 }
+
+PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
+{
+    PersonenTabelle *Ausgabe=new PersonenTabelle;
+    Ausgabe->Anzahl=0;
+    QString SQLString="SELECT Personen.id,Personen.Nachname,Personen.Vorname,Jugendfeuerwehr.Name FROM Personen,Jugendfeuerwehr WHERE Personen.jf=Jugendfeuerwehr.id";
+    if (JFans<0)
+    {
+        SQLString=SQLString.append(" AND (Personen.jf=%1").arg(JFFilter[0]);
+        for (int i=1;i<JFans;++i)
+        {
+            SQLString=SQLString.append(" OR Personen.jf=%1").arg(JFFilter[i]);
+        }
+        SQLString=SQLString.append(")");
+    }
+    QSqlQuery Abfrage(SQLString,Datenbank);
+    while(Abfrage.next())
+    {
+        ++Ausgabe->Anzahl;
+        Ausgabe->ID;
+    }
+    return Ausgabe;
+}
+
 bool SQLiteQuelle::removeGrosse(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE FROM Grosse WHERE id=%1").arg(ID),Datenbank);

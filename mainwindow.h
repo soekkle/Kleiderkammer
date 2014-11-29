@@ -5,6 +5,8 @@
 #include "datenquelle.h"
 #include "sqlitequelle.h"
 
+#include <QStandardItemModel>
+
 namespace Ui {
 class MainWindow;
 }

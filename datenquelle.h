@@ -4,6 +4,7 @@
 #include <QString>
 #include <QVector>
 
+//! Hilfsklasse zur Ausgabe der Größen.
 class GroessenTabelle
 {
 public:
@@ -11,6 +12,22 @@ public:
     QVector<int> IDs;
     QVector<QString> Namen;
     QVector<QString> Typ;
+};
+
+//! Hilfsklasse zur Ausgabe der Jugendfeuerwehren.
+class JugendFeuerwehrTabelle
+{
+public:
+    int Anzahl;
+    QVector<int>ID;
+    QVector<QString>Name;
+};
+
+class KleiderTabelle
+{
+    int Anzahl;
+    QVector<int> ID;
+    QVector<int> Nummer;
 };
 
 class Kleidungstypentabelle
@@ -23,6 +40,15 @@ public:
     QVector<int> EndNummer;
 };
 
+class PersonenTabelle
+{
+public:
+    int Anzahl;
+    QVector<int> ID;
+    QVector<QString> Vorname;
+    QVector<QString> Nachname;
+    QVector<QString> JugendFeuerwehr;
+};
 
 class DatenQuelle
 {
@@ -37,9 +63,11 @@ public:
     virtual int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer)=0;
     virtual int addPerson(QString Nachname, QString Vorname,int Gruppe)=0;
     virtual int freieNummer(int Typ)=0;
-    virtual GroessenTabelle *GetGroessen(int *Filter, int anz)=0;
-    virtual Kleidungstypentabelle *GetKleidungstypen()=0;
+    virtual GroessenTabelle *getGroessen(int *Filter, int anz)=0;
     virtual int getIDByKleidungsNummer(int Nummer)=0;
+    virtual JugendFeuerwehrTabelle *getJugendfeuerwehr()=0;
+    virtual Kleidungstypentabelle *getKleidungstypen()=0;
+    virtual PersonenTabelle *getPersonen(int *JFFilter,int JFans)=0;
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
     virtual bool removeGrosse(int ID)=0;
     virtual bool removeJugendferweher(int ID)=0;

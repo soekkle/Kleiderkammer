@@ -228,7 +228,10 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
     while(Abfrage.next())
     {
         ++Ausgabe->Anzahl;
-        Ausgabe->ID;
+        Ausgabe->ID.append(Abfrage.value(0).toInt());
+        Ausgabe->Nachname.append(Abfrage.value(1).toString());
+        Ausgabe->Vorname.append(Abfrage.value(2).toString());
+        Ausgabe->JugendFeuerwehr.append(Abfrage.value(3).toString());
     }
     return Ausgabe;
 }
@@ -255,4 +258,9 @@ bool SQLiteQuelle::removePerson(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE FROM Personen WHERE id=%1").arg(ID),Datenbank);
     return true;
+}
+
+void SQLiteQuelle::rueckgabeKleidungsstueck(int ID)
+{
+    QSqlQuery Abfrage(QString("UPDATE Kleidungsstuecke SET 'Traeger'=0 WHERE id=%1").arg(ID),Datenbank);
 }

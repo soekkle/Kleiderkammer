@@ -43,6 +43,7 @@ public:
     bool removeJugendferweher(int ID);
     bool removeKleidungstyp(int ID);
     bool removePerson(int ID);
+    void rueckgabeKleidungsstueck(int ID);
 private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.

@@ -73,6 +73,7 @@ public:
     virtual bool removeJugendferweher(int ID)=0;
     virtual bool removeKleidungstyp(int ID)=0;
     virtual bool removePerson(int ID)=0;
+    virtual void rueckgabeKleidungsstueck(int ID)=0;
 };
 
 #endif // DATENQUELLE_H

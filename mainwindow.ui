@@ -6,30 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>538</width>
+    <height>399</height>
    </rect>
   </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Kleiderkammer</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QTableView" name="tableView">
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-     </widget>
-    </item>
-   </layout>
+   <layout class="QGridLayout" name="gridLayout"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>538</width>
      <height>22</height>
     </rect>
    </property>
@@ -39,7 +34,14 @@
     </property>
     <addaction name="actionBeenden"/>
    </widget>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+    <addaction name="actionKleidungstypen_verwalten"/>
+   </widget>
    <addaction name="menuDatei"/>
+   <addaction name="menuBearbeiten"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -53,6 +55,11 @@
   <action name="actionBeenden">
    <property name="text">
     <string>Beenden</string>
+   </property>
+  </action>
+  <action name="actionKleidungstypen_verwalten">
+   <property name="text">
+    <string>Kleidungstypen verwalten</string>
    </property>
   </action>
  </widget>

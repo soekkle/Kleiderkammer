@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "datenquelle.h"
 #include "sqlitequelle.h"
+#include "kleidungstypenverwaltung.h"
 
 #include <QStandardItemModel>
 
@@ -22,6 +23,9 @@ public:
 private:
     Ui::MainWindow *ui;
     SQLiteQuelle *Daten;
+    KleidungsTypenVerwaltung *Typen;
+
+private slots:
 };
 
 #endif // MAINWINDOW_H

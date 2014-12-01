@@ -15,10 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     datenquelle.cpp \
-    sqlitequelle.cpp
+    sqlitequelle.cpp \
+    kleidungstypenverwaltung.cpp
 
 HEADERS  += mainwindow.h \
     datenquelle.h \
-    sqlitequelle.h
+    sqlitequelle.h \
+    kleidungstypenverwaltung.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    kleidungstypenverwaltung.ui

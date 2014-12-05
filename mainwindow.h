@@ -25,7 +25,14 @@ private:
     SQLiteQuelle *Daten;
     KleidungsTypenVerwaltung *Typen;
 
+    QStandardItemModel Personen,Kleidungstuecke;
+
 private slots:
+
+    void PersonenAnzeigen(int Filter);
+    void PersonHinCancel();
+    void PersonHinClicked();
+
 };
 
 #endif // MAINWINDOW_H

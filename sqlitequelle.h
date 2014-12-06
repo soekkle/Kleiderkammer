@@ -31,6 +31,8 @@ public:
     int freieNummer(int Typ);
 
     GroessenTabelle *getGroessen(int *Filter, int anz);
+    KleiderTabelle *getKleiderinKammer(int Typ, int Groesse);
+    KleiderTabelle *getKleidervonPerson(int id);
     Kleidungstypentabelle *getKleidungstypen();
     JugendFeuerwehrTabelle *getJugendfeuerwehr();
     PersonenTabelle *getPersonen(int *JFFilter,int JFans);
@@ -48,6 +50,7 @@ private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.
     void createDB();
+    KleiderTabelle* getKleider(int Typ, int Groesse,int Traeger);
 };
 
 #endif // SQLITEQUELLE_H

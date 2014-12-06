@@ -172,6 +172,39 @@ JugendFeuerwehrTabelle *SQLiteQuelle::getJugendfeuerwehr()
     return Ausgabe;
 }
 
+KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
+{
+    KleiderTabelle *Ausgabe=new KleiderTabelle;
+    Ausgabe->Anzahl=0;
+    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
+    if(Typ>0)
+        SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
+    if (Groesse>0)
+        SQLString.append(" AND Kleidungsstuecke.Groesse=%1").arg(Groesse);
+    SQLString.append(" AND Kleidungsstuecke.Traeger=%1").arg(Traeger);
+    std::cout<<SQLString.toStdString();
+    QSqlQuery Abfrage(SQLString,Datenbank);
+    while (Abfrage.next())
+    {
+        ++Ausgabe->Anzahl;
+        Ausgabe->ID.append(Abfrage.value(0).toInt());
+        Ausgabe->Nummer.append(Abfrage.value(1).toInt());
+        Ausgabe->Groesse.append(Abfrage.value(2).toString());
+        Ausgabe->Typ.append(Abfrage.value(3).toString());
+    }
+    return Ausgabe;
+}
+
+KleiderTabelle *SQLiteQuelle::getKleiderinKammer(int Typ, int Groesse)
+{
+    return getKleider(Typ,Groesse,0);
+}
+
+KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id)
+{
+    return getKleider(-1,-1,id);
+}
+
 Kleidungstypentabelle *SQLiteQuelle::getKleidungstypen()
 {
     Kleidungstypentabelle *Ausgabe=new Kleidungstypentabelle;
@@ -215,7 +248,7 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
     PersonenTabelle *Ausgabe=new PersonenTabelle;
     Ausgabe->Anzahl=0;
     QString SQLString="SELECT Personen.id,Personen.Nachname,Personen.Vorname,Jugendfeuerwehr.Name FROM Personen,Jugendfeuerwehr WHERE Personen.jf=Jugendfeuerwehr.id";
-    if (JFans<0)
+    if (JFans>0)
     {
         SQLString=SQLString.append(" AND (Personen.jf=%1").arg(JFFilter[0]);
         for (int i=1;i<JFans;++i)

@@ -211,11 +211,11 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
     Ausgabe->Anzahl=0;
     QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
     if(Typ>0)
-        SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
+        SQLString=SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
     if (Groesse>0)
-        SQLString.append(" AND Kleidungsstuecke.Groesse=%1").arg(Groesse);
-    SQLString.append(" AND Kleidungsstuecke.Traeger=%1").arg(Traeger);
-    std::cout<<SQLString.toStdString();
+        SQLString=SQLString.append(" AND Kleidungsstuecke.Groesse=%1").arg(Groesse);
+    SQLString=SQLString.append(" AND Kleidungsstuecke.Traeger=%1").arg(Traeger);
+    std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);
     while (Abfrage.next())
     {
@@ -225,6 +225,8 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
         Ausgabe->Groesse.append(Abfrage.value(2).toString());
         Ausgabe->Typ.append(Abfrage.value(3).toString());
     }
+    std::cout<<Abfrage.lastQuery().toStdString()<<std::endl;
+    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return Ausgabe;
 }
 
@@ -261,6 +263,16 @@ int SQLiteQuelle::getIDByKleidungsNummer(int Nummer)
     if(!Abfrage.next())
         return -1;
     return Abfrage.value(0).toInt();
+}
+
+void SQLiteQuelle::getNummerBereich(int TypID, int *Anfang, int *Ende)
+{
+    QSqlQuery Abfrage(QString("SELECT AnNummer,EndNummer FROM Kleidungstyp WHERE id=%1").arg(TypID),Datenbank);
+    if (Abfrage.next())
+    {
+        *Anfang=Abfrage.value(0).toInt();
+        *Ende=Abfrage.value(1).toInt();
+    }
 }
 
 bool SQLiteQuelle::KleidungsstueckzuordnenbyID(int ID, int Traeger)

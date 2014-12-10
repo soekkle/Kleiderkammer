@@ -37,6 +37,7 @@ public:
     JugendFeuerwehrTabelle *getJugendfeuerwehr();
     PersonenTabelle *getPersonen(int *JFFilter,int JFans);
 
+    void getNummerBereich(int TypID,int *Anfang,int* Ende);
     int getIDByKleidungsNummer(int Nummer);
     //! Fügt einen Kleidungstück einen Träger hinzu.
     bool KleidungsstueckzuordnenbyID(int ID, int Traeger);

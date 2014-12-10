@@ -27,7 +27,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -121,11 +121,11 @@
         <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
-           <string>GroupBox</string>
+           <string>Kleidungsstücke</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QComboBox" name="comboBox_3"/>
+            <widget class="QComboBox" name="comboBoxBekFilter"/>
            </item>
            <item>
             <widget class="QTableView" name="tableKleidung">
@@ -147,17 +147,17 @@
           </property>
           <layout class="QFormLayout" name="formLayout_2">
            <item row="2" column="1">
-            <widget class="QSpinBox" name="spinBox">
+            <widget class="QSpinBox" name="spinBoxBeNumEin">
              <property name="enabled">
               <bool>false</bool>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="comboBox_5"/>
+            <widget class="QComboBox" name="comboBoxBeTypEin"/>
            </item>
            <item row="1" column="1">
-            <widget class="QComboBox" name="comboBox_4">
+            <widget class="QComboBox" name="comboBoxBeGroEin">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -206,7 +206,7 @@
      <x>0</x>
      <y>0</y>
      <width>641</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

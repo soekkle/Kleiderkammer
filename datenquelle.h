@@ -72,6 +72,7 @@ public:
     virtual KleiderTabelle *getKleidervonPerson(int id)=0;
     virtual KleiderTabelle *getKleiderinKammer(int Typ,int Groesse)=0;
     virtual Kleidungstypentabelle *getKleidungstypen()=0;
+    virtual void getNummerBereich(int TypID,int *Anfang,int* Ende)=0;
     virtual PersonenTabelle *getPersonen(int *JFFilter,int JFans)=0;
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
     virtual bool removeGrosse(int ID)=0;

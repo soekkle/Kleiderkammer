@@ -40,6 +40,7 @@ int SQLiteQuelle::addJugendfeuerwehr(QString Name)
 
 /*!
  * \brief SQLiteQuelle::addKleiderstueck
+ * Fügt der Datenbank ein Kleidungstück hinzu.
  * \param Typ Typ des Kleidungsstück.
  * \param Groesse Größe des Kleidungsstücks
  * \param Nummer Gewünschte Nummer für das Kleidungsstück.
@@ -49,12 +50,14 @@ int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
 {
     QSqlQuery Abfrage("",Datenbank);
     QString SQLString;
-    if (Nummer>0)
+    if (Nummer>0)//Pütt ob einen Nummer angegeben wurde
     {
+        //Prüft ob die Nummer schon vergeben ist.
         SQLString=QString("SELECT Nummer FROM Kleidungsstuecke WHERE Nummer=%1;").arg(Nummer);
         Abfrage.exec(SQLString);
         if(Abfrage.next())
         {
+            //Wenn das der Fall ist so wird die nächsste freie Nummer verwendet.
             Nummer=freieNummer(Typ);
         }
     }
@@ -67,12 +70,26 @@ int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
     return Nummer;
 }
 
+/*!
+ * \brief SQLiteQuelle::addKleidungstyp fügt einen neunen Typ von Kleiderstücken hinzu.
+ * \param Name Name des hinzu gefügten Typs
+ * \param AnfangsNummer Erste Nummer des bereiches aus dem die Nummern vergeben werden sollen
+ * \param Endnummer Letzte Nummer aus dem Bereich aus dem die Nummer vergeben werden sollen.
+ * \return Nummer des Grade Hinzugefügten Kleidungstyp.
+ */
 int SQLiteQuelle::addKleidungstyp(QString Name,int AnfangsNummer,int Endnummer)
 {
     QSqlQuery Abfrage(QString("INSERT INTO Kleidungstyp ('Name','AnNummer','EndNummer')Values('%1',%2,%3)").arg(Name).arg(AnfangsNummer).arg(Endnummer),Datenbank);
     return Abfrage.lastInsertId().toInt();
 }
 
+/*!
+ * \brief SQLiteQuelle::addPerson fügt eine Person ein.
+ * \param Nachname
+ * \param Vorname
+ * \param Gruppe
+ * \return ID der Hinzugefügten Person
+ */
 int SQLiteQuelle::addPerson(QString Nachname, QString Vorname,int Gruppe)
 {
     QSqlQuery Abfrage("",Datenbank);
@@ -82,6 +99,9 @@ int SQLiteQuelle::addPerson(QString Nachname, QString Vorname,int Gruppe)
     return Abfrage.lastInsertId().toInt();
 }
 
+/*!
+ * \brief SQLiteQuelle::createDB erzeugt einen Datenbank in die die Daten geschrieben weerden.
+ */
 void SQLiteQuelle::createDB()
 {
     std::clog<<"Die Tabellen werden in der Datenank erzeugt.\n";
@@ -95,6 +115,11 @@ void SQLiteQuelle::createDB()
     std::cout<<Fehler.text().toStdString();
 }
 
+/*!
+ * \brief SQLiteQuelle::freieNummer liefert die Erste Freie Nummer für den angegebenen Typ.
+ * \param Typ
+ * \return Erste freie Bummer
+ */
 int SQLiteQuelle::freieNummer(int Typ)
 {
     QSqlQuery Abfrage("",Datenbank);
@@ -102,17 +127,19 @@ int SQLiteQuelle::freieNummer(int Typ)
     int min=0,max=0;
     if(Abfrage.next())
     {
-        min=Abfrage.value(0).toInt();
-        max=Abfrage.value(1).toInt();
+        min=Abfrage.value(0).toInt();//Kleinste Nummer für den Typ
+        max=Abfrage.value(1).toInt();//ggrößte Nummer fr den Typ
     }
     else
     {
         return -1;
     }
     Abfrage.clear();
+    //Fragt liste aller vergebenen Nummren ab in aufsteigend sortierter Reihenfolge.
     Abfrage.exec(QString("SELECT Nummer FROM Kleidungsstuecke WHERE Typ=%1 ORDER BY Nummer ASC").arg(Typ));
     if (Abfrage.next())
     {
+        //Prüft ob die Nummer schon vergeen ist.
         int Nummer=Abfrage.value(0).toInt();
         for (int i=min;i<max;i++)
         {
@@ -132,6 +159,12 @@ int SQLiteQuelle::freieNummer(int Typ)
     return min;
 }
 
+/*!
+ * \brief SQLiteQuelle::getGroessen
+ * \param Filter Id für, die die Größen zurückgegeben werden soll.
+ * \param anz Größe des Übergebenen Arrays.
+ * \return Liste Aller zu den angegebenen Typen
+ */
 GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
 {
     GroessenTabelle *Ausgabe=new GroessenTabelle;

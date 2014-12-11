@@ -23,10 +23,14 @@ MainWindow::MainWindow(QWidget *parent) :
     std::clog <<Ort.toStdString()<<std::endl;
     Daten=new SQLiteQuelle(Ort);
     Typen=new KleidungsTypenVerwaltung(Daten,this);
+    Gruppen=new Gruppenverwaltung(Daten,this);
     ui->tableKleidung->setModel(&Kleidungstuecke);
     ui->tablePersonen->setModel(&Personen);
     ComboboxFuellen();
     connect(ui->actionKleidungstypen_verwalten,SIGNAL(triggered()),Typen,SLOT(exec()));
+    connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
+    connect(ui->actionGruppen_Verwalten,SIGNAL(triggered()),Gruppen,SLOT(exec()));
+    connect(Gruppen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
     connect(ui->comboBoxPerJFFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PersonenAnzeigen(int)));
     connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(PersonHinClicked()));
     connect(ui->buttonBox,SIGNAL(rejected()),this,SLOT(PersonHinCancel()));

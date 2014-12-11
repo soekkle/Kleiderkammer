@@ -5,6 +5,7 @@
 #include "datenquelle.h"
 #include "sqlitequelle.h"
 #include "kleidungstypenverwaltung.h"
+#include "gruppenverwaltung.h"
 
 #include <QStandardItemModel>
 
@@ -24,11 +25,12 @@ private:
     Ui::MainWindow *ui;
     SQLiteQuelle *Daten;
     KleidungsTypenVerwaltung *Typen;
+    Gruppenverwaltung *Gruppen;
     //! Modelle für das Anzeigen der Daten.
     QStandardItemModel Personen,Kleidungstuecke;
-    void ComboboxFuellen();
 
 private slots:
+    void ComboboxFuellen();
     //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
     void Kleidungstypgewaehlt(int Typ);
     //! Slot der für die Anzeige der Personen zuständig ist.

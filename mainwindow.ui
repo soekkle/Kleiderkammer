@@ -27,7 +27,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -220,6 +220,7 @@
      <string>Bearbeiten</string>
     </property>
     <addaction name="actionKleidungstypen_verwalten"/>
+    <addaction name="actionGruppen_Verwalten"/>
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
@@ -241,6 +242,11 @@
   <action name="actionKleidungstypen_verwalten">
    <property name="text">
     <string>Kleidungstypen verwalten</string>
+   </property>
+  </action>
+  <action name="actionGruppen_Verwalten">
+   <property name="text">
+    <string>Gruppen Verwalten</string>
    </property>
   </action>
  </widget>

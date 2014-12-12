@@ -27,9 +27,14 @@ private:
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
     //! Modelle für das Anzeigen der Daten.
-    QStandardItemModel Personen,Kleidungstuecke;
+    QStandardItemModel Personen,Kleidungstuecke,KleiderAus;
+    int PersonenID;
+    void Ausleihlistefuellen(int Filtertyp, int FilterGroesse);
 
 private slots:
+    void AusGroessenFiltergeaendert(int Typ);
+    void Auslehenclicked();
+    void AusTypFiltergeaendert(int Typ);
     void ComboboxFuellen();
     //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
     void Kleidungstypgewaehlt(int Typ);
@@ -43,6 +48,8 @@ private slots:
     void PersonHinCancel();
     //! Solt der die Eingegebene Person Speichert.
     void PersonHinClicked();
+    //! Füllt den Tab Für einen Person.
+    void PersonAusgewaehlt(const QModelIndex &neu,const QModelIndex);
 
 };
 

@@ -27,7 +27,7 @@ private:
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
     //! Modelle für das Anzeigen der Daten.
-    QStandardItemModel Personen,Kleidungstuecke,KleiderAus;
+    QStandardItemModel Personen,Kleidungstuecke,KleiderAus,PerKleider;
     int PersonenID;
     void Ausleihlistefuellen(int Filtertyp, int FilterGroesse);
 
@@ -44,12 +44,14 @@ private slots:
     void KleidunginKammerAnzeigen(int Filter);
     void KleidungHinClicked();
     void KleidungHinCancel();
+    void PerKleidungslistefuellen(int FilterTyp);
     //! Slot der die Eingabemaske für Personen zurücksetzt.
     void PersonHinCancel();
     //! Solt der die Eingegebene Person Speichert.
     void PersonHinClicked();
     //! Füllt den Tab Für einen Person.
     void PersonAusgewaehlt(const QModelIndex &neu,const QModelIndex);
+    void Zurueckgeben();
 
 };
 

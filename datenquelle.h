@@ -69,7 +69,7 @@ public:
     virtual GroessenTabelle *getGroessen(int *Filter, int anz)=0;
     virtual int getIDByKleidungsNummer(int Nummer)=0;
     virtual JugendFeuerwehrTabelle *getJugendfeuerwehr()=0;
-    virtual KleiderTabelle *getKleidervonPerson(int id)=0;
+    virtual KleiderTabelle *getKleidervonPerson(int id,int Typ)=0;
     virtual KleiderTabelle *getKleiderinKammer(int Typ,int Groesse)=0;
     virtual Kleidungstypentabelle *getKleidungstypen()=0;
     virtual void getNummerBereich(int TypID,int *Anfang,int* Ende)=0;

@@ -202,9 +202,9 @@ KleiderTabelle *SQLiteQuelle::getKleiderinKammer(int Typ, int Groesse)
     return getKleider(Typ,Groesse,0);
 }
 
-KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id)
+KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id, int Typ)
 {
-    return getKleider(-1,-1,id);
+    return getKleider(Typ,-1,id);
 }
 
 Kleidungstypentabelle *SQLiteQuelle::getKleidungstypen()

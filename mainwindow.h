@@ -5,6 +5,7 @@
 #include "datenquelle.h"
 #include "sqlitequelle.h"
 #include "kleidungstypenverwaltung.h"
+#include "gruppenverwaltung.h"
 
 #include <QStandardItemModel>
 
@@ -24,11 +25,17 @@ private:
     Ui::MainWindow *ui;
     SQLiteQuelle *Daten;
     KleidungsTypenVerwaltung *Typen;
+    Gruppenverwaltung *Gruppen;
     //! Modelle für das Anzeigen der Daten.
-    QStandardItemModel Personen,Kleidungstuecke;
-    void ComboboxFuellen();
+    QStandardItemModel Personen,Kleidungstuecke,KleiderAus,PerKleider;
+    int PersonenID;
+    void Ausleihlistefuellen(int Filtertyp, int FilterGroesse);
 
 private slots:
+    void AusGroessenFiltergeaendert(int Typ);
+    void Auslehenclicked();
+    void AusTypFiltergeaendert(int Typ);
+    void ComboboxFuellen();
     //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
     void Kleidungstypgewaehlt(int Typ);
     //! Slot der für die Anzeige der Personen zuständig ist.
@@ -37,10 +44,14 @@ private slots:
     void KleidunginKammerAnzeigen(int Filter);
     void KleidungHinClicked();
     void KleidungHinCancel();
+    void PerKleidungslistefuellen(int FilterTyp);
     //! Slot der die Eingabemaske für Personen zurücksetzt.
     void PersonHinCancel();
     //! Solt der die Eingegebene Person Speichert.
     void PersonHinClicked();
+    //! Füllt den Tab Für einen Person.
+    void PersonAusgewaehlt(const QModelIndex &neu,const QModelIndex);
+    void Zurueckgeben();
 
 };
 

@@ -44,6 +44,7 @@ void KleidungsTypenVerwaltung::GroesseAnlegen()
         Daten->addGroesse(Name,GroessenFilter);
     }
     GroessenList();
+    datenGeaendert();
 }
 
 void KleidungsTypenVerwaltung::GroessenList()
@@ -68,6 +69,7 @@ void KleidungsTypenVerwaltung::Typanlegen()
         GroessenFilter=Daten->addKleidungstyp(Name,Anfang,Ende);
     }
     Typentable();
+    datenGeaendert();
 }
 
 void KleidungsTypenVerwaltung::Typentable()

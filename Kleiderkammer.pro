@@ -16,12 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     datenquelle.cpp \
     sqlitequelle.cpp \
-    kleidungstypenverwaltung.cpp
+    kleidungstypenverwaltung.cpp \
+    gruppenverwaltung.cpp
 
 HEADERS  += mainwindow.h \
     datenquelle.h \
     sqlitequelle.h \
-    kleidungstypenverwaltung.h
+    kleidungstypenverwaltung.h \
+    gruppenverwaltung.h
 
 FORMS    += mainwindow.ui \
-    kleidungstypenverwaltung.ui
+    kleidungstypenverwaltung.ui \
+    gruppenverwaltung.ui

@@ -28,6 +28,9 @@ private:
     QStandardItemModel *Typen,*Groessen;
     int GroessenFilter;
 
+signals:
+    void datenGeaendert();
+
 public slots:
         int exec();
 private slots:

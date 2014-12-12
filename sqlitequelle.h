@@ -32,7 +32,7 @@ public:
 
     GroessenTabelle *getGroessen(int *Filter, int anz);
     KleiderTabelle *getKleiderinKammer(int Typ, int Groesse);
-    KleiderTabelle *getKleidervonPerson(int id);
+    KleiderTabelle *getKleidervonPerson(int id, int Typ);
     Kleidungstypentabelle *getKleidungstypen();
     JugendFeuerwehrTabelle *getJugendfeuerwehr();
     PersonenTabelle *getPersonen(int *JFFilter,int JFans);

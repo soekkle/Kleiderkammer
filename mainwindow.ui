@@ -20,14 +20,11 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
-      <property name="tabPosition">
-       <enum>QTabWidget::North</enum>
-      </property>
-      <property name="tabShape">
-       <enum>QTabWidget::Rounded</enum>
+      <property name="enabled">
+       <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -196,6 +193,66 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_einKleiden">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <attribute name="title">
+        <string>Einkleiden</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_Name"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="groupBox_5">
+          <property name="title">
+           <string>Kleidungssücke</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QComboBox" name="comboBox_eigenFilter"/>
+           </item>
+           <item>
+            <widget class="QTableView" name="tableView_KleiPerson"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_zuruck">
+             <property name="text">
+              <string>Zurückgeben</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QGroupBox" name="groupBox_6">
+          <property name="title">
+           <string>Ausgeben</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QComboBox" name="comboBox_AusTypFilter"/>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_AusGroFilter"/>
+           </item>
+           <item>
+            <widget class="QTableView" name="table_Kleileihen"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_leihen">
+             <property name="text">
+              <string>Ausleihen</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -206,7 +263,7 @@
      <x>0</x>
      <y>0</y>
      <width>641</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -220,6 +277,7 @@
      <string>Bearbeiten</string>
     </property>
     <addaction name="actionKleidungstypen_verwalten"/>
+    <addaction name="actionGruppen_Verwalten"/>
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
@@ -243,6 +301,11 @@
     <string>Kleidungstypen verwalten</string>
    </property>
   </action>
+  <action name="actionGruppen_Verwalten">
+   <property name="text">
+    <string>Gruppen Verwalten</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
@@ -253,6 +316,19 @@
   <tabstop>lineEditPerNach</tabstop>
   <tabstop>comboPerJFEin</tabstop>
   <tabstop>buttonBox</tabstop>
+  <tabstop>comboBoxBekFilter</tabstop>
+  <tabstop>tableKleidung</tabstop>
+  <tabstop>comboBoxBeTypEin</tabstop>
+  <tabstop>comboBoxBeGroEin</tabstop>
+  <tabstop>spinBoxBeNumEin</tabstop>
+  <tabstop>buttonBox_2</tabstop>
+  <tabstop>comboBox_eigenFilter</tabstop>
+  <tabstop>tableView_KleiPerson</tabstop>
+  <tabstop>pushButton_zuruck</tabstop>
+  <tabstop>comboBox_AusTypFilter</tabstop>
+  <tabstop>comboBox_AusGroFilter</tabstop>
+  <tabstop>table_Kleileihen</tabstop>
+  <tabstop>pushButton_leihen</tabstop>
  </tabstops>
  <resources/>
  <connections/>

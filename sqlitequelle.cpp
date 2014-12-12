@@ -179,7 +179,7 @@ GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
         }
         SQLString=SQLString.append(" );");
     }
-    std::cout<<SQLString.toStdString()<<std::endl;
+    //std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);
     while(Abfrage.next())
     {
@@ -225,7 +225,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
         Ausgabe->Groesse.append(Abfrage.value(2).toString());
         Ausgabe->Typ.append(Abfrage.value(3).toString());
     }
-    std::cout<<Abfrage.lastQuery().toStdString()<<std::endl;
+    //std::cout<<Abfrage.lastQuery().toStdString()<<std::endl;
     std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return Ausgabe;
 }
@@ -235,9 +235,9 @@ KleiderTabelle *SQLiteQuelle::getKleiderinKammer(int Typ, int Groesse)
     return getKleider(Typ,Groesse,0);
 }
 
-KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id)
+KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id, int Typ)
 {
-    return getKleider(-1,-1,id);
+    return getKleider(Typ,-1,id);
 }
 
 Kleidungstypentabelle *SQLiteQuelle::getKleidungstypen()
@@ -285,6 +285,7 @@ bool SQLiteQuelle::KleidungsstueckzuordnenbyID(int ID, int Traeger)
         std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
         return true;
     }
+    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return false;
 }
 

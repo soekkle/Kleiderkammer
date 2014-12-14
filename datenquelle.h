@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QDateTime>
 
 //! Hilfsklasse zur Ausgabe der Größen.
 class GroessenTabelle
@@ -31,6 +32,8 @@ public:
     QVector<int> Nummer;
     QVector<QString> Typ;
     QVector<QString> Groesse;
+    QVector<int> AnzahlAusleihen;
+    QVector<QDateTime> Anschaffung;
 };
 
 class Kleidungstypentabelle

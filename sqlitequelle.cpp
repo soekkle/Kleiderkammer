@@ -65,8 +65,13 @@ int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
     {
         Nummer=freieNummer(Typ);
     }
-    SQLString=QString("insert into Kleidungsstuecke ('Nummer','Typ','Groesse','Traeger') Values(%1,%2,%3,0);").arg(Nummer).arg(Typ).arg(Groesse);
-    Abfrage.exec(SQLString);
+    Abfrage.prepare("insert into Kleidungsstuecke ('Nummer','Typ','Groesse','DatumHin') Values(:Nummer,:Typ,:Groesse,:Datum);");
+    Abfrage.bindValue(0, Nummer);//Einsetzen der Daten
+    Abfrage.bindValue(1, Typ);
+    Abfrage.bindValue(2,Groesse);
+    Abfrage.bindValue(3,QDateTime::currentDateTimeUtc());
+    Abfrage.exec();//Ausführen der Abfrage.
+    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;//Ausgabe deies Fehlers.
     return Nummer;
 }
 
@@ -106,7 +111,7 @@ void SQLiteQuelle::createDB()
 {
     std::clog<<"Die Tabellen werden in der Datenank erzeugt.\n";
     QSqlQuery Abfrage("",Datenbank);
-    Abfrage.exec("create table Kleidungsstuecke(id integer primary key AUTOINCREMENT,Nummer integer,Typ integer,Groesse integer,Traeger integer)");
+    Abfrage.exec("create table Kleidungsstuecke(id integer primary key AUTOINCREMENT,Nummer integer,Typ integer,Groesse integer,Traeger integer DEFAULT(0),AnzAusleih integer DEFAULT(0),DatumHin DateTime)");
     Abfrage.exec("create table Kleidungstyp(id integer primary key AUTOINCREMENT,Name varchar,AnNummer integer,EndNummer integer)");
     Abfrage.exec("create table Personen(id integer primary key AUTOINCREMENT,Nachname varchar,Vorname varchar,Jf integer)");
     Abfrage.exec("create table Jugendfeuerwehr(id integer primary key AUTOINCREMENT,Name varchar)");
@@ -191,6 +196,10 @@ GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
     return Ausgabe;
 }
 
+/*!
+ * \brief SQLiteQuelle::getJugendfeuerwehr liefert alle angelegten Jugendfeuerwehren zurück.
+ * \return Liste aller jugendfeuerwehren mit ID.
+ */
 JugendFeuerwehrTabelle *SQLiteQuelle::getJugendfeuerwehr()
 {
     JugendFeuerwehrTabelle *Ausgabe=new JugendFeuerwehrTabelle;
@@ -205,11 +214,18 @@ JugendFeuerwehrTabelle *SQLiteQuelle::getJugendfeuerwehr()
     return Ausgabe;
 }
 
+/*!
+ * \brief SQLiteQuelle::getKleider
+ * \param Typ Filter für den Typ der Kleidungsstücke
+ * \param Groesse Filter für die Größe der Kleidungsstücke
+ * \param Traeger Filter für den Träger der Kleidungsstücke
+ * \return Lister der Kleiderstücke.
+ */
 KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
 {
     KleiderTabelle *Ausgabe=new KleiderTabelle;
     Ausgabe->Anzahl=0;
-    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
+    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih,Kleidungsstuecke.DatumHin FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
     if(Typ>0)
         SQLString=SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
     if (Groesse>0)
@@ -224,12 +240,19 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
         Ausgabe->Nummer.append(Abfrage.value(1).toInt());
         Ausgabe->Groesse.append(Abfrage.value(2).toString());
         Ausgabe->Typ.append(Abfrage.value(3).toString());
+        Ausgabe->AnzahlAusleihen.append(Abfrage.value(4).toInt());
+        Ausgabe->Anschaffung.append(Abfrage.value(5).toDateTime());
     }
     //std::cout<<Abfrage.lastQuery().toStdString()<<std::endl;
     std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return Ausgabe;
 }
-
+/*!
+ * \brief SQLiteQuelle::getKleiderinKammer Lieft deine Liste mit allen Kleidungsstücken din der Kleiderkammer.
+ * \param Typ Typ der nur angezeigt werden soll.
+ * \param Groesse Groeße die nur angezeigt werden soll.
+ * \return Liste aller Kleidungsstücke in der Kammer mit den Geforderten eigenschaften.
+ */
 KleiderTabelle *SQLiteQuelle::getKleiderinKammer(int Typ, int Groesse)
 {
     return getKleider(Typ,Groesse,0);
@@ -280,8 +303,10 @@ bool SQLiteQuelle::KleidungsstueckzuordnenbyID(int ID, int Traeger)
     QSqlQuery Abfrage(QString("SELECT Traeger FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
     if(Abfrage.next())
     {
+        if (Abfrage.value(0).toInt()>0)//Prüft ob das Kleidungsstück scon verlienen ist.
+            return false;
         Abfrage.clear();
-        Abfrage.exec(QString("UPDATE Kleidungsstuecke SET 'Traeger'=%1 WHERE id=%2").arg(Traeger).arg(ID));
+        Abfrage.exec(QString("UPDATE Kleidungsstuecke SET 'Traeger'=%1,'AnzAusleih'=AnzAusleih+1 WHERE id=%2").arg(Traeger).arg(ID));
         std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
         return true;
     }

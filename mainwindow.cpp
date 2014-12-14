@@ -139,7 +139,7 @@ void MainWindow::ComboboxFuellen()
     ui->comboBox_AusGroFilter->addItem("Alle",QVariant(0));
     ui->comboBox_eigenFilter->addItem("Alle",QVariant(0));
     ui->comboBox_AusTypFilter->addItem("Alle",QVariant(0));
-    ui->comboBoxBeTypEin->addItem(QString::fromLocal8Bit("Bitte Wählen"),QVariant(0));
+    ui->comboBoxBeTypEin->addItem(QString::fromUtf8("Bitte Wählen"),QVariant(0));
     Kleidungstypentabelle *KleiTyp=Daten->getKleidungstypen();
     for (int i=0;i<KleiTyp->Anzahl;++i)
     {

@@ -9,6 +9,13 @@
 
 #include <QStandardItemModel>
 
+#if __WIN32__||_MSC_VER
+#define WINVER 0x0602
+#define _WIN32_WINNT 0x0602
+#include <windows.h>
+#include <shlobj.h>
+#endif
+
 namespace Ui {
 class MainWindow;
 }

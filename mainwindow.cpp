@@ -7,12 +7,29 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     PersonenID=0;
-#if __linux__ || __unix__
+#if __linux__||__unix__
     QString Ort=QDir::homePath();
-    Ort=Ort.append("/.config/Kleiderkammer");
-#elif __WIN32__ || _MSC_VER
-    QString Ort="$APPDATA$/Kleiderkammer";
+    Ort=Ort.append("/.config");
+#elif __WIN32__||_MSC_VER
+    PWSTR *localAppData=new PWSTR[256];
+    _GUID Local;//Ersetzrt die _GUID FOLDERID_LocalAppData ist nicht sön aber läuft.
+    Local.Data1=0xF1B32785;
+    Local.Data2=0x6FBA;
+    Local.Data3=0x4FCF;
+    Local.Data4[0]=0x9D;
+    Local.Data4[1]=0x55;
+    Local.Data4[2]=0x7B;
+    Local.Data4[3]=0x8E;
+    Local.Data4[4]=0x7F;
+    Local.Data4[5]=0x15;
+    Local.Data4[6]=0x70;
+    Local.Data4[7]=0x91;
+    SHGetKnownFolderPath(Local,0,NULL,localAppData);
+    QString Ort=QString::fromWCharArray(*localAppData);
+    delete localAppData;
+
 #endif
+    Ort.append("/Kleiderkammer");
     {
         QDir Appdir(Ort);
         if(!Appdir.exists())
@@ -81,7 +98,7 @@ void MainWindow::Ausleihlistefuellen(int Filtertyp, int FilterGroesse)
     QStringList Titel;
     Titel.append("ID");
     Titel.append("Typ");
-    Titel.append(QString::fromLocal8Bit("Größe"));
+    Titel.append(QString::fromUtf8("Größe"));
     Titel.append("Nummer");
     KleiderAus.setHorizontalHeaderLabels(Titel);
     KleiderTabelle *Kleidung=Daten->getKleiderinKammer(Filtertyp,FilterGroesse);
@@ -177,7 +194,7 @@ void MainWindow::KleidunginKammerAnzeigen(int Filter)
     QStringList Zeile;
     Zeile.append("Nummer");
     Zeile.append("Typ");
-    Zeile.append(QString::fromLocal8Bit("Größe"));
+    Zeile.append(QString::fromUtf8("Größe"));
     Kleidungstuecke.clear();
     Kleidungstuecke.setHorizontalHeaderLabels(Zeile);
     int TypFilter=ui->comboBoxBekFilter->itemData(Filter).toInt();
@@ -196,7 +213,7 @@ void MainWindow::KleidunginKammerAnzeigen(int Filter)
 void MainWindow::Kleidungstypgewaehlt(int Typ)
 {
     ui->comboBoxBeGroEin->clear();
-    ui->comboBoxBeGroEin->addItem(QString::fromLocal8Bit("Bitte Wählen"),QVariant(0));
+    ui->comboBoxBeGroEin->addItem(QString::fromUtf8("Bitte Wählen"),QVariant(0));
     int TypID=ui->comboBoxBeTypEin->itemData(Typ).toInt();
     if (TypID==0)
     {
@@ -226,7 +243,7 @@ void MainWindow::PerKleidungslistefuellen(int FilterTyp)
     QStringList Titel;
     Titel.append("ID");
     Titel.append("Typ");
-    Titel.append(QString::fromLocal8Bit("Größe"));
+    Titel.append(QString::fromUtf8("Größe"));
     Titel.append("Nummer");
     PerKleider.setHorizontalHeaderLabels(Titel);
     int Filter=ui->comboBox_eigenFilter->itemData(FilterTyp).toInt();

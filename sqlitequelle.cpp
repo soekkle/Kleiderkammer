@@ -117,7 +117,7 @@ void SQLiteQuelle::createDB()
     Abfrage.exec("create table Jugendfeuerwehr(id integer primary key AUTOINCREMENT,Name varchar)");
     Abfrage.exec("create table Groessen(id integer primary key AUTOINCREMENT, Groesse varchar,Typ integer)");
     QSqlError Fehler=Abfrage.lastError();
-    std::cout<<Fehler.text().toStdString();
+    std::cerr<<Fehler.text().toStdString();
 }
 
 /*!
@@ -231,7 +231,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
     if (Groesse>0)
         SQLString=SQLString.append(" AND Kleidungsstuecke.Groesse=%1").arg(Groesse);
     SQLString=SQLString.append(" AND Kleidungsstuecke.Traeger=%1").arg(Traeger);
-    std::cout<<SQLString.toStdString()<<std::endl;
+    //std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);
     while (Abfrage.next())
     {

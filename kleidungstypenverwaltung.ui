@@ -171,11 +171,12 @@
  <tabstops>
   <tabstop>table_Typ</tabstop>
   <tabstop>edit_Typ_Name</tabstop>
+  <tabstop>spin_Typ_An</tabstop>
+  <tabstop>spin_Typ_En</tabstop>
   <tabstop>Button_Typ</tabstop>
   <tabstop>table_Groesse</tabstop>
   <tabstop>edit_Groesse</tabstop>
   <tabstop>Button_Groesse</tabstop>
-  <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

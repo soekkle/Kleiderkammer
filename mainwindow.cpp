@@ -178,6 +178,7 @@ void MainWindow::KleidunginKammerAnzeigen(int Filter)
     Zeile.append("Nummer");
     Zeile.append("Typ");
     Zeile.append(QString::fromLocal8Bit("Größe"));
+    Zeile.append("Alter");
     Kleidungstuecke.clear();
     Kleidungstuecke.setHorizontalHeaderLabels(Zeile);
     int TypFilter=ui->comboBoxBekFilter->itemData(Filter).toInt();
@@ -188,6 +189,8 @@ void MainWindow::KleidunginKammerAnzeigen(int Filter)
         Zeile.append(new QStandardItem(QString::number(Kleidung->Nummer[i])));
         Zeile.append(new QStandardItem(Kleidung->Typ[i]));
         Zeile.append(new QStandardItem(Kleidung->Groesse[i]));
+        int Alter=QDate::currentDate().year() -Kleidung->Anschaffung[i].date().year();
+        Zeile.append(new QStandardItem(QString::number(Alter/365)));
         Kleidungstuecke.appendRow(Zeile);
     }
     delete Kleidung;

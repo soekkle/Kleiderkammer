@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->table_Kleileihen->setModel(&KleiderAus);
     ui->tableView_KleiPerson->setModel(&PerKleider);
     ComboboxFuellen();
+    Drucken=new Bericht(Daten,this);
     connect(ui->actionKleidungstypen_verwalten,SIGNAL(triggered()),Typen,SLOT(exec()));
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
     connect(ui->actionGruppen_Verwalten,SIGNAL(triggered()),Gruppen,SLOT(exec()));
@@ -64,12 +65,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_leihen,SIGNAL(clicked()),this,SLOT(Auslehenclicked()));
     connect(ui->comboBox_eigenFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PerKleidungslistefuellen(int)));
     connect(ui->pushButton_zuruck,SIGNAL(clicked()),this,SLOT(Zurueckgeben()));
+    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(Druckenstarten()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete Daten;
+    delete Drucken;
 }
 
 void MainWindow::AusGroessenFiltergeaendert(int Groesse)
@@ -167,6 +170,15 @@ void MainWindow::ComboboxFuellen()
     }
     KleidunginKammerAnzeigen(0);
     delete KleiTyp;
+}
+
+void MainWindow::Druckenstarten()
+{
+    if (ui->radioButton->isChecked())
+        Drucken->generiereKammerListe();
+    if (ui->radioButton_2->isChecked())
+        Drucken->generierenPersonenListe(0);
+
 }
 
 void MainWindow::KleidungHinCancel()

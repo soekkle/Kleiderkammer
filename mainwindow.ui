@@ -24,7 +24,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -253,6 +253,42 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_berichte">
+       <attribute name="title">
+        <string>Berichte</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="1">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButton">
+              <property name="text">
+               <string>Inventarliste</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QRadioButton" name="radioButton_2">
+              <property name="text">
+               <string>Namenliste</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Bericht erzeugen</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -263,7 +299,7 @@
      <x>0</x>
      <y>0</y>
      <width>641</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -309,7 +345,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
   <tabstop>comboBoxPerJFFilter</tabstop>
   <tabstop>tablePersonen</tabstop>
   <tabstop>linePerVor</tabstop>

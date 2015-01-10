@@ -6,6 +6,7 @@
 #include "sqlitequelle.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
+#include "bericht.h"
 
 #include <QStandardItemModel>
 
@@ -30,6 +31,7 @@ public:
     
 private:
     Ui::MainWindow *ui;
+    Bericht *Drucken;
     SQLiteQuelle *Daten;
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
@@ -43,6 +45,8 @@ private slots:
     void Auslehenclicked();
     void AusTypFiltergeaendert(int Typ);
     void ComboboxFuellen();
+    //! Slot zum Starten des Druckens
+    void Druckenstarten();
     //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
     void Kleidungstypgewaehlt(int Typ);
     //! Slot der für die Anzeige der Personen zuständig ist.

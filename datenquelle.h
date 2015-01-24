@@ -34,6 +34,7 @@ public:
     QVector<QString> Groesse;
     QVector<int> AnzahlAusleihen;
     QVector<QDateTime> Anschaffung;
+    QVector<QString> Bemerkung;
 };
 
 class Kleidungstypentabelle
@@ -83,6 +84,7 @@ public:
     virtual bool removeKleidungstyp(int ID)=0;
     virtual bool removePerson(int ID)=0;
     virtual void rueckgabeKleidungsstueck(int ID)=0;
+    virtual bool setKleidungsKommentar(int ID, QString Kommentar)=0;
 };
 
 #endif // DATENQUELLE_H

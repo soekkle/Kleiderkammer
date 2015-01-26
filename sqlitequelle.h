@@ -48,7 +48,7 @@ public:
     bool removePerson(int ID);
     void rueckgabeKleidungsstueck(int ID);
     //! Setzt den Komentar eines Kleidungsstückes.
-    bool setKleidungsKommentar(int ID, QString Kommentar)
+    bool setKleidungsKommentar(int ID, QString Kommentar);
 private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.

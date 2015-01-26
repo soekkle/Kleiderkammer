@@ -373,10 +373,10 @@ void SQLiteQuelle::rueckgabeKleidungsstueck(int ID)
 
 bool SQLiteQuelle::setKleidungsKommentar(int ID, QString Kommentar)
 {
-    QSqlQuery Abfrabe(Datenbank);
+    QSqlQuery Abfrage(Datenbank);
     Abfrage.prepare("UPDATE Kleidungsstuecke SET 'Bemerkung'=:Kommentar WHERE id=:ID");
     Abfrage.bindValue(0, Kommentar);//Einsetzen der Daten
     Abfrage.bindValue(1, ID);
-    Abfrabe.exec();
+    Abfrage.exec();
     return true;
 }

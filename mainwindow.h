@@ -6,6 +6,7 @@
 #include "sqlitequelle.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
+#include "kleidungstableview.h"
 
 #include <QStandardItemModel>
 
@@ -34,7 +35,8 @@ private:
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
     //! Modelle für das Anzeigen der Daten.
-    QStandardItemModel Personen,Kleidungstuecke,KleiderAus,PerKleider;
+    QStandardItemModel Personen,KleiderAus,PerKleider;
+    KleidungsTableview *Kleidungstuecke;
     int PersonenID;
     void Ausleihlistefuellen(int Filtertyp, int FilterGroesse);
 

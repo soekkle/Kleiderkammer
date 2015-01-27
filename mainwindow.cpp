@@ -42,7 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
     Daten=new SQLiteQuelle(Ort);
     Typen=new KleidungsTypenVerwaltung(Daten,this);
     Gruppen=new Gruppenverwaltung(Daten,this);
-    ui->tableKleidung->setModel(&Kleidungstuecke);
+    Kleidungstuecke =new KleidungsTableview(Daten,0,this);
+    ui->tableKleidung->setModel(Kleidungstuecke);
     ui->tablePersonen->setModel(&Personen);
     ui->table_Kleileihen->setModel(&KleiderAus);
     ui->tableView_KleiPerson->setModel(&PerKleider);
@@ -69,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete Kleidungstuecke;
     delete Daten;
 }
 
@@ -192,28 +194,7 @@ void MainWindow::KleidungHinClicked()
 
 void MainWindow::KleidunginKammerAnzeigen(int Filter)
 {
-    QStringList Zeile;
-    Zeile.append("Nummer");
-    Zeile.append("Typ");
-    Zeile.append(QString::fromUtf8("Größe"));
-    Zeile.append("Alter");
-    Zeile.append("Bemerkung");
-    Kleidungstuecke.clear();
-    Kleidungstuecke.setHorizontalHeaderLabels(Zeile);
-    int TypFilter=ui->comboBoxBekFilter->itemData(Filter).toInt();
-    KleiderTabelle *Kleidung=Daten->getKleiderinKammer(TypFilter,-1);
-    for (int i=0;i<Kleidung->Anzahl;++i)
-    {
-        QList<QStandardItem*> Zeile;
-        Zeile.append(new QStandardItem(QString::number(Kleidung->Nummer[i])));
-        Zeile.append(new QStandardItem(Kleidung->Typ[i]));
-        Zeile.append(new QStandardItem(Kleidung->Groesse[i]));
-        int Alter=QDate::currentDate().year() -Kleidung->Anschaffung[i].date().year();
-        Zeile.append(new QStandardItem(QString::number(Alter)));
-        Zeile.append(new QStandardItem(Kleidung->Bemerkung[i]));
-        Kleidungstuecke.appendRow(Zeile);
-    }
-    delete Kleidung;
+    Kleidungstuecke->setFilterTyp(Filter);
 }
 
 void MainWindow::Kleidungstypgewaehlt(int Typ)

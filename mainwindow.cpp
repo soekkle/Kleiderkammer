@@ -42,11 +42,13 @@ MainWindow::MainWindow(QWidget *parent) :
     Daten=new SQLiteQuelle(Ort);
     Typen=new KleidungsTypenVerwaltung(Daten,this);
     Gruppen=new Gruppenverwaltung(Daten,this);
-    Kleidungstuecke =new KleidungsTableview(Daten,0,this);
+    Kleidungstuecke = new KleidungsTableview(Daten,0,this);
+    KleiderAus = new KleidungsTableview(Daten,0,this);
+    PerKleider = new KleidungsTableview(Daten,1,this);
     ui->tableKleidung->setModel(Kleidungstuecke);
     ui->tablePersonen->setModel(&Personen);
-    ui->table_Kleileihen->setModel(&KleiderAus);
-    ui->tableView_KleiPerson->setModel(&PerKleider);
+    ui->table_Kleileihen->setModel(KleiderAus);
+    ui->tableView_KleiPerson->setModel(PerKleider);
     ComboboxFuellen();
     connect(ui->actionKleidungstypen_verwalten,SIGNAL(triggered()),Typen,SLOT(exec()));
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
@@ -76,46 +78,24 @@ MainWindow::~MainWindow()
 
 void MainWindow::AusGroessenFiltergeaendert(int Groesse)
 {
-    int GroFilter,TypFilter;
-    TypFilter=ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt();
+    int GroFilter;
     GroFilter=ui->comboBox_AusGroFilter->itemData(Groesse).toInt();
-    Ausleihlistefuellen(TypFilter,GroFilter);
+    KleiderAus->setFilterGroesse(GroFilter);
 }
 
 void MainWindow::Auslehenclicked()
 {
-    int id=KleiderAus.data(KleiderAus.index(ui->table_Kleileihen->currentIndex().row(),0)).toInt();
+    int id=KleiderAus->getKleidungsId(ui->table_Kleileihen->currentIndex().row());
     if (id==0)
         return;
     std::clog<<PersonenID<<" : "<<id<<std::endl;
     Daten->KleidungsstueckzuordnenbyID(id,PersonenID);
-    Ausleihlistefuellen(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt(),
-                        ui->comboBox_AusGroFilter->itemData(ui->comboBox_AusGroFilter->currentIndex()).toInt());
+    //Ausleihlistefuellen
+    KleiderAus->setFilterTyp(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt());
+    KleiderAus->setFilterGroesse(ui->comboBox_AusGroFilter->itemData(ui->comboBox_AusGroFilter->currentIndex()).toInt());
     PerKleidungslistefuellen(ui->comboBox_eigenFilter->currentIndex());
 }
 
-void MainWindow::Ausleihlistefuellen(int Filtertyp, int FilterGroesse)
-{
-    KleiderAus.clear();
-    QStringList Titel;
-    Titel.append("ID");
-    Titel.append("Typ");
-    Titel.append(QString::fromUtf8("Größe"));
-    Titel.append("Nummer");
-    KleiderAus.setHorizontalHeaderLabels(Titel);
-    KleiderTabelle *Kleidung=Daten->getKleiderinKammer(Filtertyp,FilterGroesse);
-    for (int i=0;i<Kleidung->Anzahl;++i)
-    {
-        QList<QStandardItem*> Zeile;
-        Zeile.append(new QStandardItem(QString::number(Kleidung->ID[i])));
-        Zeile.append(new QStandardItem(Kleidung->Typ[i]));
-        Zeile.append(new QStandardItem(Kleidung->Groesse[i]));
-        Zeile.append(new QStandardItem(QString::number(Kleidung->Nummer[i])));
-        KleiderAus.appendRow(Zeile);
-    }
-    delete Kleidung;
-    ui->table_Kleileihen->hideColumn(0);
-}
 
 void MainWindow::AusTypFiltergeaendert(int Typ)
 {
@@ -123,10 +103,12 @@ void MainWindow::AusTypFiltergeaendert(int Typ)
     if (Typ==0)
     {
         ui->comboBox_AusGroFilter->setEnabled(false);
+        KleiderAus->setFilterTyp(0);
         return;
     }
     ui->comboBox_AusGroFilter->addItem("Alle",QVariant(0));
     int Gro=ui->comboBox_AusTypFilter->itemData(Typ).toInt();
+    KleiderAus->setFilterTyp(Gro);
     GroessenTabelle *Groessen=Daten->getGroessen(&Gro,1);
     for (int i=0;i<Groessen->Anzahl;++i)
     {
@@ -195,6 +177,7 @@ void MainWindow::KleidungHinClicked()
 void MainWindow::KleidunginKammerAnzeigen(int Filter)
 {
     Kleidungstuecke->setFilterTyp(Filter);
+
 }
 
 void MainWindow::Kleidungstypgewaehlt(int Typ)
@@ -226,26 +209,8 @@ void MainWindow::Kleidungstypgewaehlt(int Typ)
 
 void MainWindow::PerKleidungslistefuellen(int FilterTyp)
 {
-    PerKleider.clear();
-    QStringList Titel;
-    Titel.append("ID");
-    Titel.append("Typ");
-    Titel.append(QString::fromUtf8("Größe"));
-    Titel.append("Nummer");
-    PerKleider.setHorizontalHeaderLabels(Titel);
     int Filter=ui->comboBox_eigenFilter->itemData(FilterTyp).toInt();
-    KleiderTabelle *Kleidung=Daten->getKleidervonPerson(PersonenID,Filter);
-    for (int i=0;i<Kleidung->Anzahl;++i)
-    {
-        QList<QStandardItem*> Zeile;
-        Zeile.append(new QStandardItem(QString::number(Kleidung->ID[i])));
-        Zeile.append(new QStandardItem(Kleidung->Typ[i]));
-        Zeile.append(new QStandardItem(Kleidung->Groesse[i]));
-        Zeile.append(new QStandardItem(QString::number(Kleidung->Nummer[i])));
-        PerKleider.appendRow(Zeile);
-    }
-    delete Kleidung;
-    ui->tableView_KleiPerson->hideColumn(0);
+    PerKleider->setFilterTyp(Filter);
 }
 
 void MainWindow::PersonenAnzeigen(int Filter)
@@ -290,7 +255,7 @@ void MainWindow::PersonAusgewaehlt(const QModelIndex &neu, const QModelIndex )
     AusTypFiltergeaendert(0);
     ui->comboBox_AusTypFilter->setCurrentIndex(0);
     PersonenID=Personen.data(Personen.index(row,0)).toInt();
-    PerKleidungslistefuellen(0);
+    PerKleider->setFilterPerson(PersonenID);
     return;
 }
 
@@ -322,12 +287,11 @@ void MainWindow::PersonHinCancel()
 
 void MainWindow::Zurueckgeben()
 {
-    int id=PerKleider.data(PerKleider.index(ui->tableView_KleiPerson->currentIndex().row(),0)).toInt();
+    int id=PerKleider->getKleidungsId(ui->tableView_KleiPerson->currentIndex().row());
     if (id==0)
         return;
     Daten->rueckgabeKleidungsstueck(id);
-    Ausleihlistefuellen(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt(),
-                        ui->comboBox_AusGroFilter->itemData(ui->comboBox_AusGroFilter->currentIndex()).toInt());
+    KleiderAus->update();
     PerKleidungslistefuellen(ui->comboBox_eigenFilter->currentIndex());
     KleidunginKammerAnzeigen(ui->comboBoxBekFilter->currentIndex());
 }

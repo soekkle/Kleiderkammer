@@ -50,6 +50,13 @@ Qt::ItemFlags KleidungsTableview::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
 }
 
+int KleidungsTableview::getKleidungsId(int row)
+{
+    if (row<Kleidung->Anzahl)
+        return Kleidung->ID[row];
+    return -1;
+}
+
 QVariant KleidungsTableview::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role==Qt::DisplayRole)
@@ -79,7 +86,7 @@ QVariant KleidungsTableview::headerData(int section, Qt::Orientation orientation
 
 int KleidungsTableview::rowCount(const QModelIndex &parent) const
 {
-    return Kleidung->Anzahl-1;
+    return Kleidung->Anzahl;
 }
 
 bool KleidungsTableview::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -95,6 +102,20 @@ bool KleidungsTableview::setData(const QModelIndex &index, const QVariant &value
     return true ;
 }
 
+void KleidungsTableview::setFilterGroesse(int Groesse)
+{
+    if (Groesse>=0)
+        FilterGroesse=Groesse;
+    update();
+}
+
+void KleidungsTableview::setFilterPerson(int Person)
+{
+    if (Person>=0)
+        FilterPerson=Person;
+    update();
+}
+
 void KleidungsTableview::setFilterTyp(int Typ)
 {
     if (Typ>=0)
@@ -108,22 +129,14 @@ void KleidungsTableview::update()
     if (Kleidung!=NULL)
     {
         anz_Alt=Kleidung->Anzahl-1;
+        beginRemoveRows(QModelIndex(),0,anz_Alt);
         delete Kleidung;
+        endRemoveRows();
     }
     if (Modus==0)
         Kleidung=Daten->getKleiderinKammer(FilterTyp,FilterGroesse);
     if (Modus==1)
         Kleidung=Daten->getKleidervonPerson(FilterPerson,FilterTyp);
-    int anz=Kleidung->Anzahl-1;
-    qDebug()<<anz_Alt<<anz;
-    if (anz_Alt>anz)
-    {
-        beginRemoveRows(QModelIndex(),anz,anz_Alt);
-        endRemoveRows();
-    }
-    else if (anz>anz_Alt)
-    {
-        beginInsertRows(QModelIndex(),anz_Alt+1,anz);
-        endInsertRows();
-    }
+    beginInsertRows(QModelIndex(),0,Kleidung->Anzahl-1);
+    endInsertRows();
 }

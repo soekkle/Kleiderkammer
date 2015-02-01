@@ -35,10 +35,9 @@ private:
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
     //! Modelle für das Anzeigen der Daten.
-    QStandardItemModel Personen,KleiderAus,PerKleider;
-    KleidungsTableview *Kleidungstuecke;
+    QStandardItemModel Personen;
+    KleidungsTableview *Kleidungstuecke, *PerKleider, *KleiderAus;
     int PersonenID;
-    void Ausleihlistefuellen(int Filtertyp, int FilterGroesse);
 
 private slots:
     void AusGroessenFiltergeaendert(int Typ);

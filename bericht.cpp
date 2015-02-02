@@ -13,6 +13,37 @@ Bericht::~Bericht()
 QString Bericht::generiereKammerListe()
 {
     QString HTML="<html><head>";
+    HTML=HTML.append("<title> Inventurliste von %1 </title>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
+    HTML.append("</head><body>");
+    HTML=HTML.append("<h1> Inventurliste von %1 <h1>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
+    Kleidungstypentabelle *Typen=Daten->getKleidungstypen();
+    for (int i=0;i<Typen->Anzahl;++i)
+    {
+        HTML=HTML.append("<h2>%1. %2</h2>").arg(QString::number(i+1),Typen->Name[i]);
+        int Typ=Typen->ID[i];
+        GroessenTabelle *Groessen=Daten->getGroessen(&Typ,1);
+        KleiderTabelle *Kleider=Daten->getKleiderinKammer(Typ,0);
+        HTML=HTML.append(QString::fromUtf8("<p>In der Kliderkammer sind %1 %2 in %3 Größen.</p>")).arg(QString::number(Kleider->Anzahl)
+                                                                                    ,Typen->Name[i],QString::number(Groessen->Anzahl));
+        for(int j=0;j<Groessen->Anzahl;++j)
+        {
+            delete Kleider;
+            Kleider=Daten->getKleiderinKammer(Typ,Groessen->IDs[j]);
+            HTML=HTML.append(QString::fromUtf8("<h3>%5.%6 %1</h3><p>Es sind %3 %2 in Größe %1 in der Kleiderkammer mit den Nummer:</p><p>")).arg(
+                        Groessen->Namen[j],Typen->Name[i],QString::number(Kleider->Anzahl),QString::number(i+1),QString::number(j+1));
+            for (int k=0;k<Kleider->Anzahl;++k)
+            {
+                if (k>0)
+                    HTML=HTML.append(", %1").arg(Kleider->Nummer[k]);
+                else
+                    HTML.append(QString::number(Kleider->Nummer[k]));
+            }
+            HTML.append("</p>");
+        }
+        delete Groessen;
+        delete Kleider;
+    }
+    delete Typen;
     return HTML.append("</body></html>");
 }
 
@@ -29,7 +60,7 @@ QString Bericht::generierenPersonenListe(int Gruppe)
         }
         delete GruppenNamen;
     }
-    HTML.append("<title> Kleidungstabelle für").append(GName).append("</title>");
+    HTML=HTML.append("<title> Kleidungstabelle für %1</title>").arg(GName);
     HTML.append("</head><body>");
     HTML=HTML.append("<h1>Kleidungstabelle %1 vom %2 </h1>").arg(GName,QDate::currentDate().toString("dd.MM.yyyy"));
     HTML.append("<table><thead><td>Nachname</td><td>Vorname</td>");

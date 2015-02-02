@@ -65,7 +65,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_leihen,SIGNAL(clicked()),this,SLOT(Auslehenclicked()));
     connect(ui->comboBox_eigenFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PerKleidungslistefuellen(int)));
     connect(ui->pushButton_zuruck,SIGNAL(clicked()),this,SLOT(Zurueckgeben()));
-    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(Druckenstarten()));
+    connect(ui->pushButton_BeAn,SIGNAL(clicked()),this,SLOT(BerichtAnzeigen()));
+    connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
+    connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
 }
 
 MainWindow::~MainWindow()
@@ -142,11 +144,14 @@ void MainWindow::ComboboxFuellen()
     JugendFeuerwehrTabelle *JfDaten=Daten->getJugendfeuerwehr();
     ui->comboBoxPerJFFilter->clear();
     ui->comboBoxPerJFFilter->addItem("Alle",QVariant(0));
+    ui->comboBox_BeJF->clear();
+    ui->comboBox_BeJF->addItem("Alle",QVariant(0));
     ui->comboPerJFEin->clear();
     for (int i=0;i<JfDaten->Anzahl;++i)
     {
         ui->comboBoxPerJFFilter->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
         ui->comboPerJFEin->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
+        ui->comboBox_BeJF->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
     }
     PersonenAnzeigen(0);
     delete JfDaten;
@@ -172,12 +177,47 @@ void MainWindow::ComboboxFuellen()
     delete KleiTyp;
 }
 
-void MainWindow::Druckenstarten()
+void MainWindow::BerichtAnzeigen()
 {
+    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
     if (ui->radioButton->isChecked())
         ui->webView->setHtml(Drucken->generiereKammerListe());
     if (ui->radioButton_2->isChecked())
-        ui->webView->setHtml(Drucken->generierenPersonenListe(1));
+        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe));
+}
+
+void MainWindow::BerichtDrucken()
+{
+    QPrinter Drucker;
+    QPrintDialog DruckDialog(&Drucker,this);
+    if (DruckDialog.exec()!= QDialog::Accepted)
+        return ;
+    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
+    QString HTML="";
+    if (ui->radioButton->isChecked())
+        HTML=Drucken->generiereKammerListe();
+    if (ui->radioButton_2->isChecked())
+        HTML=Drucken->generierenPersonenListe(Gruppe);
+    QWebView* Flaeche=new QWebView;
+    Flaeche->setHtml(HTML);
+    Flaeche->print(&Drucker);
+    delete Flaeche;
+}
+
+void MainWindow::BerichtSpeichern()
+{
+    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
+    QString HTML="";
+    if (ui->radioButton->isChecked())
+        HTML=Drucken->generiereKammerListe();
+    if (ui->radioButton_2->isChecked())
+        HTML=Drucken->generierenPersonenListe(Gruppe);
+    QString Datei=QFileDialog::getSaveFileName(this,tr("Bericht Speichern"));
+    QFile HDD_Datei(Datei);
+    if (!HDD_Datei.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+    HDD_Datei.write(HTML.toAscii());
+    HDD_Datei.close();
 }
 
 void MainWindow::KleidungHinCancel()

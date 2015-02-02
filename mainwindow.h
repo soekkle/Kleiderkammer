@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
+#include <QPrintDialog>
 #include "datenquelle.h"
 #include "sqlitequelle.h"
 #include "kleidungstypenverwaltung.h"
@@ -44,9 +46,11 @@ private slots:
     void AusGroessenFiltergeaendert(int Typ);
     void Auslehenclicked();
     void AusTypFiltergeaendert(int Typ);
-    void ComboboxFuellen();
+    void BerichtAnzeigen();
     //! Slot zum Starten des Druckens
-    void Druckenstarten();
+    void BerichtDrucken();
+    void BerichtSpeichern();
+    void ComboboxFuellen();
     //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
     void Kleidungstypgewaehlt(int Typ);
     //! Slot der für die Anzeige der Personen zuständig ist.

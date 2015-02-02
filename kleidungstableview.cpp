@@ -70,7 +70,7 @@ QVariant KleidungsTableview::headerData(int section, Qt::Orientation orientation
                 case 1:
                     return QString("Typ");
                 case 2:
-                    return QString().fromLocal8Bit("Größe");
+                    return QString().fromUtf8("Größe");
                 case 3:
                     return QString("Alter");
                 case 4:

@@ -14,15 +14,12 @@ class Bericht
 public:
     Bericht(DatenQuelle *Daten, QWidget *parent=0);
     ~Bericht();
-    bool generierenPersonenListe(int Gruppe);
-    bool generiereKammerListe();
+    QString generierenPersonenListe(int Gruppe);
+    QString generiereKammerListe();
 
 private:
     int Typ;
     DatenQuelle *Daten;
-    QPrinter Drucker;
-    QPrintDialog *DruckDialog;
-    void SeitenLayout(QString Name, int SeitenNummer, int SeitenAnzahl, QPainter *Seite);
 };
 
 #endif // BERICHT_H

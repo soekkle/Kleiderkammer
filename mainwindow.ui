@@ -24,7 +24,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -278,6 +278,15 @@
             </item>
            </layout>
           </item>
+          <item row="1" column="1">
+           <widget class="QWebView" name="webView">
+            <property name="url">
+             <url>
+              <string>about:blank</string>
+             </url>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -299,7 +308,7 @@
      <x>0</x>
      <y>0</y>
      <width>641</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -344,6 +353,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKit/QWebView</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>comboBoxPerJFFilter</tabstop>
   <tabstop>tablePersonen</tabstop>

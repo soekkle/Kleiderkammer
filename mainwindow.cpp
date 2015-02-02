@@ -175,10 +175,9 @@ void MainWindow::ComboboxFuellen()
 void MainWindow::Druckenstarten()
 {
     if (ui->radioButton->isChecked())
-        Drucken->generiereKammerListe();
+        ui->webView->setHtml(Drucken->generiereKammerListe());
     if (ui->radioButton_2->isChecked())
-        Drucken->generierenPersonenListe(0);
-
+        ui->webView->setHtml(Drucken->generierenPersonenListe(1));
 }
 
 void MainWindow::KleidungHinCancel()

@@ -38,6 +38,7 @@ private:
     SQLiteQuelle *Daten;
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
+    QString Ort;
     //! Modelle für das Anzeigen der Daten.
     QStandardItemModel Personen;
     KleidungsTableview *Kleidungstuecke, *PerKleider, *KleiderAus;

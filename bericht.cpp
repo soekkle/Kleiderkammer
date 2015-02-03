@@ -12,7 +12,7 @@ Bericht::~Bericht()
 
 QString Bericht::generiereKammerListe()
 {
-    QString HTML="<html><head>";
+    QString HTML="<html><head> <link rel=\"stylesheet\" href=\"style.css\">";
     HTML=HTML.append("<title> Inventurliste von %1 </title>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
     HTML.append("</head><body>");
     HTML=HTML.append("<h1> Inventurliste von %1 <h1>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
@@ -49,7 +49,7 @@ QString Bericht::generiereKammerListe()
 
 QString Bericht::generierenPersonenListe(int Gruppe)
 {
-    QString HTML="<html><head>";
+    QString HTML="<html><head><link rel=\"stylesheet\" href=\"style.css\">";
     QString GName="";
     {
         JugendFeuerwehrTabelle *GruppenNamen=Daten->getJugendfeuerwehr();
@@ -63,7 +63,7 @@ QString Bericht::generierenPersonenListe(int Gruppe)
     HTML=HTML.append("<title> Kleidungstabelle für %1</title>").arg(GName);
     HTML.append("</head><body>");
     HTML=HTML.append("<h1>Kleidungstabelle %1 vom %2 </h1>").arg(GName,QDate::currentDate().toString("dd.MM.yyyy"));
-    HTML.append("<table><thead><td>Nachname</td><td>Vorname</td>");
+    HTML.append("<table border=\"1\"><thead><th>Nachname</th><th>Vorname</th>");
     QVector<int> TypenListe;
     {
        Kleidungstypentabelle *Typen=Daten->getKleidungstypen();
@@ -74,6 +74,7 @@ QString Bericht::generierenPersonenListe(int Gruppe)
        }
        delete Typen;
     }
+    HTML.append("</thead><tbody>");
     int anzTypen=TypenListe.count();
     PersonenTabelle *Personen=Daten->getPersonen(&Gruppe,1);
     for (int i=0;i<Personen->Anzahl;++i)
@@ -96,7 +97,6 @@ QString Bericht::generierenPersonenListe(int Gruppe)
         HTML.append("</tr>");
     }
     delete Personen;
-    HTML.append("</thead><tbody>");
     HTML.append("</tbody></table>");
     return HTML.append("</body></html>");
 }

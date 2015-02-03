@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     PersonenID=0;
 #if __linux__||__unix__
-    QString Ort=QDir::homePath();
+    Ort=QDir::homePath();
     Ort=Ort.append("/.config");
 #elif __WIN32__||_MSC_VER
     PWSTR *localAppData=new PWSTR[256];
@@ -25,11 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
     Local.Data4[6]=0x70;
     Local.Data4[7]=0x91;
     SHGetKnownFolderPath(Local,0,NULL,localAppData);
-    QString Ort=QString::fromWCharArray(*localAppData);
+    Ort=QString::fromWCharArray(*localAppData);
     delete localAppData;
 
 #endif
-    Ort.append("/Kleiderkammer");
+    Ort.append("/Kleiderkammer/");
     {
         QDir Appdir(Ort);
         if(!Appdir.exists())
@@ -37,7 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
             Appdir.mkpath(Ort);
         }
     }
-    Ort  =Ort.append("/Daten.sqlite");
+    QString Ort=this->Ort;
+    Ort.append("Daten.sqlite");
     std::clog <<Ort.toStdString()<<std::endl;
     Daten=new SQLiteQuelle(Ort);
     Typen=new KleidungsTypenVerwaltung(Daten,this);
@@ -163,16 +164,18 @@ void MainWindow::ComboboxFuellen()
 
 void MainWindow::BerichtAnzeigen()
 {
+    QUrl Url=QUrl::fromLocalFile(Ort);
     int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
     if (ui->radioButton->isChecked())
-        ui->webView->setHtml(Drucken->generiereKammerListe());
+        ui->webView->setHtml(Drucken->generiereKammerListe(),Url);
     if (ui->radioButton_2->isChecked())
-        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe));
+        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe),Url);
 }
 
 void MainWindow::BerichtDrucken()
 {
     QPrinter Drucker;
+    QUrl Url=QUrl::fromLocalFile(Ort);
     QPrintDialog DruckDialog(&Drucker,this);
     if (DruckDialog.exec()!= QDialog::Accepted)
         return ;
@@ -183,7 +186,7 @@ void MainWindow::BerichtDrucken()
     if (ui->radioButton_2->isChecked())
         HTML=Drucken->generierenPersonenListe(Gruppe);
     QWebView* Flaeche=new QWebView;
-    Flaeche->setHtml(HTML);
+    Flaeche->setHtml(HTML,Url);
     Flaeche->print(&Drucker);
     delete Flaeche;
 }

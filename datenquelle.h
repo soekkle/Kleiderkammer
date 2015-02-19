@@ -13,6 +13,7 @@ public:
     QVector<int> IDs;
     QVector<QString> Namen;
     QVector<QString> Typ;
+    QVector<int> Rang;
 };
 
 //! Hilfsklasse zur Ausgabe der Jugendfeuerwehren.
@@ -85,6 +86,7 @@ public:
     virtual bool removePerson(int ID)=0;
     virtual void rueckgabeKleidungsstueck(int ID)=0;
     virtual bool setKleidungsKommentar(int ID, QString Kommentar)=0;
+    virtual bool setRangGroesse(int ID,int Rang)=0;
 };
 
 #endif // DATENQUELLE_H

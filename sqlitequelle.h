@@ -49,6 +49,7 @@ public:
     void rueckgabeKleidungsstueck(int ID);
     //! Setzt den Komentar eines Kleidungsstückes.
     bool setKleidungsKommentar(int ID, QString Kommentar);
+    bool setRangGroesse(int ID,int Rang);
 private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.

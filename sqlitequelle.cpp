@@ -115,7 +115,7 @@ void SQLiteQuelle::createDB()
     Abfrage.exec("create table Kleidungstyp(id integer primary key AUTOINCREMENT,Name varchar,AnNummer integer,EndNummer integer)");
     Abfrage.exec("create table Personen(id integer primary key AUTOINCREMENT,Nachname varchar,Vorname varchar,Jf integer)");
     Abfrage.exec("create table Jugendfeuerwehr(id integer primary key AUTOINCREMENT,Name varchar)");
-    Abfrage.exec("create table Groessen(id integer primary key AUTOINCREMENT, Groesse varchar,Typ integer)");
+    Abfrage.exec("create table Groessen(id integer primary key AUTOINCREMENT, Groesse varchar,Typ integer,Rang integer)");
     QSqlError Fehler=Abfrage.lastError();
     std::cerr<<Fehler.text().toStdString();
 }
@@ -133,7 +133,7 @@ int SQLiteQuelle::freieNummer(int Typ)
     if(Abfrage.next())
     {
         min=Abfrage.value(0).toInt();//Kleinste Nummer für den Typ
-        max=Abfrage.value(1).toInt();//ggrößte Nummer fr den Typ
+        max=Abfrage.value(1).toInt();//Größte Nummer für den Typ
     }
     else
     {
@@ -174,7 +174,7 @@ GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
 {
     GroessenTabelle *Ausgabe=new GroessenTabelle;
     Ausgabe->Anzahl=0;
-    QString SQLString="SELECT Groessen.id, Groesse,name FROM Groessen,Kleidungstyp WHERE Groessen.Typ=Kleidungstyp.id";
+    QString SQLString="SELECT Groessen.id, Groesse,name FROM Groessen,Kleidungstyp,Rang WHERE Groessen.Typ=Kleidungstyp.id";
     if (anz>0)
     {
         SQLString=SQLString.append(" AND ( Groessen.Typ= %1").arg(Filter[0]);
@@ -182,7 +182,7 @@ GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
         {
             SQLString=SQLString.append(" OR Groessen.Typ=%1").arg(Filter[i]);
         }
-        SQLString=SQLString.append(" );");
+        SQLString=SQLString.append(" ) ORDER BY Rang ASC;");
     }
     //std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);
@@ -192,6 +192,7 @@ GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
         Ausgabe->IDs.append(Abfrage.value(0).toInt());
         Ausgabe->Namen.append(Abfrage.value(1).toString());
         Ausgabe->Typ.append(Abfrage.value(2).toString());
+        Ausgabe->Rang.append(Abfrage.value(3).toInt());
     }
     return Ausgabe;
 }
@@ -245,7 +246,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
         Ausgabe->Bemerkung.append(Abfrage.value(6).toString());
     }
     //std::cout<<Abfrage.lastQuery().toStdString()<<std::endl;
-    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
+    //std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return Ausgabe;
 }
 /*!
@@ -379,4 +380,14 @@ bool SQLiteQuelle::setKleidungsKommentar(int ID, QString Kommentar)
     Abfrage.bindValue(1, ID);
     Abfrage.exec();
     return true;
+}
+
+bool SQLiteQuelle::setRangGroesse(int ID, int Rang)
+{
+    QSqlQuery Abfrage(Datenbank);
+    Abfrage.prepare("UPDATE Groessen SET 'Rang'=:Kommentar WHERE id=:ID");
+    Abfrage.bindValue(0, Rang);//Einsetzen der Daten
+    Abfrage.bindValue(1, ID);
+    Abfrage.exec();
+    return true;;
 }

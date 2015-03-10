@@ -72,10 +72,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_BeAn,SIGNAL(clicked()),this,SLOT(BerichtAnzeigen()));
     connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
     connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
+    //Verboinden der ContextMenüs
+    connect(ui->tablePersonen,SIGNAL(customContextMenuRequested(const QPoint)),this,SLOT(NamenContextMenuEvent(QPoint)));
+    //Anlegen der Actionen
+    ActionPersonLoeschen= new QAction(QString::fromUtf8("Löschen"),this);
+    connect(ActionPersonLoeschen,SIGNAL(triggered()),this,SLOT(PersonLoeschen()));
 }
 
 MainWindow::~MainWindow()
 {
+    delete ActionPersonLoeschen;
     delete ui;
     delete Kleidungstuecke;
     delete Daten;
@@ -261,6 +267,18 @@ void MainWindow::Kleidungstypgewaehlt(int Typ)
     ui->spinBoxBeNumEin->setEnabled(true);
 }
 
+/*!
+ * \brief MainWindow::NamenContextMenuEvent Zeigt das Kontentmenü für die Personenliste an. Es bietet die Möglichkeit zum Löschen einer Person.
+ * \param Pos Position an der dan Menü erscheinen soll.
+ */
+void MainWindow::NamenContextMenuEvent(const QPoint &Pos)
+{
+    QMenu menu(this);
+    //menu.addAction("Bearbeiten");
+    menu.addAction(ActionPersonLoeschen);
+    menu.exec(ui->tablePersonen->viewport()->mapToGlobal(Pos));
+}
+
 void MainWindow::PerKleidungslistefuellen(int FilterTyp)
 {
     int Filter=ui->comboBox_eigenFilter->itemData(FilterTyp).toInt();
@@ -328,7 +346,6 @@ void MainWindow::PersonHinClicked()
     }
     Daten->addPerson(Nachname,Vorname,JF);
     PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex());
-    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex());
     PersonHinCancel();
 }
 
@@ -338,6 +355,20 @@ void MainWindow::PersonHinCancel()
     ui->linePerVor->clear();
 }
 
+/*!
+ * \brief MainWindow::PersonLoeschen Für den Löschvorgang der markierten Person aus.
+ */
+void MainWindow::PersonLoeschen()
+{
+    int id=Personen.data(Personen.index(ui->tablePersonen->currentIndex().row(),0)).toInt();
+    KleiderTabelle *Kleider=Daten->getKleidervonPerson(id,0);
+    if (Kleider->Anzahl==0)
+    {
+        Daten->removePerson(id);
+        PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex());
+    }
+    delete Kleider;
+}
 
 void MainWindow::Zurueckgeben()
 {

@@ -48,6 +48,9 @@
            </item>
            <item>
             <widget class="QTableView" name="tablePersonen">
+             <property name="contextMenuPolicy">
+              <enum>Qt::CustomContextMenu</enum>
+             </property>
              <property name="tabKeyNavigation">
               <bool>false</bool>
              </property>
@@ -343,7 +346,7 @@
      <x>0</x>
      <y>0</y>
      <width>641</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -392,7 +395,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header>QtWebKitWidgets/QWebView</header>
   </customwidget>
  </customwidgets>
  <tabstops>

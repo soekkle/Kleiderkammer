@@ -43,6 +43,7 @@ private:
     QStandardItemModel Personen;
     KleidungsTableview *Kleidungstuecke, *PerKleider, *KleiderAus;
     int PersonenID;
+    QAction *ActionPersonLoeschen;
 
 private slots:
     void AusGroessenFiltergeaendert(int Typ);
@@ -51,6 +52,7 @@ private slots:
     void BerichtAnzeigen();
     //! Slot zum Starten des Druckens
     void BerichtDrucken();
+    //! Slot zum Speichern des Berichtes als HTML-Datei.
     void BerichtSpeichern();
     void ComboboxFuellen();
     //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
@@ -61,6 +63,8 @@ private slots:
     void KleidunginKammerAnzeigen(int Filter);
     void KleidungHinClicked();
     void KleidungHinCancel();
+    //! Slot für das ContextMenü bei den Namen
+    void NamenContextMenuEvent(const QPoint &Pos);
     void PerKleidungslistefuellen(int FilterTyp);
     //! Slot der die Eingabemaske für Personen zurücksetzt.
     void PersonHinCancel();
@@ -68,6 +72,8 @@ private slots:
     void PersonHinClicked();
     //! Füllt den Tab Für einen Person.
     void PersonAusgewaehlt(const QModelIndex &neu,const QModelIndex);
+    //! Löscht die Ausgewälte Person.
+    void PersonLoeschen();
     void Zurueckgeben();
 
 };

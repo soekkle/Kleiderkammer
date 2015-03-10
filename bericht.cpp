@@ -79,7 +79,7 @@ QString Bericht::generierenPersonenListe(int Gruppe)
     PersonenTabelle *Personen=Daten->getPersonen(&Gruppe,1);
     for (int i=0;i<Personen->Anzahl;++i)
     {
-        HTML=HTML.append("<tr><td>%1</td><td>%2</td>").arg(Personen->Nachname[i],Personen->Vorname[i]);
+        HTML=HTML.append("<tr><td class=\"Name\">%1</td><td class=\"Name\">%2</td>").arg(Personen->Nachname[i],Personen->Vorname[i]);
         for (int j=0;j<anzTypen;++j)
         {
             KleiderTabelle *Kleidung=Daten->getKleidervonPerson(Personen->ID[i],TypenListe[j]);

@@ -12,6 +12,7 @@
 #include "kleidungstableview.h"
 
 #include <QStandardItemModel>
+#include <QSortFilterProxyModel>
 
 #if __WIN32__||_MSC_VER
 #define WINVER 0x0602
@@ -42,6 +43,8 @@ private:
     //! Modelle für das Anzeigen der Daten.
     QStandardItemModel Personen;
     KleidungsTableview *Kleidungstuecke, *PerKleider, *KleiderAus;
+    //! Modelle Für die Sortierten Anzeigen.
+    QSortFilterProxyModel ProPersonen, ProKleidungstuecke, ProPerKleider, ProKleiderAus;
     int PersonenID;
 
 private slots:

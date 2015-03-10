@@ -46,10 +46,14 @@ MainWindow::MainWindow(QWidget *parent) :
     Kleidungstuecke = new KleidungsTableview(Daten,0,this);
     KleiderAus = new KleidungsTableview(Daten,0,this);
     PerKleider = new KleidungsTableview(Daten,1,this);
-    ui->tableKleidung->setModel(Kleidungstuecke);//Setzt die Modelle zur Anzeige der Daten.
-    ui->tablePersonen->setModel(&Personen);
-    ui->table_Kleileihen->setModel(KleiderAus);
-    ui->tableView_KleiPerson->setModel(PerKleider);
+    ProKleidungstuecke.setSourceModel(Kleidungstuecke);//Verbinden Des Proxiemodell mit dem Datenmodell.
+    ui->tableKleidung->setModel(&ProKleidungstuecke);//Setzt die Modelle zur Anzeige der Daten.
+    ProPersonen.setSourceModel(&Personen);
+    ui->tablePersonen->setModel(&ProPersonen);
+    ProKleiderAus.setSourceModel(KleiderAus);
+    ui->table_Kleileihen->setModel(&ProKleiderAus);
+    ProPerKleider.setSourceModel(PerKleider);
+    ui->tableView_KleiPerson->setModel(&ProPerKleider);
     ComboboxFuellen();//Inizalisiert alle Comboboxen.
     Drucken=new Bericht(Daten,this);
     //Stellt alle Eventverbindungen her.
@@ -73,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_BeAn,SIGNAL(clicked()),this,SLOT(BerichtAnzeigen()));
     connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
     connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
+    connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
 }
 
 MainWindow::~MainWindow()
@@ -95,7 +100,7 @@ void MainWindow::Auslehenclicked()
     int id=KleiderAus->getKleidungsId(ui->table_Kleileihen->currentIndex().row());
     if (id==0)
         return;
-    std::clog<<PersonenID<<" : "<<id<<std::endl;
+    //std::clog<<PersonenID<<" : "<<id<<std::endl;
     Daten->KleidungsstueckzuordnenbyID(id,PersonenID);
     //Ausleihlistefuellen
     KleiderAus->setFilterTyp(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt());

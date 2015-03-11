@@ -28,7 +28,7 @@ int SQLiteQuelle::addGroesse(QString Groesse, int Typ)
         Abfrage.exec(QString("INSERT INTO Groessen('Groesse','Typ') VALUES('%1',%2);").arg(Groesse).arg(Typ));
         return Abfrage.lastInsertId().toInt();
     }
-    std::cerr<<"Größe \""<<Groesse.toStdString()<<"\"Kann nicht hinzugefügt werden.";
+    std::cerr<<"Größe \""<<Groesse.toStdString()<<"\"kann nicht hinzugefügt werden.";
     return -1;
 }
 
@@ -100,7 +100,8 @@ int SQLiteQuelle::addPerson(QString Nachname, QString Vorname,int Gruppe)
     QSqlQuery Abfrage("",Datenbank);
     QString SQLString=QString("insert into Personen ('Nachname','Vorname','JF') Values('%1','%2',%3);").arg(Nachname,Vorname).arg(Gruppe);
     Abfrage.exec(SQLString);
-    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
+    if (Abfrage.lastError().type()!=QSqlError::NoError)
+        std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return Abfrage.lastInsertId().toInt();
 }
 
@@ -329,6 +330,8 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
         }
         SQLString=SQLString.append(")");
     }
+    SQLString.append(" ORDER BY Nachname,Vorname ASC");
+    //std::cout<< SQLString.toStdString();
     QSqlQuery Abfrage(SQLString,Datenbank);
     while(Abfrage.next())
     {

@@ -8,11 +8,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     PersonenID=0;
 #if __linux__||__unix__
-    Ort=QDir::homePath();
+    Ort=QDir::homePath();//Setzt den Pfard der Anwendung unter Linux
     Ort=Ort.append("/.config");
 #elif __WIN32__||_MSC_VER
     PWSTR *localAppData=new PWSTR[256];
-    _GUID Local;//Ersetzrt die _GUID FOLDERID_LocalAppData ist nicht sön aber läuft.
+    _GUID Local;//Ersetzrt die _GUID FOLDERID_LocalAppData ist nicht schön aber läuft.
     Local.Data1=0xF1B32785;
     Local.Data2=0x6FBA;
     Local.Data3=0x4FCF;
@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Local.Data4[6]=0x70;
     Local.Data4[7]=0x91;
     SHGetKnownFolderPath(Local,0,NULL,localAppData);
-    Ort=QString::fromWCharArray(*localAppData);
+    Ort=QString::fromWCharArray(*localAppData);//setzt den Pfard der Anwendung unter Windows
     delete localAppData;
 
 #endif
@@ -40,18 +40,23 @@ MainWindow::MainWindow(QWidget *parent) :
     QString Ort=this->Ort;
     Ort.append("Daten.sqlite");
     std::clog <<Ort.toStdString()<<std::endl;
-    Daten=new SQLiteQuelle(Ort);
-    Typen=new KleidungsTypenVerwaltung(Daten,this);
+    Daten=new SQLiteQuelle(Ort);//Stellt die verbindung zur Datenbank her.
+    Typen=new KleidungsTypenVerwaltung(Daten,this);//Erzeugt die Modelle zur Anzeige der Daten.
     Gruppen=new Gruppenverwaltung(Daten,this);
     Kleidungstuecke = new KleidungsTableview(Daten,0,this);
     KleiderAus = new KleidungsTableview(Daten,0,this);
     PerKleider = new KleidungsTableview(Daten,1,this);
-    ui->tableKleidung->setModel(Kleidungstuecke);
-    ui->tablePersonen->setModel(&Personen);
-    ui->table_Kleileihen->setModel(KleiderAus);
-    ui->tableView_KleiPerson->setModel(PerKleider);
-    ComboboxFuellen();
+    ProKleidungstuecke.setSourceModel(Kleidungstuecke);//Verbinden Des Proxiemodell mit dem Datenmodell.
+    ui->tableKleidung->setModel(&ProKleidungstuecke);//Setzt die Modelle zur Anzeige der Daten.
+    ProPersonen.setSourceModel(&Personen);
+    ui->tablePersonen->setModel(&ProPersonen);
+    ProKleiderAus.setSourceModel(KleiderAus);
+    ui->table_Kleileihen->setModel(&ProKleiderAus);
+    ProPerKleider.setSourceModel(PerKleider);
+    ui->tableView_KleiPerson->setModel(&ProPerKleider);
+    ComboboxFuellen();//Inizalisiert alle Comboboxen.
     Drucken=new Bericht(Daten,this);
+    //Stellt alle Eventverbindungen her.
     connect(ui->actionKleidungstypen_verwalten,SIGNAL(triggered()),Typen,SLOT(exec()));
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
     connect(ui->actionGruppen_Verwalten,SIGNAL(triggered()),Gruppen,SLOT(exec()));
@@ -72,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_BeAn,SIGNAL(clicked()),this,SLOT(BerichtAnzeigen()));
     connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
     connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
+    connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
     //Verboinden der ContextMenüs
     connect(ui->tablePersonen,SIGNAL(customContextMenuRequested(const QPoint)),this,SLOT(NamenContextMenuEvent(QPoint)));
     //Anlegen der Actionen
@@ -97,10 +103,11 @@ void MainWindow::AusGroessenFiltergeaendert(int Groesse)
 
 void MainWindow::Auslehenclicked()
 {
-    int id=KleiderAus->getKleidungsId(ui->table_Kleileihen->currentIndex().row());
+    QModelIndex Index=ProKleiderAus.mapToSource(ProKleiderAus.index(ui->table_Kleileihen->currentIndex().row(),0));
+    int id=KleiderAus->getKleidungsId(Index.row());
     if (id==0)
         return;
-    std::clog<<PersonenID<<" : "<<id<<std::endl;
+    //std::clog<<PersonenID<<" : "<<id<<std::endl;
     Daten->KleidungsstueckzuordnenbyID(id,PersonenID);
     //Ausleihlistefuellen
     KleiderAus->setFilterTyp(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt());
@@ -132,6 +139,8 @@ void MainWindow::AusTypFiltergeaendert(int Typ)
 
 void MainWindow::ComboboxFuellen()
 {
+    /* Fült zwei Comboboxen mit den Namen der Eingetragenen Gruppen.
+       und Speicher die id aus der Datenqelle dazu.*/
     JugendFeuerwehrTabelle *JfDaten=Daten->getJugendfeuerwehr();
     ui->comboBoxPerJFFilter->clear();
     ui->comboBoxPerJFFilter->addItem("Alle",QVariant(0));
@@ -146,6 +155,8 @@ void MainWindow::ComboboxFuellen()
     }
     PersonenAnzeigen(0);
     delete JfDaten;
+    /* Fült alle komboboxen die die Typen der Kleidungsstücke benötigen.
+       Ebenfalls werden die ID als Daten dazu gespeichert.*/
     ui->comboBoxBekFilter->clear();
     ui->comboBoxBeTypEin->clear();
     ui->comboBox_AusGroFilter->clear();
@@ -168,6 +179,11 @@ void MainWindow::ComboboxFuellen()
     delete KleiTyp;
 }
 
+/*!
+ * \brief MainWindow::BerichtAnzeigen Zeigt den Bericht in der webView des Tabs an. Es werden die in der Oberfläche gewälten einstellungen an die
+ * entsprechende Funktion der Klasse Bericht übergeben.
+ */
+
 void MainWindow::BerichtAnzeigen()
 {
     QUrl Url=QUrl::fromLocalFile(Ort);
@@ -178,12 +194,15 @@ void MainWindow::BerichtAnzeigen()
         ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe),Url);
 }
 
+/*!
+ * \brief MainWindow::BerichtDrucken Starte den Vorgang des Drucken eines Bereichtes. Es wird de standad Dialog mit den Druckereinstellungen angezeigt.
+ */
 void MainWindow::BerichtDrucken()
 {
     QPrinter Drucker;
     QUrl Url=QUrl::fromLocalFile(Ort);
     QPrintDialog DruckDialog(&Drucker,this);
-    if (DruckDialog.exec()!= QDialog::Accepted)
+    if (DruckDialog.exec()!= QDialog::Accepted)//Öffnet den Druckendialog und prüft ob gedruckt werden soll.
         return ;
     int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
     QString HTML="";
@@ -193,10 +212,13 @@ void MainWindow::BerichtDrucken()
         HTML=Drucken->generierenPersonenListe(Gruppe);
     QWebView* Flaeche=new QWebView;
     Flaeche->setHtml(HTML,Url);
-    Flaeche->print(&Drucker);
+    Flaeche->print(&Drucker);//rendert den Bericht in einer nicht sichtbaren QWebview und gibt inh an den Drucker weiter.
     delete Flaeche;
 }
 
+/*!
+ * \brief MainWindow::BerichtSpeichern Speicher den Generierten Bericht in einem HTML Dokument.
+ */
 void MainWindow::BerichtSpeichern()
 {
     int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
@@ -205,7 +227,7 @@ void MainWindow::BerichtSpeichern()
         HTML=Drucken->generiereKammerListe();
     if (ui->radioButton_2->isChecked())
         HTML=Drucken->generierenPersonenListe(Gruppe);
-    QString Datei=QFileDialog::getSaveFileName(this,tr("Bericht Speichern"));
+    QString Datei=QFileDialog::getSaveFileName(this,tr("Bericht Speichern"),QString(),tr("Webseite(*.html)"));
     QFile HDD_Datei(Datei);
     if (!HDD_Datei.open(QIODevice::WriteOnly | QIODevice::Text))
         return;
@@ -223,6 +245,8 @@ void MainWindow::KleidungHinCancel()
 void MainWindow::KleidungHinClicked()
 {
     if (ui->comboBoxBeTypEin->currentIndex()==0)
+        return;
+    if (ui->comboBoxBeGroEin->currentIndex()==0)
         return;
     int TypID,GroID,Nummer;
     TypID=ui->comboBoxBeTypEin->itemData(ui->comboBoxBeTypEin->currentIndex()).toInt();
@@ -360,7 +384,9 @@ void MainWindow::PersonHinCancel()
  */
 void MainWindow::PersonLoeschen()
 {
-    int id=Personen.data(Personen.index(ui->tablePersonen->currentIndex().row(),0)).toInt();
+    //Holen des Orginal Indexes.
+    QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(ui->tablePersonen->currentIndex().row(),0));
+    int id=Personen.data(Index).toInt();
     KleiderTabelle *Kleider=Daten->getKleidervonPerson(id,0);
     if (Kleider->Anzahl==0)
     {
@@ -372,7 +398,8 @@ void MainWindow::PersonLoeschen()
 
 void MainWindow::Zurueckgeben()
 {
-    int id=PerKleider->getKleidungsId(ui->tableView_KleiPerson->currentIndex().row());
+    QModelIndex Index=ProPerKleider.mapToSource(ProPerKleider.index(ui->tableView_KleiPerson->currentIndex().row(),0));
+    int id=PerKleider->getKleidungsId(Index.row());
     if (id==0)
         return;
     Daten->rueckgabeKleidungsstueck(id);

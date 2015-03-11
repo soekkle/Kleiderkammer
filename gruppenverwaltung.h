@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include <QMessageBox>
+#include <QMenu>
 #include "datenquelle.h"
 
 namespace Ui {
@@ -25,10 +27,15 @@ private:
     Ui::Gruppenverwaltung *ui;
     DatenQuelle *Daten;
     QStandardItemModel Gruppen;
+    //! Actions für das Contextmenü.
+    QAction *ActionGruppeLoeschen;
 
     void gruppenTabelleFullen();
+
 private slots:
     void gruppenHin();
+    void GruppeLoeschen();
+    void GruppenContextMenu(QPoint Pos);
 };
 
 #endif // GRUPPENVERWALTUNG_H

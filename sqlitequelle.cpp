@@ -349,7 +349,8 @@ bool SQLiteQuelle::removeGrosse(int ID)
 
 bool SQLiteQuelle::removeJugendferweher(int ID)
 {
-    QSqlQuery Abfrage(QString("DELETE Jugendfeuerweher WHERE id=%1").arg(ID),Datenbank);
+    QSqlQuery Abfrage(QString("DELETE FROM Jugendfeuerwehr WHERE id=%1").arg(ID),Datenbank);
+    std::cerr<<Abfrage.lastError().text().toStdString();
     return true;
 }
 

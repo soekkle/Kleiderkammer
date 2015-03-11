@@ -71,7 +71,7 @@ int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
     Abfrage.bindValue(2,Groesse);
     Abfrage.bindValue(3,QDateTime::currentDateTimeUtc());
     Abfrage.exec();//Ausführen der Abfrage.
-    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;//Ausgabe deies Fehlers.
+    //std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;//Ausgabe deies Fehlers.
     return Nummer;
 }
 
@@ -118,7 +118,7 @@ void SQLiteQuelle::createDB()
     Abfrage.exec("create table Jugendfeuerwehr(id integer primary key AUTOINCREMENT,Name varchar)");
     Abfrage.exec("create table Groessen(id integer primary key AUTOINCREMENT, Groesse varchar,Typ integer)");
     QSqlError Fehler=Abfrage.lastError();
-    std::cerr<<Fehler.text().toStdString();
+    //std::cerr<<Fehler.text().toStdString();
 }
 
 /*!
@@ -246,7 +246,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
         Ausgabe->Bemerkung.append(Abfrage.value(6).toString());
     }
     //std::cout<<Abfrage.lastQuery().toStdString()<<std::endl;
-    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
+    //std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return Ausgabe;
 }
 /*!
@@ -309,7 +309,7 @@ bool SQLiteQuelle::KleidungsstueckzuordnenbyID(int ID, int Traeger)
             return false;
         Abfrage.clear();
         Abfrage.exec(QString("UPDATE Kleidungsstuecke SET 'Traeger'=%1,'AnzAusleih'=AnzAusleih+1 WHERE id=%2").arg(Traeger).arg(ID));
-        std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
+        //std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
         return true;
     }
     std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
@@ -353,7 +353,7 @@ bool SQLiteQuelle::removeGrosse(int ID)
 bool SQLiteQuelle::removeJugendferweher(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE FROM Jugendfeuerwehr WHERE id=%1").arg(ID),Datenbank);
-    std::cerr<<Abfrage.lastError().text().toStdString();
+    //std::cerr<<Abfrage.lastError().text().toStdString();
     return true;
 }
 

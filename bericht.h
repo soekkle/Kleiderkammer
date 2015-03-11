@@ -12,7 +12,7 @@
 class Bericht
 {
 public:
-    Bericht(DatenQuelle *Daten, QWidget *parent=0);
+    Bericht(DatenQuelle *Daten);
     ~Bericht();
     QString generierenPersonenListe(int Gruppe);
     QString generiereKammerListe();

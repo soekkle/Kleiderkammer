@@ -1,6 +1,6 @@
 #include "bericht.h"
 
-Bericht::Bericht(DatenQuelle *Daten, QWidget* parent)
+Bericht::Bericht(DatenQuelle *Daten)
 {
     this->Daten=Daten;
     Typ=1;
@@ -47,6 +47,12 @@ QString Bericht::generiereKammerListe()
     return HTML.append("</body></html>");
 }
 
+/*!
+ * \brief Bericht::generierenPersonenListe Generiert eien HTML-Webseite mit einer Tabelle in, der die Nummer der ausgeliehnenen
+ * Kleidungsstücke für die verschiedenen Personen Eingetragen sind.
+ * \param Gruppe ID der Gruppe Für die der Bereicht generiert werden soll.
+ * \return  Gibt HTML Text des Reports zurück.
+ */
 QString Bericht::generierenPersonenListe(int Gruppe)
 {
     QString HTML="<html><head><link rel=\"stylesheet\" href=\"style.css\">";
@@ -76,10 +82,17 @@ QString Bericht::generierenPersonenListe(int Gruppe)
     }
     HTML.append("</thead><tbody>");
     int anzTypen=TypenListe.count();
-    PersonenTabelle *Personen=Daten->getPersonen(&Gruppe,1);
+    int anz=1;
+    if (Gruppe==0)
+        anz=0;
+    PersonenTabelle *Personen=Daten->getPersonen(&Gruppe,anz);
     for (int i=0;i<Personen->Anzahl;++i)
     {
-        HTML=HTML.append("<tr><td class=\"Name\">%1</td><td class=\"Name\">%2</td>").arg(Personen->Nachname[i],Personen->Vorname[i]);
+        if (i%2==0)
+            HTML.append("<tr class=\"UZeile\">");
+        else
+            HTML.append("<tr class=\"GZeile\">");
+        HTML=HTML.append("<td class=\"Name\">%1</td><td class=\"Name\">%2</td>").arg(Personen->Nachname[i],Personen->Vorname[i]);
         for (int j=0;j<anzTypen;++j)
         {
             KleiderTabelle *Kleidung=Daten->getKleidervonPerson(Personen->ID[i],TypenListe[j]);

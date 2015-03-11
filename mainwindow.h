@@ -46,6 +46,7 @@ private:
     //! Modelle Für die Sortierten Anzeigen.
     QSortFilterProxyModel ProPersonen, ProKleidungstuecke, ProPerKleider, ProKleiderAus;
     int PersonenID;
+    //! Die verschieden Actionen.
     QAction *ActionPersonLoeschen;
 
 private slots:

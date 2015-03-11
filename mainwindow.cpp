@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ProPerKleider.setSourceModel(PerKleider);
     ui->tableView_KleiPerson->setModel(&ProPerKleider);
     ComboboxFuellen();//Inizalisiert alle Comboboxen.
-    Drucken=new Bericht(Daten,this);
+    Drucken=new Bericht(Daten);
     //Stellt alle Eventverbindungen her.
     connect(ui->actionKleidungstypen_verwalten,SIGNAL(triggered()),Typen,SLOT(exec()));
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
@@ -380,7 +380,7 @@ void MainWindow::PersonHinCancel()
 }
 
 /*!
- * \brief MainWindow::PersonLoeschen Für den Löschvorgang der markierten Person aus.
+ * \brief MainWindow::PersonLoeschen Für den Löschvorgang der markierten Person aus. Und Prüft, ob sie noch Kleidungsstücke ausgelienen hat.
  */
 void MainWindow::PersonLoeschen()
 {
@@ -390,8 +390,14 @@ void MainWindow::PersonLoeschen()
     KleiderTabelle *Kleider=Daten->getKleidervonPerson(id,0);
     if (Kleider->Anzahl==0)
     {
+        if (QMessageBox::information(this,QString::fromUtf8("Person löschen"),QString::fromUtf8("Sind Sie sicher, dass sie ausgewälte die Person löschen wollen?"),
+                                      QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
         Daten->removePerson(id);
         PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex());
+    }
+    else
+    {
+        QMessageBox::warning(this,QString::fromUtf8("Die Person hat noch Kleidungsstücke."),QString::fromUtf8("Die Person kann nicht gelöscht werden, da sie noch Kleidungsstücke ausgeliehen hat."),QMessageBox::Ok);
     }
     delete Kleider;
 }

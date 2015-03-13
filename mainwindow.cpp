@@ -80,9 +80,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
     //Verboinden der ContextMenüs
     connect(ui->tablePersonen,SIGNAL(customContextMenuRequested(const QPoint)),this,SLOT(NamenContextMenuEvent(QPoint)));
+    connect(ui->tableKleidung,SIGNAL(customContextMenuRequested(const QPoint)),this, SLOT(KleidungContextMenuEvent(QPoint)));
     //Anlegen der Actionen
     ActionPersonLoeschen= new QAction(QString::fromUtf8("Löschen"),this);
     connect(ActionPersonLoeschen,SIGNAL(triggered()),this,SLOT(PersonLoeschen()));
+    ActionKleicungLoeschen=new QAction(QString::fromUtf8("Löschen"),this);
+    ActionKleicungLoeschen->setToolTip(QString::fromUtf8("Löscht das Ausgewalte Kleidungsstück."));
+    connect(ActionKleicungLoeschen,SIGNAL(triggered()),this,SLOT(KleidungLoeschen()));
 }
 
 MainWindow::~MainWindow()
@@ -235,6 +239,17 @@ void MainWindow::BerichtSpeichern()
     HDD_Datei.close();
 }
 
+/*!
+ * \brief MainWindow::KleidungContextMenuEvent Zeigt ein Kontextmenü für das Tableview TabelleKleider an.
+ * \param Pos Position Auf der TableView, wo das Contextmenü angezeigt wird,
+ */
+void MainWindow::KleidungContextMenuEvent(const QPoint Pos)
+{
+    QMenu menu(this);
+    menu.addAction(ActionKleicungLoeschen);
+    menu.exec(ui->tableKleidung->viewport()->mapToGlobal(Pos));
+}
+
 void MainWindow::KleidungHinCancel()
 {
     ui->comboBoxBeTypEin->setCurrentIndex(0);
@@ -261,6 +276,21 @@ void MainWindow::KleidungHinClicked()
 void MainWindow::KleidunginKammerAnzeigen(int Filter)
 {
     Kleidungstuecke->setFilterTyp(Filter);
+
+}
+
+/*!
+ * \brief MainWindow::KleidungLoeschen Löscht das ausgewälte Kleidungsstück aus der Kleiderkammer.
+ */
+void MainWindow::KleidungLoeschen()
+{
+    //Holen des Orginal Indexes.
+    QModelIndex Index=ProKleidungstuecke.mapToSource(ProKleidungstuecke.index(ui->tableKleidung->currentIndex().row(),0));
+    int id=Kleidungstuecke->getKleidungsId(Index.row());
+    if (QMessageBox::information(this,QString::fromUtf8("Kleidungsstück löschen"),QString::fromUtf8("Sind Sie sich sicher, dass sie das Ausgewälte Kleidungsstück löschen wollen?"),
+                                 QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+        Daten->removeKleidungsstueck(id);
+    KleidunginKammerAnzeigen(ui->comboBoxBekFilter->currentIndex());
 
 }
 

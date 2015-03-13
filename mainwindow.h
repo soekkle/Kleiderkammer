@@ -46,7 +46,7 @@ private:
     //! Modelle Für die Sortierten Anzeigen.
     QSortFilterProxyModel ProPersonen, ProKleidungstuecke, ProPerKleider, ProKleiderAus;
     int PersonenID;
-    QAction *ActionPersonLoeschen;
+    QAction *ActionPersonLoeschen,*ActionKleicungLoeschen;
 
 private slots:
     void AusGroessenFiltergeaendert(int Typ);
@@ -58,6 +58,10 @@ private slots:
     //! Slot zum Speichern des Berichtes als HTML-Datei.
     void BerichtSpeichern();
     void ComboboxFuellen();
+    //! Solt zum Anzeigen des Contextmenüs in der Kleidungs Tabelle
+    void KleidungContextMenuEvent(const QPoint Pos);
+    //! Slot zum Löschen eines Kleidungsstückes.
+    void KleidungLoeschen();
     //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
     void Kleidungstypgewaehlt(int Typ);
     //! Slot der für die Anzeige der Personen zuständig ist.

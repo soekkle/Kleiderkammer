@@ -357,6 +357,12 @@ bool SQLiteQuelle::removeJugendferweher(int ID)
     return true;
 }
 
+bool SQLiteQuelle::removeKleidungsstueck(int ID)
+{
+    QSqlQuery Abfrage(QString("DELETE FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
+    return true;
+}
+
 bool SQLiteQuelle::removeKleidungstyp(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE FROM Kleidungstyp WHERE id=%1").arg(ID),Datenbank);

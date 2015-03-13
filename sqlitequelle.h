@@ -46,6 +46,8 @@ public:
     bool removeJugendferweher(int ID);
     bool removeKleidungstyp(int ID);
     bool removePerson(int ID);
+    //! Löscht das Kleidungsstück aus der Datenbank.
+    bool removeKleidungsstueck(int ID);
     void rueckgabeKleidungsstueck(int ID);
     //! Setzt den Komentar eines Kleidungsstückes.
     bool setKleidungsKommentar(int ID, QString Kommentar);

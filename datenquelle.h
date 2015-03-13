@@ -81,6 +81,7 @@ public:
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
     virtual bool removeGrosse(int ID)=0;
     virtual bool removeJugendferweher(int ID)=0;
+    virtual bool removeKleidungsstueck(int ID)=0;
     virtual bool removeKleidungstyp(int ID)=0;
     virtual bool removePerson(int ID)=0;
     virtual void rueckgabeKleidungsstueck(int ID)=0;

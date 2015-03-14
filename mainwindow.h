@@ -13,6 +13,7 @@
 
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <QTextStream>
 
 #if __WIN32__||_MSC_VER
 #define WINVER 0x0602

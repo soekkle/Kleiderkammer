@@ -9,7 +9,7 @@
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
 #include "bericht.h"
-#include "kleidungstableview.h"
+#include "tableviews/kleidungstableview.h"
 
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>

@@ -175,7 +175,7 @@ GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
 {
     GroessenTabelle *Ausgabe=new GroessenTabelle;
     Ausgabe->Anzahl=0;
-    QString SQLString="SELECT Groessen.id, Groesse,name FROM Groessen,Kleidungstyp,Rang WHERE Groessen.Typ=Kleidungstyp.id";
+    QString SQLString="SELECT Groessen.id, Groesse,name, Rang FROM Groessen,Kleidungstyp WHERE Groessen.Typ=Kleidungstyp.id";
     if (anz>0)
     {
         SQLString=SQLString.append(" AND ( Groessen.Typ= %1").arg(Filter[0]);
@@ -183,7 +183,7 @@ GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
         {
             SQLString=SQLString.append(" OR Groessen.Typ=%1").arg(Filter[i]);
         }
-        SQLString=SQLString.append(" ) ORDER BY Rang ASC;");
+        SQLString=SQLString.append(" ) ORDER BY Groessen.Rang ASC;");
     }
     //std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);

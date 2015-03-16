@@ -14,8 +14,8 @@ class KleidungsTableview : public QAbstractTableModel
 public:
     KleidungsTableview(DatenQuelle* Daten,int Modus,QObject *parent = 0);
     int getKleidungsId(int row);
-    int rowCount(const QModelIndex &parent) const;
-    int columnCount(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex &) const;
+    int columnCount(const QModelIndex &) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role=Qt::EditRole);
@@ -23,11 +23,11 @@ public:
     void setFilterTyp(int Typ);
     void setFilterPerson(int Person);
     void setFilterGroesse(int Groesse);
-    void update();
 signals:
     
 public slots:
-    
+    void update();
+
 private:
     KleiderTabelle* Kleidung;
     int FilterTyp, FilterGroesse, FilterPerson;

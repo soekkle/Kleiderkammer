@@ -10,8 +10,11 @@
     <height>385</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::CustomContextMenu</enum>
+  </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Kleidungstypen verwalten</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -23,7 +26,11 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTableView" name="table_Typ"/>
+         <widget class="QTableView" name="table_Typ">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QGroupBox" name="groupBox_3">
@@ -31,14 +38,20 @@
            <string>Hinzufügen</string>
           </property>
           <layout class="QFormLayout" name="formLayout">
-           <item row="0" column="0">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+           </property>
+           <item row="1" column="0">
             <widget class="QLabel" name="label">
              <property name="text">
               <string>Name</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="edit_Typ_Name"/>
+           </item>
+           <item row="2" column="0">
             <widget class="QLabel" name="label_2">
              <property name="toolTip">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Anfang&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Die erste Nummer, die an ein Kleidungsstück dieses Typs vergeben werden soll.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -48,27 +61,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ende&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Die letzte Nummer, die an ein Kleidungsstück dieses Typs vergeben werden soll.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="text">
-              <string>Ende</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="edit_Typ_Name"/>
-           </item>
-           <item row="4" column="1">
-            <widget class="QPushButton" name="Button_Typ">
-             <property name="text">
-              <string>Hinzufügen</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
+           <item row="2" column="1">
             <widget class="QSpinBox" name="spin_Typ_An">
              <property name="maximum">
               <number>100000</number>
@@ -81,7 +74,17 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ende&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Die letzte Nummer, die an ein Kleidungsstück dieses Typs vergeben werden soll.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>Ende</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
             <widget class="QSpinBox" name="spin_Typ_En">
              <property name="maximum">
               <number>100000</number>
@@ -91,6 +94,13 @@
              </property>
              <property name="value">
               <number>1000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QPushButton" name="Button_Typ">
+             <property name="text">
+              <string>Hinzufügen</string>
              </property>
             </widget>
            </item>
@@ -111,6 +121,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QTableView" name="table_Groesse">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="alternatingRowColors">
            <bool>true</bool>
           </property>
@@ -141,12 +154,22 @@
            <item row="0" column="1">
             <widget class="QLineEdit" name="edit_Groesse"/>
            </item>
-           <item row="1" column="1">
+           <item row="2" column="1">
             <widget class="QPushButton" name="Button_Groesse">
              <property name="text">
               <string>Hinzufügen</string>
              </property>
             </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Rang</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="spin_Gros_Rang"/>
            </item>
           </layout>
          </widget>
@@ -169,7 +192,6 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>table_Typ</tabstop>
   <tabstop>edit_Typ_Name</tabstop>
   <tabstop>spin_Typ_An</tabstop>
   <tabstop>spin_Typ_En</tabstop>

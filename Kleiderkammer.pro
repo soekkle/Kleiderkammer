@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     kleidungstypenverwaltung.cpp \
     gruppenverwaltung.cpp \
     bericht.cpp \
-    kleidungstableview.cpp
+    tableviews/kleidungstableview.cpp \
+    tableviews/kleidungsgroessentableview.cpp
 
 HEADERS  += mainwindow.h \
     datenquelle.h \
@@ -27,7 +28,9 @@ HEADERS  += mainwindow.h \
     kleidungstypenverwaltung.h \
     gruppenverwaltung.h \
     bericht.h \
-    kleidungstableview.h
+    kleidungstableview.h \
+    tableviews/kleidungstableview.h \
+    tableviews/kleidungsgroessentableview.h
 
 FORMS    += mainwindow.ui \
     kleidungstypenverwaltung.ui \

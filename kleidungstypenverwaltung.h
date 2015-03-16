@@ -5,6 +5,7 @@
 #include <QStandardItemModel>
 #include <QItemSelectionModel>
 #include <datenquelle.h>
+#include "tableviews/spinboxdelegate.h"
 #include "tableviews/kleidungsgroessentableview.h"
 
 namespace Ui {
@@ -28,6 +29,7 @@ private:
     QStandardItemModel *Typen;
     KleidungsGroessenTableView *Groessen;
     int GroessenFilter;
+    SpinBoxDelegate SpinBox;
 
 signals:
     void datenGeaendert();
@@ -39,5 +41,4 @@ private slots:
         void Typanlegen();
         void Typwahlen(const QItemSelection& neu  , const QItemSelection &);
 };
-
 #endif // KLEIDUNGSTYPENVERWALTUNG_H

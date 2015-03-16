@@ -11,6 +11,7 @@ KleidungsTypenVerwaltung::KleidungsTypenVerwaltung(DatenQuelle *Quelle,QWidget *
     Groessen=new KleidungsGroessenTableView(Daten,this);
     ui->table_Typ->setModel(Typen);
     ui->table_Groesse->setModel(Groessen);
+    ui->table_Groesse->setItemDelegateForColumn(1,&SpinBox);
     QStringList Header;
     Header.append("ID");
     Header.append("Name");

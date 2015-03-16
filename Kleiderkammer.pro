@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     gruppenverwaltung.cpp \
     bericht.cpp \
     tableviews/kleidungstableview.cpp \
-    tableviews/kleidungsgroessentableview.cpp
+    tableviews/kleidungsgroessentableview.cpp \
+    tableviews/spinboxdelegate.cpp
 
 HEADERS  += mainwindow.h \
     datenquelle.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     bericht.h \
     kleidungstableview.h \
     tableviews/kleidungstableview.h \
-    tableviews/kleidungsgroessentableview.h
+    tableviews/kleidungsgroessentableview.h \
+    tableviews/spinboxdelegate.h
 
 FORMS    += mainwindow.ui \
     kleidungstypenverwaltung.ui \

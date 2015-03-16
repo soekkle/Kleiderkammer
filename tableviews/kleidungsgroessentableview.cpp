@@ -47,7 +47,7 @@ QVariant KleidungsGroessenTableView::data(const QModelIndex &index, int role) co
 
 Qt::ItemFlags KleidungsGroessenTableView::flags(const QModelIndex &index) const
 {
-    if (index.row()==1)
+    if (index.column()==1)
         return Qt::ItemIsEditable|Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
 }
@@ -75,6 +75,19 @@ int KleidungsGroessenTableView::rowCount(const QModelIndex &) const
     if (Groessen==NULL)
         return 0;
     return Groessen->Anzahl;
+}
+
+bool KleidungsGroessenTableView::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (index.column()!=1)
+        return false;
+    if (role==Qt::EditRole)
+    {
+        int Rang=value.toInt();
+        Daten->setRangGroesse(Groessen->IDs[index.row()],Rang);
+    }
+    update();
+    return true;
 }
 
 void KleidungsGroessenTableView::setKleidungsTyp(int Typ)

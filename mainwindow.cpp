@@ -228,13 +228,14 @@ void MainWindow::BerichtSpeichern()
     int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
     QString Datei=QFileDialog::getSaveFileName(this,tr("Bericht Speichern"),QString(),tr("Webseite(*.html)"));
     QFile HDD_Datei(Datei);
-    if (!HDD_Datei.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (!HDD_Datei.open(QIODevice::WriteOnly | QIODevice::Text))//Prüft ob die Datei geöffnet werden kann.
         return;
     QTextStream HTML(&HDD_Datei);
+    HTML.setCodec("UTF-8");
     if (ui->radioButton->isChecked())
-        HTML<<Drucken->generiereKammerListe().toLatin1();
+        HTML<<Drucken->generiereKammerListe();
     if (ui->radioButton_2->isChecked())
-        HTML<< Drucken->generierenPersonenListe(Gruppe).toLatin1();
+        HTML<< Drucken->generierenPersonenListe(Gruppe);
     HDD_Datei.close();
 }
 

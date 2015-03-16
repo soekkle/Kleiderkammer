@@ -12,7 +12,7 @@ Bericht::~Bericht()
 
 QString Bericht::generiereKammerListe()
 {
-    QString HTML="<html><head> <link rel=\"stylesheet\" href=\"style.css\">";
+    QString HTML="<!DOCTYPE html >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de-DE\" prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#\">\n<head >\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"stylesheet\" href=\"style.css\">";
     HTML=HTML.append("<title> Inventurliste von %1 </title>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
     HTML.append("</head><body>");
     HTML=HTML.append("<h1> Inventurliste von %1 <h1>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
@@ -55,7 +55,7 @@ QString Bericht::generiereKammerListe()
  */
 QString Bericht::generierenPersonenListe(int Gruppe)
 {
-    QString HTML="<html><head><link rel=\"stylesheet\" href=\"style.css\">";
+    QString HTML="<!DOCTYPE html >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de-DE\" prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#\">\n<head >\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"stylesheet\" href=\"style.css\">";
     QString GName="";
     {
         JugendFeuerwehrTabelle *GruppenNamen=Daten->getJugendfeuerwehr();

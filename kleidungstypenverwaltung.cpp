@@ -8,9 +8,10 @@ KleidungsTypenVerwaltung::KleidungsTypenVerwaltung(DatenQuelle *Quelle,QWidget *
     ui->setupUi(this);
     Daten=Quelle;
     Typen=new QStandardItemModel(this);
-    Groessen=new QStandardItemModel(this);
+    Groessen=new KleidungsGroessenTableView(Daten,this);
     ui->table_Typ->setModel(Typen);
     ui->table_Groesse->setModel(Groessen);
+    ui->table_Groesse->setItemDelegateForColumn(1,&SpinBox);
     QStringList Header;
     Header.append("ID");
     Header.append("Name");
@@ -39,23 +40,15 @@ int KleidungsTypenVerwaltung::exec()
 void KleidungsTypenVerwaltung::GroesseAnlegen()
 {
     QString Name=ui->edit_Groesse->text();
+    int Rang=ui->spin_Gros_Rang->value();
     if(!Name.isEmpty())
     {
-        Daten->addGroesse(Name,GroessenFilter);
-    }
-    GroessenList();
-    datenGeaendert();
-}
+        int id=Daten->addGroesse(Name,GroessenFilter);
+        Daten->setRangGroesse(id,Rang);
 
-void KleidungsTypenVerwaltung::GroessenList()
-{
-    Groessen->clear();
-    Groessen->setHorizontalHeaderLabels(QStringList("Name"));
-    GroessenTabelle *GrosData=Daten->getGroessen(&GroessenFilter,1);
-    for (int i=0;i<GrosData->Anzahl;++i)
-    {
-        Groessen->appendRow(new QStandardItem(GrosData->Namen[i]));
     }
+    Groessen->update();
+    datenGeaendert();
 }
 
 void KleidungsTypenVerwaltung::Typanlegen()
@@ -107,5 +100,5 @@ void KleidungsTypenVerwaltung::Typwahlen(const QItemSelection &neu, const QItemS
     ui->groupBox_2->setEnabled(true);
     ui->groupBox_4->setEnabled(true);
     GroessenFilter=Typen->item(neu.indexes().first().row(),0)->text().toInt();
-    GroessenList();
+    Groessen->setKleidungsTyp(GroessenFilter);
 }

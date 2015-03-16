@@ -11,7 +11,7 @@ KleidungsTableview::KleidungsTableview(DatenQuelle *Daten, int Modus, QObject *p
     Kleidung=Daten->getKleiderinKammer(0,0);
 }
 
-int KleidungsTableview::columnCount(const QModelIndex &parent) const
+int KleidungsTableview::columnCount(const QModelIndex &) const
 {
     return 6;
 }
@@ -84,7 +84,7 @@ QVariant KleidungsTableview::headerData(int section, Qt::Orientation orientation
     return QAbstractTableModel::headerData(section,orientation,role);
 }
 
-int KleidungsTableview::rowCount(const QModelIndex &parent) const
+int KleidungsTableview::rowCount(const QModelIndex &) const
 {
     return Kleidung->Anzahl;
 }

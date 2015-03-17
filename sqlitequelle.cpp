@@ -22,6 +22,7 @@ int SQLiteQuelle::addGroesse(QString Groesse, int Typ)
 {
     QSqlQuery Abfrage("",Datenbank);
     Abfrage.exec(QString("SELECT * FROM Kleidungstyp WHERE id=%1").arg(Typ));
+    FehlerAusgabe(Abfrage);
     if (Abfrage.next())
     {
         Abfrage.clear();
@@ -121,6 +122,21 @@ void SQLiteQuelle::createDB()
 }
 
 /*!
+ * \brief SQLiteQuelle::FehlerAusgabe Beibt den Fehler sowie dien SQL sting zurück bei den der Fehler aufgetreten ist.
+ * \param Abfrage
+ * \return true Wenn kein Fehler Aufgetreten ist.
+ */
+bool SQLiteQuelle::FehlerAusgabe(QSqlQuery Abfrage)
+{
+    if (Abfrage.lastError().type()!=QSqlError::NoError)
+    {
+        std::cerr<<Abfrage.lastQuery().toStdString()<<"\n----------------------------\n"<<Abfrage.lastError().text().toStdString()<<std::endl;
+        return false;
+    }
+    return true;
+}
+
+/*!
  * \brief SQLiteQuelle::freieNummer liefert die Erste Freie Nummer für den angegebenen Typ.
  * \param Typ
  * \return Erste freie Bummer
@@ -142,6 +158,7 @@ int SQLiteQuelle::freieNummer(int Typ)
     Abfrage.clear();
     //Fragt liste aller vergebenen Nummren ab in aufsteigend sortierter Reihenfolge.
     Abfrage.exec(QString("SELECT Nummer FROM Kleidungsstuecke WHERE Typ=%1 ORDER BY Nummer ASC").arg(Typ));
+    FehlerAusgabe(Abfrage);
     if (Abfrage.next())
     {
         //Prüft ob die Nummer schon vergeen ist.
@@ -186,6 +203,7 @@ GroessenTabelle *SQLiteQuelle::getGroessen(int *Filter, int anz)
     }
     //std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);
+    FehlerAusgabe(Abfrage);
     while(Abfrage.next())
     {
         ++Ausgabe->Anzahl;
@@ -206,6 +224,7 @@ JugendFeuerwehrTabelle *SQLiteQuelle::getJugendfeuerwehr()
     JugendFeuerwehrTabelle *Ausgabe=new JugendFeuerwehrTabelle;
     Ausgabe->Anzahl=0;
     QSqlQuery Abfrage("SELECT id,Name FROM Jugendfeuerwehr",Datenbank);
+    FehlerAusgabe(Abfrage);
     while(Abfrage.next())
     {
         ++Ausgabe->Anzahl;
@@ -234,6 +253,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
     SQLString=SQLString.append(" AND Kleidungsstuecke.Traeger=%1").arg(Traeger);
     //std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);
+    FehlerAusgabe(Abfrage);
     while (Abfrage.next())
     {
         ++Ausgabe->Anzahl;
@@ -270,6 +290,7 @@ Kleidungstypentabelle *SQLiteQuelle::getKleidungstypen()
     Kleidungstypentabelle *Ausgabe=new Kleidungstypentabelle;
     QString SQLString="SELECT id, Name,AnNummer,Endnummer FROM Kleidungstyp";
     QSqlQuery Abfrage(SQLString,Datenbank);
+    FehlerAusgabe(Abfrage);
     Ausgabe->Anzahl=0;
     while (Abfrage.next())
     {
@@ -285,6 +306,7 @@ Kleidungstypentabelle *SQLiteQuelle::getKleidungstypen()
 int SQLiteQuelle::getIDByKleidungsNummer(int Nummer)
 {
     QSqlQuery Abfrage(QString("SELECT id FROM Kleidungsstuecke WHERE Nummer=%1").arg(Nummer),Datenbank);
+    FehlerAusgabe(Abfrage);
     if(!Abfrage.next())
         return -1;
     return Abfrage.value(0).toInt();
@@ -293,6 +315,7 @@ int SQLiteQuelle::getIDByKleidungsNummer(int Nummer)
 void SQLiteQuelle::getNummerBereich(int TypID, int *Anfang, int *Ende)
 {
     QSqlQuery Abfrage(QString("SELECT AnNummer,EndNummer FROM Kleidungstyp WHERE id=%1").arg(TypID),Datenbank);
+    FehlerAusgabe(Abfrage);
     if (Abfrage.next())
     {
         *Anfang=Abfrage.value(0).toInt();
@@ -303,6 +326,7 @@ void SQLiteQuelle::getNummerBereich(int TypID, int *Anfang, int *Ende)
 bool SQLiteQuelle::KleidungsstueckzuordnenbyID(int ID, int Traeger)
 {
     QSqlQuery Abfrage(QString("SELECT Traeger FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
+    FehlerAusgabe(Abfrage);
     if(Abfrage.next())
     {
         if (Abfrage.value(0).toInt()>0)//Prüft ob das Kleidungsstück scon verlienen ist.
@@ -331,6 +355,7 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
         SQLString=SQLString.append(")");
     }
     QSqlQuery Abfrage(SQLString,Datenbank);
+    FehlerAusgabe(Abfrage);
     while(Abfrage.next())
     {
         ++Ausgabe->Anzahl;
@@ -345,30 +370,31 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
 bool SQLiteQuelle::removeGrosse(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE FROM Grosse WHERE id=%1").arg(ID),Datenbank);
-    return true;
+    return FehlerAusgabe(Abfrage);
 }
 
 bool SQLiteQuelle::removeJugendferweher(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE Jugendfeuerweher WHERE id=%1").arg(ID),Datenbank);
-    return true;
+    return FehlerAusgabe(Abfrage);
 }
 
 bool SQLiteQuelle::removeKleidungstyp(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE FROM Kleidungstyp WHERE id=%1").arg(ID),Datenbank);
-    return true;
+    return FehlerAusgabe(Abfrage);
 }
 
 bool SQLiteQuelle::removePerson(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE FROM Personen WHERE id=%1").arg(ID),Datenbank);
-    return true;
+    return FehlerAusgabe(Abfrage);
 }
 
 void SQLiteQuelle::rueckgabeKleidungsstueck(int ID)
 {
     QSqlQuery Abfrage(QString("UPDATE Kleidungsstuecke SET 'Traeger'=0 WHERE id=%1").arg(ID),Datenbank);
+    FehlerAusgabe(Abfrage);
 }
 
 

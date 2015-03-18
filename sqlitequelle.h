@@ -56,6 +56,7 @@ private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.
     void createDB();
+    bool FehlerAusgabe(QSqlQuery Abfrage);
     KleiderTabelle* getKleider(int Typ, int Groesse,int Traeger);
 };
 

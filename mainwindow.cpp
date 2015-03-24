@@ -371,7 +371,8 @@ void MainWindow::PersonenAnzeigen(int Filter)
 void MainWindow::PersonAusgewaehlt(const QModelIndex &neu, const QModelIndex )
 {
 
-    int row=neu.row();
+    QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(neu.row(),0));
+    int row=Index.row();
     QString Name,Text="<html><head/><body><p><span style=\" font-size:11pt; font-weight:600;\">%1</span></p></body></html>";
     Name=Personen.data(Personen.index(row,1)).toString();
     Name=Name.append(" ").append(Personen.data(Personen.index(row,2)).toString()).append(" - ");

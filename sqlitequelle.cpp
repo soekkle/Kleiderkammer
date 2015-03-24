@@ -131,7 +131,7 @@ bool SQLiteQuelle::FehlerAusgabe(QSqlQuery Abfrage)
 {
     if (Abfrage.lastError().type()!=QSqlError::NoError)
     {
-        std::cerr<<Abfrage.lastQuery().toStdString()<<"\n----------------------------\n"<<Abfrage.lastError().text().toStdString()<<std::endl;
+        std::cerr<<"----------------------------\n\n"<<Abfrage.lastQuery().toStdString()<<"\n---\n "<<Abfrage.lastError().text().toStdString()<<std::endl;
         return false;
     }
     return true;
@@ -372,7 +372,7 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
 
 bool SQLiteQuelle::removeGrosse(int ID)
 {
-    QSqlQuery Abfrage(QString("DELETE FROM Grosse WHERE id=%1").arg(ID),Datenbank);
+    QSqlQuery Abfrage(QString("DELETE FROM Groessen WHERE id=%1").arg(ID),Datenbank);
     return FehlerAusgabe(Abfrage);
 }
 
@@ -385,6 +385,7 @@ bool SQLiteQuelle::removeJugendferweher(int ID)
 bool SQLiteQuelle::removeKleidungsstueck(int ID)
 {
     QSqlQuery Abfrage(QString("DELETE FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
+    return FehlerAusgabe(Abfrage);
 }
 
 bool SQLiteQuelle::removeKleidungstyp(int ID)

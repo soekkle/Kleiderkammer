@@ -52,6 +52,16 @@ Qt::ItemFlags KleidungsGroessenTableView::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
 }
 
+/*!
+ * \brief KleidungsGroessenTableView::getGroessenID
+ * \param row Zeile für, die die id zurückgegeben wird.
+ * \return Datenbank id des Elementes in der übergebenen Zeile
+ */
+int KleidungsGroessenTableView::getGroessenID(int row)
+{
+    return Groessen->IDs[row];
+}
+
 QVariant KleidungsGroessenTableView::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role==Qt::DisplayRole)

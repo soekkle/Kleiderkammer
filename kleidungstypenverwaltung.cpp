@@ -22,6 +22,16 @@ KleidungsTypenVerwaltung::KleidungsTypenVerwaltung(DatenQuelle *Quelle,QWidget *
     connect(ui->Button_Typ,SIGNAL(clicked()),this,SLOT(Typanlegen()));
     connect(ui->Button_Groesse,SIGNAL(clicked()),this,SLOT(GroesseAnlegen()));
     connect(ui->table_Typ->selectionModel(),SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(Typwahlen(QItemSelection,QItemSelection)));
+    //Verbinden der Menu Actionen
+    connect(ui->table_Groesse,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(GrossenContextMenu(QPoint)));
+    connect(ui->table_Typ,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(TypContextMenu(QPoint)));
+    //Anlegen der Actionen.
+    ActionGroesseLoeschen=new QAction(QString::fromUtf8("Löschen"),this);
+    ActionGroesseLoeschen->setToolTip(QString::fromUtf8("Löscht die ausgewälte Grösse"));
+    connect(ActionGroesseLoeschen,SIGNAL(triggered()),this,SLOT(GroesseLoeschen()));
+    ActionTypLoeschen=new QAction(QString::fromUtf8("Löschen"),this);
+    ActionTypLoeschen->setToolTip(QString::fromUtf8("Löscht den Ausgewälten Kleidungstyp und alle dazugehörigen Größen."));
+    connect(ActionTypLoeschen,SIGNAL(triggered()),this,SLOT(TypLoeschen()));
 }
 
 KleidungsTypenVerwaltung::~KleidungsTypenVerwaltung()
@@ -51,6 +61,24 @@ void KleidungsTypenVerwaltung::GroesseAnlegen()
     datenGeaendert();
 }
 
+void KleidungsTypenVerwaltung::GroesseLoeschen()
+{
+    int ID=Groessen->getGroessenID(ui->table_Groesse->currentIndex().row());
+    if (QMessageBox::information(this,QString::fromUtf8("Größe Löschen"),QString::fromUtf8("Sind Sie sicher Dass sie ausgewälte die Größe löschen wollen?"),
+                                 QMessageBox::Yes|QMessageBox::No)==QMessageBox::No)
+        return;
+    Daten->removeGrosse(ID);
+    Groessen->update();
+    return;
+}
+
+void KleidungsTypenVerwaltung::GrossenContextMenu(QPoint Pos)
+{
+    QMenu Menu(this);
+    Menu.addAction(ActionGroesseLoeschen);
+    Menu.exec(ui->table_Groesse->viewport()->mapToGlobal(Pos));
+}
+
 void KleidungsTypenVerwaltung::Typanlegen()
 {
     QString Name=ui->edit_Typ_Name->text();
@@ -63,6 +91,13 @@ void KleidungsTypenVerwaltung::Typanlegen()
     }
     Typentable();
     datenGeaendert();
+}
+
+void KleidungsTypenVerwaltung::TypContextMenu(QPoint Pos)
+{
+    QMenu Menu(this);
+    Menu.addAction(ActionTypLoeschen);
+    Menu.exec(ui->table_Typ->viewport()->mapToGlobal(Pos));
 }
 
 void KleidungsTypenVerwaltung::Typentable()
@@ -87,6 +122,24 @@ void KleidungsTypenVerwaltung::Typentable()
         Typen->appendRow(Zeile);
     }
     delete TypenTab;
+}
+
+void KleidungsTypenVerwaltung::TypLoeschen()
+{
+    if (QMessageBox::information(this,QString::fromUtf8("Typ Löschen"),QString::fromUtf8("Sind Sie sicher Dass sie ausgewälte denausgewläten Typ und die dazugehörigen Größen löschen wollen?"),
+                                 QMessageBox::Yes|QMessageBox::No)==QMessageBox::No)
+        return;
+    QModelIndex Index=Typen->index(ui->table_Typ->currentIndex().row(),0);
+    int ID=Typen->data(Index).toInt();
+    GroessenTabelle *Groessen=Daten->getGroessen(&ID,1);
+    for (int i=0;i<Groessen->Anzahl;i++)
+    {
+        Daten->removeGrosse(Groessen->IDs[i]);
+    }
+    delete Groessen;
+    Daten->removeKleidungstyp(ID);
+    Typentable();
+    return;
 }
 
 void KleidungsTypenVerwaltung::Typwahlen(const QItemSelection &neu, const QItemSelection &)

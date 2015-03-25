@@ -372,7 +372,12 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
 
 bool SQLiteQuelle::removeGrosse(int ID)
 {
-    QSqlQuery Abfrage(QString("DELETE FROM Groessen WHERE id=%1").arg(ID),Datenbank);
+    QSqlQuery Abfrage(QString("SELECT ID FROM Kleidungsstuecke WHERE Groesse=%1").arg(ID),Datenbank);
+    if (!FehlerAusgabe(Abfrage))
+            return false;
+    if (Abfrage.next())
+        return false;
+    Abfrage.exec(QString("DELETE FROM Groessen WHERE id=%1").arg(ID));
     return FehlerAusgabe(Abfrage);
 }
 
@@ -390,7 +395,12 @@ bool SQLiteQuelle::removeKleidungsstueck(int ID)
 
 bool SQLiteQuelle::removeKleidungstyp(int ID)
 {
-    QSqlQuery Abfrage(QString("DELETE FROM Kleidungstyp WHERE id=%1").arg(ID),Datenbank);
+    QSqlQuery Abfrage(QString("SELECT id FROM Kleidungsstuecke WHERE Typ=%1").arg(ID),Datenbank);
+    if (!FehlerAusgabe(Abfrage))
+            return false;
+    if (Abfrage.next())
+        return false;
+    Abfrage.exec(QString("DELETE FROM Kleidungstyp WHERE id=%1").arg(ID));
     return FehlerAusgabe(Abfrage);
 }
 

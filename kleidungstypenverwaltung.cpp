@@ -67,7 +67,8 @@ void KleidungsTypenVerwaltung::GroesseLoeschen()
     if (QMessageBox::information(this,QString::fromUtf8("Größe Löschen"),QString::fromUtf8("Sind Sie sicher Dass sie ausgewälte die Größe löschen wollen?"),
                                  QMessageBox::Yes|QMessageBox::No)==QMessageBox::No)
         return;
-    Daten->removeGrosse(ID);
+    if (!Daten->removeGrosse(ID))
+        QMessageBox::warning(this,QString::fromUtf8("Fehler beim Löschen der Größe"),QString::fromUtf8("Die ausgewälte Größe konnte nicht gelöscht werden.\nPrüfen sie, ob noch Kleidungsstücke dieser Größe Ausgeliehnen, oder noch in der Kleiderkammer sind."));
     Groessen->update();
     return;
 }
@@ -124,20 +125,28 @@ void KleidungsTypenVerwaltung::Typentable()
     delete TypenTab;
 }
 
+/*!
+ * \brief KleidungsTypenVerwaltung::TypLoeschen Löscht den augewälten Kleidungstyp und die dazugehörigen Größen.
+ * Wenn noch Kleidungsstücke von dem Typ existieren so werden nur die Größen Gelöscht für die Keine Kleidung
+ * eingetragen sind.
+ */
 void KleidungsTypenVerwaltung::TypLoeschen()
 {
+    // Nachfrage ob wirklich gelöscht werden soll.
     if (QMessageBox::information(this,QString::fromUtf8("Typ Löschen"),QString::fromUtf8("Sind Sie sicher Dass sie ausgewälte denausgewläten Typ und die dazugehörigen Größen löschen wollen?"),
                                  QMessageBox::Yes|QMessageBox::No)==QMessageBox::No)
         return;
     QModelIndex Index=Typen->index(ui->table_Typ->currentIndex().row(),0);
     int ID=Typen->data(Index).toInt();
     GroessenTabelle *Groessen=Daten->getGroessen(&ID,1);
+    //Löschen der Einzelnen Größen.
     for (int i=0;i<Groessen->Anzahl;i++)
     {
         Daten->removeGrosse(Groessen->IDs[i]);
     }
     delete Groessen;
-    Daten->removeKleidungstyp(ID);
+    if (!Daten->removeKleidungstyp(ID))
+        QMessageBox::warning(this,QString::fromUtf8("Fehler beim Löschen des Typs"),QString::fromUtf8("Der Ausgewälte Typ konnte nicht gelöscht werden.\nPrüfen sie, ob noch Kleidungsstücke diese Typs Ausgeliehnen, oder noch in der Kleiderkammer sind."));
     Typentable();
     return;
 }

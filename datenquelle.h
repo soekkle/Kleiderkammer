@@ -27,15 +27,21 @@ public:
 
 class KleiderTabelle
 {
+    //! Klasse zum zwischenspeichern von Abfrageergebnissen mit Kleidungsstücken.
 public:
     int Anzahl;
+    //! ID des Kleidungsstück
     QVector<int> ID;
+    //! Numme des Kleiudungsstücks
     QVector<int> Nummer;
+    //! Typ des Kleidungsstück
     QVector<QString> Typ;
+    //! Größe des Kleidungsstücks
     QVector<QString> Groesse;
     QVector<int> AnzahlAusleihen;
     QVector<QDateTime> Anschaffung;
     QVector<QString> Bemerkung;
+    QVector<bool> Groesseunbekannt;
 };
 
 class Kleidungstypentabelle
@@ -86,6 +92,7 @@ public:
     virtual bool removeKleidungstyp(int ID)=0;
     virtual bool removePerson(int ID)=0;
     virtual void rueckgabeKleidungsstueck(int ID)=0;
+    virtual bool setKleidungsGroesse(int ID, int GroesseID)=0;
     virtual bool setKleidungsKommentar(int ID, QString Kommentar)=0;
     virtual bool setRangGroesse(int ID,int Rang)=0;
 };

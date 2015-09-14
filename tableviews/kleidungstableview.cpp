@@ -28,7 +28,13 @@ QVariant KleidungsTableview::data(const QModelIndex &index, int role) const
             case 1:
                 return QVariant(Kleidung->Typ[index.row()]);break;
             case 2:
-                return QVariant(Kleidung->Groesse[index.row()]);break;
+            {
+                if (Kleidung->Groesseunbekannt[index.row()])
+                    return QVariant("Unbekannt");
+                else
+                    return QVariant(Kleidung->Groesse[index.row()]);
+                break;
+            }
             case 3:
             {
                 int alter=QDate::currentDate().year() - Kleidung->Anschaffung[index.row()].date().year();

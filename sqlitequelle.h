@@ -49,8 +49,11 @@ public:
     //! Löscht das Kleidungsstück aus der Datenbank.
     bool removeKleidungsstueck(int ID);
     void rueckgabeKleidungsstueck(int ID);
+    //! Setzt die Größe eines Kleidungsstück wenn sie Unbekannt ist.
+    bool setKleidungsGroesse(int ID, int GroesseID);
     //! Setzt den Komentar eines Kleidungsstückes.
     bool setKleidungsKommentar(int ID, QString Kommentar);
+    //! Setzt den Rang der Größe zum Sortiern in den Listen.
     bool setRangGroesse(int ID,int Rang);
 private:
     QSqlDatabase Datenbank;

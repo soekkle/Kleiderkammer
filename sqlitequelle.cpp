@@ -118,6 +118,7 @@ void SQLiteQuelle::createDB()
     Abfrage.exec("create table Personen(id integer primary key AUTOINCREMENT,Nachname varchar,Vorname varchar,Jf integer)");
     Abfrage.exec("create table Jugendfeuerwehr(id integer primary key AUTOINCREMENT,Name varchar)");
     Abfrage.exec("create table Groessen(id integer primary key AUTOINCREMENT, Groesse varchar,Typ integer,Rang integer)");
+    Abfrage.exec("INSERT INTO Groessen ('id') VALUES(0)");
     QSqlError Fehler=Abfrage.lastError();
     //std::cerr<<Fehler.text().toStdString();
 }
@@ -246,7 +247,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
 {
     KleiderTabelle *Ausgabe=new KleiderTabelle;
     Ausgabe->Anzahl=0;
-    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
+    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE (Kleidungsstuecke.Groesse=Groessen.id OR (Kleidungsstuecke.Groesse=0 AND Groessen.id=0)) AND Kleidungsstuecke.Typ=Kleidungstyp.id";
     if(Typ>0)
         SQLString=SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
     if (Groesse>0)
@@ -260,11 +261,16 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
         ++Ausgabe->Anzahl;
         Ausgabe->ID.append(Abfrage.value(0).toInt());
         Ausgabe->Nummer.append(Abfrage.value(1).toInt());
-        Ausgabe->Groesse.append(Abfrage.value(2).toString());
+        QString Groesse=Abfrage.value(2).toString();
+        Ausgabe->Groesse.append(Groesse);
         Ausgabe->Typ.append(Abfrage.value(3).toString());
         Ausgabe->AnzahlAusleihen.append(Abfrage.value(4).toInt());
         Ausgabe->Anschaffung.append(Abfrage.value(5).toDateTime());
         Ausgabe->Bemerkung.append(Abfrage.value(6).toString());
+        if (Groesse.isEmpty())
+            Ausgabe->Groesseunbekannt.append(true);
+        else
+            Ausgabe->Groesseunbekannt.append(false);
     }
     //std::cout<<Abfrage.lastQuery().toStdString()<<std::endl;
     //std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
@@ -416,6 +422,18 @@ void SQLiteQuelle::rueckgabeKleidungsstueck(int ID)
     FehlerAusgabe(Abfrage);
 }
 
+bool SQLiteQuelle::setKleidungsGroesse(int ID, int GroesseID)
+{
+    QSqlQuery Abfrage(QString("SELECT Groesse FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
+    if (!Abfrage.next())
+        return false;
+    if (Abfrage.value(0).toString().isEmpty())
+    {
+        Abfrage.exec(QString("UPDATE Kleidungsstuecke SET 'Groesse'=%2 WHERE id=%1").arg(ID).arg(GroesseID));
+        return FehlerAusgabe(Abfrage);
+    }
+    return false;
+}
 
 bool SQLiteQuelle::setKleidungsKommentar(int ID, QString Kommentar)
 {

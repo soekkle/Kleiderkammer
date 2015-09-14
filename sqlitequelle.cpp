@@ -427,7 +427,8 @@ bool SQLiteQuelle::setKleidungsGroesse(int ID, int GroesseID)
     QSqlQuery Abfrage(QString("SELECT Groesse FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
     if (!Abfrage.next())
         return false;
-    if (Abfrage.value(0).toString().isEmpty())
+    std::clog<<Abfrage.value(0).toString().toStdString();
+    if (Abfrage.value(0).toString().compare("0")==0)
     {
         Abfrage.exec(QString("UPDATE Kleidungsstuecke SET 'Groesse'=%2 WHERE id=%1").arg(ID).arg(GroesseID));
         return FehlerAusgabe(Abfrage);

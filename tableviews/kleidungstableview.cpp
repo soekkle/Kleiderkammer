@@ -53,6 +53,9 @@ Qt::ItemFlags KleidungsTableview::flags(const QModelIndex &index) const
 {
     if (index.column()==5)
         return Qt::ItemIsEditable|Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    if (index.column()==2)
+        if (Kleidung->Groesseunbekannt[index.row()])
+        return Qt::ItemIsSelectable|Qt::ItemIsEnabled|Qt::ItemIsEditable;
     return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
 }
 
@@ -99,11 +102,46 @@ bool KleidungsTableview::setData(const QModelIndex &index, const QVariant &value
 {
     if(role==Qt::EditRole)
     {
-        int ID=Kleidung->ID[index.row()];
-        QString Text=value.toString();
-        Daten->setKleidungsKommentar(ID,Text);
-        Kleidung->Bemerkung[index.row()]=Text;
-        dataChanged(index,index);
+        int row=index.row();
+        switch (index.column())
+        {
+            case 5:
+            {
+                int ID=Kleidung->ID[row];
+                QString Text=value.toString();
+                Daten->setKleidungsKommentar(ID,Text);
+                Kleidung->Bemerkung[index.row()]=Text;
+                dataChanged(index,index);
+            }break;
+            case 2:
+            {if (Kleidung->Groesseunbekannt[row])
+            {
+                QString Eingabe=value.toString();
+                Kleidungstypentabelle *Typ=Daten->getKleidungstypen();
+                int TID=-1;
+                for (int i=0;(i<Typ->Anzahl)&&(TID<0);++i)
+                {
+                    if (Typ->Name[i].compare(Kleidung->Typ[row])==0)
+                        TID=Typ->ID[i];
+                }
+                GroessenTabelle *Grossen=Daten->getGroessen(&TID,1);
+                int GID=-1;
+                for (int i=0;(i<Grossen->Anzahl)&&(GID<0);++i)
+                {
+                    if (Grossen->Namen[i].compare(Eingabe,Qt::CaseInsensitive)==0)
+                        GID=Grossen->IDs[i];
+                }
+                delete Typ;
+                delete Grossen;
+                if (GID==-1)
+                    return false;
+                Daten->setKleidungsGroesse(Kleidung->ID[row],GID);
+                Kleidung->Groesse[index.row()]=Eingabe;
+                Kleidung->Groesseunbekannt[index.row()]=false;
+                dataChanged(index,index);
+            }
+            }break;
+        }
     }
     return true ;
 }

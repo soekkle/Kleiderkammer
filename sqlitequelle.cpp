@@ -51,6 +51,8 @@ int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
 {
     QSqlQuery Abfrage("",Datenbank);
     QString SQLString;
+    if (Groesse<0)
+        return -1;
     if (Nummer>0)//Pütt ob einen Nummer angegeben wurde
     {
         //Prüft ob die Nummer schon vergeben ist.
@@ -263,7 +265,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
 {
     KleiderTabelle *Ausgabe=new KleiderTabelle;
     Ausgabe->Anzahl=0;
-    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE (Kleidungsstuecke.Groesse=Groessen.id OR (Kleidungsstuecke.Groesse=0 AND Groessen.id=0)) AND Kleidungsstuecke.Typ=Kleidungstyp.id";
+    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
     if(Typ>0)
         SQLString=SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
     if (Groesse>0)

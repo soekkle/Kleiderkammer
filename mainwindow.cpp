@@ -54,8 +54,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tablePersonen->setModel(&ProPersonen);
     ProKleiderAus.setSourceModel(KleiderAus);
     ui->table_Kleileihen->setModel(&ProKleiderAus);
+    ui->table_Kleileihen->setItemDelegateForColumn(2,ComboBox);
     ProPerKleider.setSourceModel(PerKleider);
     ui->tableView_KleiPerson->setModel(&ProPerKleider);
+    ui->tableView_KleiPerson->setItemDelegateForColumn(2,ComboBox);
     ComboboxFuellen();//Inizalisiert alle Comboboxen.
     Drucken=new Bericht(Daten);
     //Stellt alle Eventverbindungen her.
@@ -300,7 +302,7 @@ void MainWindow::KleidungLoeschen()
 void MainWindow::Kleidungstypgewaehlt(int Typ)
 {
     ui->comboBoxBeGroEin->clear();
-    ui->comboBoxBeGroEin->addItem(QString::fromUtf8("Bitte Wählen"),QVariant(0));
+    ui->comboBoxBeGroEin->addItem(QString::fromUtf8("Bitte Wählen"),QVariant(-1));
     int TypID=ui->comboBoxBeTypEin->itemData(Typ).toInt();
     if (TypID==0)
     {
@@ -314,6 +316,7 @@ void MainWindow::Kleidungstypgewaehlt(int Typ)
         ui->comboBoxBeGroEin->addItem(Groessen->Namen[i],QVariant(Groessen->IDs[i]));
     }
     delete Groessen;
+    ui->comboBoxBeGroEin->addItem(QString::fromUtf8("Unbekante Größe"),QVariant(0));
     std::cout<<Daten->freieNummer(TypID);
     int An,End;
     Daten->getNummerBereich(TypID,&An,&End);

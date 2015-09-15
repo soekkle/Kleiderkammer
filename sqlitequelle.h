@@ -29,11 +29,15 @@ public:
     int addPerson(QString Nachname, QString Vorname,int Gruppe);
     //! Liefert die Erste Freie Nummer für den Typ
     int freieNummer(int Typ);
-
+    //! Liefert eine Liste mit den Größen die die Filtereigenschaften der Typen erfülen
     GroessenTabelle *getGroessen(int *Filter, int anz);
+    //! Liefert die ID zu einer Größe von Einen Bestimten Kleidungstyp
+    int getGroessenID(QString Groesse,int TypID);
     KleiderTabelle *getKleiderinKammer(int Typ, int Groesse);
     KleiderTabelle *getKleidervonPerson(int id, int Typ);
     Kleidungstypentabelle *getKleidungstypen();
+    //! Liefert die ID eines Kleidungstyps.
+    int getKleidungsTypID(QString Typ);
     JugendFeuerwehrTabelle *getJugendfeuerwehr();
     PersonenTabelle *getPersonen(int *JFFilter,int JFans);
 

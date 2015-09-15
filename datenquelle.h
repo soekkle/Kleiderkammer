@@ -77,12 +77,17 @@ public:
     virtual int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer)=0;
     virtual int addPerson(QString Nachname, QString Vorname,int Gruppe)=0;
     virtual int freieNummer(int Typ)=0;
+    //! Liefert eine Liste mit den Größen die die Filtereigenschaften der Typen erfülen
     virtual GroessenTabelle *getGroessen(int *Filter, int anz)=0;
+    //! Liefert die ID zu einer Größe von Einen Bestimten Kleidungstyp
+    virtual int getGroessenID(QString Groesse,int TypID)=0;
     virtual int getIDByKleidungsNummer(int Nummer)=0;
     virtual JugendFeuerwehrTabelle *getJugendfeuerwehr()=0;
     virtual KleiderTabelle *getKleidervonPerson(int id,int Typ)=0;
     virtual KleiderTabelle *getKleiderinKammer(int Typ,int Groesse)=0;
     virtual Kleidungstypentabelle *getKleidungstypen()=0;
+    //! Liefert die ID eines Kleidungstyps.
+    virtual int getKleidungsTypID(QString Typ)=0;
     virtual void getNummerBereich(int TypID,int *Anfang,int* Ende)=0;
     virtual PersonenTabelle *getPersonen(int *JFFilter,int JFans)=0;
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;

@@ -236,6 +236,22 @@ JugendFeuerwehrTabelle *SQLiteQuelle::getJugendfeuerwehr()
     return Ausgabe;
 }
 
+int SQLiteQuelle::getGroessenID(QString Groesse, int TypID)
+{
+    if (TypID<1)
+        return -1;
+    QSqlQuery Abfrage(Datenbank);
+    Abfrage.prepare("SELECT id FROM Groessen WHERE Typ=:Typ AND Groesse LIKE :Groesse");
+    Abfrage.bindValue(0,TypID);
+    Abfrage.bindValue(1,Groesse);
+    Abfrage.exec();
+    FehlerAusgabe(Abfrage);
+    int ID =-1;
+    if (Abfrage.next())
+        ID=Abfrage.value(0).toInt();
+    return ID;
+}
+
 /*!
  * \brief SQLiteQuelle::getKleider
  * \param Typ Filter für den Typ der Kleidungsstücke
@@ -253,7 +269,6 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
     if (Groesse>0)
         SQLString=SQLString.append(" AND Kleidungsstuecke.Groesse=%1").arg(Groesse);
     SQLString=SQLString.append(" AND Kleidungsstuecke.Traeger=%1").arg(Traeger);
-    //std::cout<<SQLString.toStdString()<<std::endl;
     QSqlQuery Abfrage(SQLString,Datenbank);
     FehlerAusgabe(Abfrage);
     while (Abfrage.next())
@@ -272,10 +287,9 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
         else
             Ausgabe->Groesseunbekannt.append(false);
     }
-    //std::cout<<Abfrage.lastQuery().toStdString()<<std::endl;
-    //std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
     return Ausgabe;
 }
+
 /*!
  * \brief SQLiteQuelle::getKleiderinKammer Lieft deine Liste mit allen Kleidungsstücken din der Kleiderkammer.
  * \param Typ Typ der nur angezeigt werden soll.
@@ -308,6 +322,16 @@ Kleidungstypentabelle *SQLiteQuelle::getKleidungstypen()
         Ausgabe->EndNummer.append(Abfrage.value(3).toInt());
     }
     return Ausgabe;
+}
+
+int SQLiteQuelle::getKleidungsTypID(QString Typ)
+{
+    QSqlQuery Abfrage(QString("SELECT id FROM Kleidungstyp WHERE Name LIKE '%1'").arg(Typ),Datenbank);
+    FehlerAusgabe(Abfrage);
+    int ID=-1;
+    if (Abfrage.next())
+        ID=Abfrage.value(0).toInt();
+    return ID;
 }
 
 int SQLiteQuelle::getIDByKleidungsNummer(int Nummer)

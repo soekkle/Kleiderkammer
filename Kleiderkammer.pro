@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     bericht.cpp \
     tableviews/kleidungstableview.cpp \
     tableviews/kleidungsgroessentableview.cpp \
-    tableviews/spinboxdelegate.cpp
+    tableviews/spinboxdelegate.cpp \
+    tableviews/comboboxgroessendelegate.cpp
 
 HEADERS  += mainwindow.h \
     datenquelle.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     kleidungstableview.h \
     tableviews/kleidungstableview.h \
     tableviews/kleidungsgroessentableview.h \
-    tableviews/spinboxdelegate.h
+    tableviews/spinboxdelegate.h \
+    tableviews/comboboxgroessendelegate.h
 
 FORMS    += mainwindow.ui \
     kleidungstypenverwaltung.ui \

@@ -47,7 +47,9 @@ MainWindow::MainWindow(QWidget *parent) :
     KleiderAus = new KleidungsTableview(Daten,0,this);
     PerKleider = new KleidungsTableview(Daten,1,this);
     ProKleidungstuecke.setSourceModel(Kleidungstuecke);//Verbinden Des Proxiemodell mit dem Datenmodell.
+    ComboBox=new ComboboxGroessenDelegate(Daten,this);
     ui->tableKleidung->setModel(&ProKleidungstuecke);//Setzt die Modelle zur Anzeige der Daten.
+    ui->tableKleidung->setItemDelegateForColumn(2,ComboBox);// Setzen der Combobox für die Größen
     ProPersonen.setSourceModel(&Personen);
     ui->tablePersonen->setModel(&ProPersonen);
     ProKleiderAus.setSourceModel(KleiderAus);
@@ -91,6 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete ComboBox;
     delete ActionPersonLoeschen;
     delete ui;
     delete Kleidungstuecke;

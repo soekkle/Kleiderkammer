@@ -10,6 +10,7 @@
 #include "gruppenverwaltung.h"
 #include "bericht.h"
 #include "tableviews/kleidungstableview.h"
+#include "tableviews/comboboxgroessendelegate.h"
 
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
@@ -36,6 +37,8 @@ public:
     
 private:
     Ui::MainWindow *ui;
+
+    ComboboxGroessenDelegate *ComboBox;
     Bericht *Drucken;
     SQLiteQuelle *Daten;
     KleidungsTypenVerwaltung *Typen;

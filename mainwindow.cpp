@@ -274,8 +274,8 @@ void MainWindow::KleidungHinClicked()
     Nummer=ui->spinBoxBeNumEin->value();
     std::cout<<TypID<<" : "<<GroID<<" : "<<Nummer<<std::endl;
     Daten->addKleiderstueck(TypID,GroID,Nummer);
-    Kleidungstypgewaehlt(ui->comboBoxBekFilter->currentIndex());
-    KleidungHinCancel();
+    Kleidungstypgewaehlt(ui->comboBoxBeTypEin->currentIndex());
+    KleidunginKammerAnzeigen(ui->comboBoxBekFilter->currentIndex());
 }
 
 void MainWindow::KleidunginKammerAnzeigen(int Filter)

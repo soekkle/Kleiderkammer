@@ -51,6 +51,9 @@
              <property name="contextMenuPolicy">
               <enum>Qt::CustomContextMenu</enum>
              </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
              <property name="tabKeyNavigation">
               <bool>false</bool>
              </property>
@@ -327,8 +330,8 @@
          </layout>
         </item>
         <item>
-         <widget class="QWebView" name="webView" native="true">
-          <property name="url" stdset="0">
+         <widget class="QWebView" name="webView">
+          <property name="url">
            <url>
             <string>about:blank</string>
            </url>
@@ -372,7 +375,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

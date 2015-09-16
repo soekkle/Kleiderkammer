@@ -46,6 +46,14 @@ QVariant KleidungsTableview::data(const QModelIndex &index, int role) const
                 return QVariant(Kleidung->Bemerkung[index.row()]);break;
             }
     }
+    if (role == Qt::EditRole)
+        if (index.row()<Kleidung->Anzahl)
+        {
+            if (index.column()==5)
+            {
+                return QVariant(Kleidung->Bemerkung[index.row()]);
+            }
+        }
     return QVariant();
 }
 

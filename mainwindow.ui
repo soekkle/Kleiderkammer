@@ -327,8 +327,8 @@
          </layout>
         </item>
         <item>
-         <widget class="QWebView" name="webView" native="true">
-          <property name="url" stdset="0">
+         <widget class="QWebView" name="webView">
+          <property name="url">
            <url>
             <string>about:blank</string>
            </url>
@@ -372,7 +372,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -388,8 +388,15 @@
     <addaction name="actionKleidungstypen_verwalten"/>
     <addaction name="actionGruppen_Verwalten"/>
    </widget>
+   <widget class="QMenu" name="menuSuche">
+    <property name="title">
+     <string>Suche</string>
+    </property>
+    <addaction name="actionKleidungsst_ck"/>
+   </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
+   <addaction name="menuSuche"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -413,6 +420,11 @@
   <action name="actionGruppen_Verwalten">
    <property name="text">
     <string>Gruppen Verwalten</string>
+   </property>
+  </action>
+  <action name="actionKleidungsst_ck">
+   <property name="text">
+    <string>Kleidungsstück</string>
    </property>
   </action>
  </widget>

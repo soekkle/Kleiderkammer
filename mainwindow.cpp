@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Daten=new SQLiteQuelle(Ort);//Stellt die verbindung zur Datenbank her.
     Typen=new KleidungsTypenVerwaltung(Daten,this);//Erzeugt die Modelle zur Anzeige der Daten.
     Gruppen=new Gruppenverwaltung(Daten,this);
+    KleiderInfoSuchen=new KleiderSuche(Daten,this);
     Kleidungstuecke = new KleidungsTableview(Daten,0,this);
     KleiderAus = new KleidungsTableview(Daten,0,this);
     PerKleider = new KleidungsTableview(Daten,1,this);
@@ -91,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ActionKleicungLoeschen=new QAction(QString::fromUtf8("Löschen"),this);
     ActionKleicungLoeschen->setToolTip(QString::fromUtf8("Löscht das Ausgewalte Kleidungsstück."));
     connect(ActionKleicungLoeschen,SIGNAL(triggered()),this,SLOT(KleidungLoeschen()));
+    connect(ui->actionKleidungsst_ck,SIGNAL(triggered()),KleiderInfoSuchen,SLOT(exec()));
 }
 
 MainWindow::~MainWindow()

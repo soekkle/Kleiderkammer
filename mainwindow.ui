@@ -391,8 +391,15 @@
     <addaction name="actionKleidungstypen_verwalten"/>
     <addaction name="actionGruppen_Verwalten"/>
    </widget>
+   <widget class="QMenu" name="menuSuche">
+    <property name="title">
+     <string>Suche</string>
+    </property>
+    <addaction name="actionKleidungsst_ck"/>
+   </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
+   <addaction name="menuSuche"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -416,6 +423,11 @@
   <action name="actionGruppen_Verwalten">
    <property name="text">
     <string>Gruppen Verwalten</string>
+   </property>
+  </action>
+  <action name="actionKleidungsst_ck">
+   <property name="text">
+    <string>Kleidungsstück</string>
    </property>
   </action>
  </widget>

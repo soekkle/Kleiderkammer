@@ -6,6 +6,7 @@
 #include <QPrintDialog>
 #include "datenquelle.h"
 #include "sqlitequelle.h"
+#include "kleidersuche.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
 #include "bericht.h"
@@ -41,6 +42,7 @@ private:
     ComboboxGroessenDelegate *ComboBox;
     Bericht *Drucken;
     SQLiteQuelle *Daten;
+    KleiderSuche *KleiderInfoSuchen;
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
     QString Ort;

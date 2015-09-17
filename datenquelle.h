@@ -85,6 +85,8 @@ public:
     virtual JugendFeuerwehrTabelle *getJugendfeuerwehr()=0;
     virtual KleiderTabelle *getKleidervonPerson(int id,int Typ)=0;
     virtual KleiderTabelle *getKleiderinKammer(int Typ,int Groesse)=0;
+    //! Liefert die Informationen zu einen Kleidungsstück
+    virtual int getKleidungsInfoByNummer(int Nummer, QString* Typ, QString *Groesse, QDate *Datum, QString *Traeger, QString *Gruppe, QString *Bemerkung, int *Anzahl)=0;
     virtual Kleidungstypentabelle *getKleidungstypen()=0;
     //! Liefert die ID eines Kleidungstyps.
     virtual int getKleidungsTypID(QString Typ)=0;

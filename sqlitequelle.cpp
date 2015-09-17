@@ -320,7 +320,7 @@ int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Gr
             *Groesse="Unbekannt";
         else
         {
-            Info.exec(QString("SELECT Groesse FORM Groessen WHERE id=%1").arg(GroID));
+            Info.exec(QString("SELECT Groesse FROM Groessen WHERE id=%1").arg(GroID));
             if (Info.next())
                 *Groesse=Info.value(0).toString();
         }
@@ -332,7 +332,7 @@ int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Gr
         }
         else
         {
-            Info.exec("SELECT Vorname, Nachname, Name FROM Personen, Jugendfeuerwehr WHERE Jugendfeuerwehr.id=jf AND Personen.id=%1");
+            Info.exec(QString("SELECT Vorname, Nachname, Name FROM Personen, Jugendfeuerwehr WHERE Jugendfeuerwehr.id=jf AND Personen.id=%1").arg(TraID));
             if (Info.next())
             {
                 *Traeger=Info.value(0).toString();

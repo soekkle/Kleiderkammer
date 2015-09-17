@@ -306,6 +306,51 @@ KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id, int Typ)
     return getKleider(Typ,-1,id);
 }
 
+int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger, QString *Gruppe, QString *Bemerkung,int *Anzahl)
+{
+    int ID=-1;
+    QSqlQuery Abfrage(QString("SELECT Kleidungsstuecke.id, Kleidungstyp.Name, Kleidungsstuecke.Groesse, Kleidungsstuecke.Traeger, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke, Kleidungstyp WHERE Nummer=%1 AND Kleidungstyp.id=Kleidungsstuecke.Typ").arg(Nummer),Datenbank);
+    if (Abfrage.next())
+    {
+        ID=Abfrage.value(0).toInt();
+        *Typ=Abfrage.value(1).toString();
+        QSqlQuery Info(Datenbank);
+        int GroID=Abfrage.value(2).toInt();
+        if (GroID==0)
+            *Groesse="Unbekannt";
+        else
+        {
+            Info.exec(QString("SELECT Groesse FORM Groessen WHERE id=%1").arg(GroID));
+            if (Info.next())
+                *Groesse=Info.value(0).toString();
+        }
+        int TraID=Abfrage.value(3).toInt();
+        if (TraID==0)
+        {
+            *Traeger="";
+            *Gruppe="Kleiderkammer";
+        }
+        else
+        {
+            Info.exec("SELECT Vorname, Nachname, Name FROM Personen, Jugendfeuerwehr WHERE Jugendfeuerwehr.id=jf AND Personen.id=%1");
+            if (Info.next())
+            {
+                *Traeger=Info.value(0).toString();
+                Traeger->append(" ");
+                Traeger->append(Info.value(1).toString());
+                *Gruppe=Info.value(2).toString();
+
+            }
+        }
+        *Anzahl=Abfrage.value(4).toInt();
+        *Datum=Abfrage.value(5).toDate();
+        *Bemerkung=Abfrage.value(6).toString();
+    }
+    else
+        FehlerAusgabe(Abfrage);
+    return ID;
+}
+
 Kleidungstypentabelle *SQLiteQuelle::getKleidungstypen()
 {
     Kleidungstypentabelle *Ausgabe=new Kleidungstypentabelle;

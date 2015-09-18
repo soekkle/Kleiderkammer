@@ -86,6 +86,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //Verboinden der ContextMenüs
     connect(ui->tablePersonen,SIGNAL(customContextMenuRequested(const QPoint)),this,SLOT(NamenContextMenuEvent(QPoint)));
     connect(ui->tableKleidung,SIGNAL(customContextMenuRequested(const QPoint)),this, SLOT(KleidungContextMenuEvent(QPoint)));
+
+    connect(ui->tablePersonen,SIGNAL(doubleClicked(const QModelIndex &)),this,SLOT(PersonListeDoubleClicked(const QModelIndex &)));
     //Anlegen der Actionen
     ActionPersonLoeschen= new QAction(QString::fromUtf8("Löschen"),this);
     connect(ActionPersonLoeschen,SIGNAL(triggered()),this,SLOT(PersonLoeschen()));
@@ -282,7 +284,7 @@ void MainWindow::KleidungHinClicked()
 
 void MainWindow::KleidunginKammerAnzeigen(int Filter)
 {
-    Kleidungstuecke->setFilterTyp(Filter);
+    Kleidungstuecke->setFilterTyp(ui->comboBoxBekFilter->itemData(Filter).toInt());
 
 }
 
@@ -416,6 +418,15 @@ void MainWindow::PersonHinCancel()
 {
     ui->lineEditPerNach->clear();
     ui->linePerVor->clear();
+}
+
+/*!
+ * \brief De Slot MainWindow::PersonListeDoubleClicked Wächselt die aktive Ansicht des Fenstes.
+ * \param Index
+ */
+void MainWindow::PersonListeDoubleClicked(const QModelIndex &)
+{
+    ui->tabWidget->setCurrentIndex(2);
 }
 
 /*!

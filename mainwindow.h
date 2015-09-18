@@ -59,11 +59,13 @@ private slots:
     void AusGroessenFiltergeaendert(int Typ);
     void Auslehenclicked();
     void AusTypFiltergeaendert(int Typ);
+    //! Slot zum Anzagen des Beichtes
     void BerichtAnzeigen();
     //! Slot zum Starten des Druckens
     void BerichtDrucken();
     //! Slot zum Speichern des Berichtes als HTML-Datei.
     void BerichtSpeichern();
+    //! Slot der die Komboboxen füllt.
     void ComboboxFuellen();
     //! Solt zum Anzeigen des Contextmenüs in der Kleidungs Tabelle
     void KleidungContextMenuEvent(const QPoint Pos);
@@ -86,6 +88,8 @@ private slots:
     void PersonHinClicked();
     //! Füllt den Tab Für einen Person.
     void PersonAusgewaehlt(const QModelIndex &neu,const QModelIndex);
+    //! Wächselt die Ansuicht
+    void PersonListeDoubleClicked(const QModelIndex &Index);
     //! Löscht die Ausgewälte Person.
     void PersonLoeschen();
     void Zurueckgeben();

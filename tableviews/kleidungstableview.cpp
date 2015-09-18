@@ -125,22 +125,8 @@ bool KleidungsTableview::setData(const QModelIndex &index, const QVariant &value
             {if (Kleidung->Groesseunbekannt[row])
             {
                 QString Eingabe=value.toString();
-                Kleidungstypentabelle *Typ=Daten->getKleidungstypen();
-                int TID=-1;
-                for (int i=0;(i<Typ->Anzahl)&&(TID<0);++i)
-                {
-                    if (Typ->Name[i].compare(Kleidung->Typ[row])==0)
-                        TID=Typ->ID[i];
-                }
-                GroessenTabelle *Grossen=Daten->getGroessen(&TID,1);
-                int GID=-1;
-                for (int i=0;(i<Grossen->Anzahl)&&(GID<0);++i)
-                {
-                    if (Grossen->Namen[i].compare(Eingabe,Qt::CaseInsensitive)==0)
-                        GID=Grossen->IDs[i];
-                }
-                delete Typ;
-                delete Grossen;
+                int TID=Daten->getKleidungsTypID(Kleidung->Typ[row]);
+                int GID=Daten->getGroessenID(Eingabe,TID);
                 if (GID==-1)
                     return false;
                 Daten->setKleidungsGroesse(Kleidung->ID[row],GID);

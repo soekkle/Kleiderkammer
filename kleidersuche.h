@@ -2,6 +2,7 @@
 #define KLEIDERSUCHE_H
 
 #include <QDialog>
+#include <QMessageBox>
 #include "datenquelle.h"
 
 namespace Ui {

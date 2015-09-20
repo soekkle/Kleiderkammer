@@ -88,6 +88,10 @@ private slots:
     void PersonAusgewaehlt(const QModelIndex &neu,const QModelIndex);
     //! Löscht die Ausgewälte Person.
     void PersonLoeschen();
+    //! Zeigt das Infofenser zu diesem Programm
+    void ZeigeInfo();
+    //! Zeigt das Infofenster zu Qt
+    void ZeigeQTInfo();
     void Zurueckgeben();
 
 };

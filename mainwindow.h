@@ -12,14 +12,15 @@
 #include "bericht.h"
 #include "tableviews/kleidungstableview.h"
 #include "tableviews/comboboxgroessendelegate.h"
+#include "versioninfo.h"
 
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <QTextStream>
 
 #if __WIN32__||_MSC_VER
-#define WINVER 0x0602
-#define _WIN32_WINNT 0x0602
+//#define WINVER 0x0602
+//#define _WIN32_WINNT 0x0602
 #include <windows.h>
 #include <shlobj.h>
 #endif

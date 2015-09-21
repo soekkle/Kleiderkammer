@@ -7,10 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     PersonenID=0;
-#if __linux__||__unix__
+//#if __linux__||__unix__
     Ort=QDir::homePath();//Setzt den Pfard der Anwendung unter Linux
     Ort=Ort.append("/.config");
-#elif __WIN32__||_MSC_VER
+/*#elif __WIN32__||_MSC_VER
     PWSTR *localAppData=new PWSTR[256];
     _GUID Local;//Ersetzrt die _GUID FOLDERID_LocalAppData ist nicht schön aber läuft.
     Local.Data1=0xF1B32785;
@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Ort=QString::fromWCharArray(*localAppData);//setzt den Pfard der Anwendung unter Windows
     delete localAppData;
 
-#endif
+#endif*/
     Ort.append("/Kleiderkammer/");
     {
         QDir Appdir(Ort);
@@ -444,7 +444,10 @@ void MainWindow::PersonLoeschen()
 
 void MainWindow::ZeigeInfo()
 {
-    QMessageBox::about(this,QString::fromUtf8("Über Kleiderkammer"),"Hier kommt der über Text");
+    QString UberText;
+    UberText="<html><head></head><body><h1>Kleiderkammer</h1><p>Version: %1</p><p>Diese Anwendung dient der Verwaltung einer Kleiderkammer.</p></bod></html>";
+    UberText=UberText.arg(VER_NUMBER_STRING);
+    QMessageBox::about(this,QString::fromUtf8("Über Kleiderkammer"),UberText);
 }
 
 void MainWindow::ZeigeQTInfo()

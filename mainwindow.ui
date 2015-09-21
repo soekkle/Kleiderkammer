@@ -427,7 +427,7 @@
   </action>
   <action name="actionGruppen_Verwalten">
    <property name="text">
-    <string>Gruppen Verwalten</string>
+    <string>Gruppen verwalten</string>
    </property>
   </action>
   <action name="actionKleidungsst_ck">
@@ -442,7 +442,7 @@
   </action>
   <action name="action_ber_QT">
    <property name="text">
-    <string>Über QT</string>
+    <string>Über Qt</string>
    </property>
   </action>
  </widget>

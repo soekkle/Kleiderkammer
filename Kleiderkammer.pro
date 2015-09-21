@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport webkitwidgets
 TARGET = Kleiderkammer
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         mainwindow.cpp \
     datenquelle.cpp \
@@ -36,9 +35,12 @@ HEADERS  += mainwindow.h \
     tableviews/kleidungsgroessentableview.h \
     tableviews/spinboxdelegate.h \
     tableviews/comboboxgroessendelegate.h \
-    kleidersuche.h
+    kleidersuche.h \
+    versioninfo.h
 
 FORMS    += mainwindow.ui \
     kleidungstypenverwaltung.ui \
     gruppenverwaltung.ui \
     kleidersuche.ui
+# Setzen der VersionsInfos
+VERSION= 0.0.1

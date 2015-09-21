@@ -7,10 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     PersonenID=0;
-#if __linux__||__unix__
+//#if __linux__||__unix__
     Ort=QDir::homePath();//Setzt den Pfard der Anwendung unter Linux
     Ort=Ort.append("/.config");
-#elif __WIN32__||_MSC_VER
+/*#elif __WIN32__||_MSC_VER
     PWSTR *localAppData=new PWSTR[256];
     _GUID Local;//Ersetzrt die _GUID FOLDERID_LocalAppData ist nicht schön aber läuft.
     Local.Data1=0xF1B32785;
@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Ort=QString::fromWCharArray(*localAppData);//setzt den Pfard der Anwendung unter Windows
     delete localAppData;
 
-#endif
+#endif*/
     Ort.append("/Kleiderkammer/");
     {
         QDir Appdir(Ort);
@@ -82,7 +82,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_BeAn,SIGNAL(clicked()),this,SLOT(BerichtAnzeigen()));
     connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
     connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
+    // Verbinden der Mainmenü einträgen
     connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
+    connect(ui->actionKleidungsst_ck,SIGNAL(triggered()),KleiderInfoSuchen,SLOT(exec()));
+    connect(ui->action_ber,SIGNAL(triggered()),this,SLOT(ZeigeInfo()));
+    connect(ui->action_ber_QT,SIGNAL(triggered()),this,SLOT(ZeigeQTInfo()));
     //Verboinden der ContextMenüs
     connect(ui->tablePersonen,SIGNAL(customContextMenuRequested(const QPoint)),this,SLOT(NamenContextMenuEvent(QPoint)));
     connect(ui->tableKleidung,SIGNAL(customContextMenuRequested(const QPoint)),this, SLOT(KleidungContextMenuEvent(QPoint)));
@@ -94,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ActionKleicungLoeschen=new QAction(QString::fromUtf8("Löschen"),this);
     ActionKleicungLoeschen->setToolTip(QString::fromUtf8("Löscht das Ausgewalte Kleidungsstück."));
     connect(ActionKleicungLoeschen,SIGNAL(triggered()),this,SLOT(KleidungLoeschen()));
-    connect(ui->actionKleidungsst_ck,SIGNAL(triggered()),KleiderInfoSuchen,SLOT(exec()));
+
 }
 
 MainWindow::~MainWindow()
@@ -450,6 +454,19 @@ void MainWindow::PersonLoeschen()
         QMessageBox::warning(this,QString::fromUtf8("Die Person hat noch Kleidungsstücke."),QString::fromUtf8("Die Person kann nicht gelöscht werden, da sie noch Kleidungsstücke ausgeliehen hat."),QMessageBox::Ok);
     }
     delete Kleider;
+}
+
+void MainWindow::ZeigeInfo()
+{
+    QString UberText;
+    UberText="<html><head></head><body><h1>Kleiderkammer</h1><p>Version: %1</p><p>Diese Anwendung dient der Verwaltung einer Kleiderkammer.</p></bod></html>";
+    UberText=UberText.arg(VER_NUMBER_STRING);
+    QMessageBox::about(this,QString::fromUtf8("Über Kleiderkammer"),UberText);
+}
+
+void MainWindow::ZeigeQTInfo()
+{
+    QMessageBox::aboutQt(this);
 }
 
 void MainWindow::Zurueckgeben()

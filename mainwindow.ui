@@ -397,9 +397,17 @@
     </property>
     <addaction name="actionKleidungsst_ck"/>
    </widget>
+   <widget class="QMenu" name="menuHilfe">
+    <property name="title">
+     <string>Hilfe</string>
+    </property>
+    <addaction name="action_ber"/>
+    <addaction name="action_ber_QT"/>
+   </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
    <addaction name="menuSuche"/>
+   <addaction name="menuHilfe"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -422,12 +430,22 @@
   </action>
   <action name="actionGruppen_Verwalten">
    <property name="text">
-    <string>Gruppen Verwalten</string>
+    <string>Gruppen verwalten</string>
    </property>
   </action>
   <action name="actionKleidungsst_ck">
    <property name="text">
     <string>Kleidungsstück</string>
+   </property>
+  </action>
+  <action name="action_ber">
+   <property name="text">
+    <string>Über</string>
+   </property>
+  </action>
+  <action name="action_ber_QT">
+   <property name="text">
+    <string>Über Qt</string>
    </property>
   </action>
  </widget>

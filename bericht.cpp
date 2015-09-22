@@ -22,15 +22,15 @@ QString Bericht::generiereKammerListe()
         HTML=HTML.append("<h2>%1. %2</h2>").arg(QString::number(i+1),Typen->Name[i]);
         int Typ=Typen->ID[i];
         GroessenTabelle *Groessen=Daten->getGroessen(&Typ,1);
-        KleiderTabelle *Kleider=Daten->getKleiderinKammer(Typ,0);
-        HTML=HTML.append(QString::fromUtf8("<p>In der Kliderkammer sind %1 %2 in %3 Größen.</p>")).arg(QString::number(Kleider->Anzahl)
-                                                                                    ,Typen->Name[i],QString::number(Groessen->Anzahl));
+        KleiderTabelle *Kleider=Daten->getKleiderinKammer(Typ,-1);
+        HTML=HTML.append(QString::fromUtf8("<p>In der Kliderkammer sind %1 %2 in %3 Größen vohanden.</p><table border=\"1\"><tr><th>Göße</th><th>Anzahl</th><th>Nummer</th></tr>")).arg(
+                    QString::number(Kleider->Anzahl),Typen->Name[i],QString::number(Groessen->Anzahl));
         for(int j=0;j<Groessen->Anzahl;++j)
         {
             delete Kleider;
             Kleider=Daten->getKleiderinKammer(Typ,Groessen->IDs[j]);
-            HTML=HTML.append(QString::fromUtf8("<h3>%5.%6 %1</h3><p>Es sind %3 %2 in Größe %1 in der Kleiderkammer mit den Nummer:</p><p>")).arg(
-                        Groessen->Namen[j],Typen->Name[i],QString::number(Kleider->Anzahl),QString::number(i+1),QString::number(j+1));
+            HTML=HTML.append(QString::fromUtf8("<tr><td>%1</td><td>%2</td><td>")).arg(
+                        Groessen->Namen[j],QString::number(Kleider->Anzahl));
             for (int k=0;k<Kleider->Anzahl;++k)
             {
                 if (k>0)
@@ -38,8 +38,22 @@ QString Bericht::generiereKammerListe()
                 else
                     HTML.append(QString::number(Kleider->Nummer[k]));
             }
-            HTML.append("</p>");
+            HTML.append("</td></tr>");
         }
+        delete Kleider;
+        Kleider=Daten->getKleiderinKammer(Typ,0);
+        if (Kleider->Anzahl>0)
+        {
+            HTML=HTML.append("<tr><td>Unbekannt</td><td>%1</td><td>").arg(Kleider->Anzahl);
+            for (int k=0;k<Kleider->Anzahl;++k)
+            {
+                if (k>0)
+                    HTML=HTML.append(", %1").arg(Kleider->Nummer[k]);
+                else
+                    HTML.append(QString::number(Kleider->Nummer[k]));
+            }
+        }
+        HTML.append("</td></tr></table>");
         delete Groessen;
         delete Kleider;
     }

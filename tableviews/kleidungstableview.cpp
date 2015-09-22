@@ -6,7 +6,7 @@ KleidungsTableview::KleidungsTableview(DatenQuelle *Daten, int Modus, QObject *p
     this->Daten=Daten;
     this->Modus=Modus;
     FilterTyp=0;
-    FilterGroesse=0;
+    FilterGroesse=-1;
     FilterPerson=0;
     Kleidung=Daten->getKleiderinKammer(0,0);
 }
@@ -148,8 +148,10 @@ bool KleidungsTableview::setData(const QModelIndex &index, const QVariant &value
 
 void KleidungsTableview::setFilterGroesse(int Groesse)
 {
-    if (Groesse>=0)
+    if (Groesse>0)
         FilterGroesse=Groesse;
+    else
+        FilterGroesse=-1;
     update();
 }
 

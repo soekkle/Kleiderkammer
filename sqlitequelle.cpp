@@ -268,7 +268,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger)
     QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
     if(Typ>0)
         SQLString=SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
-    if (Groesse>0)
+    if (Groesse>=0)
         SQLString=SQLString.append(" AND Kleidungsstuecke.Groesse=%1").arg(Groesse);
     SQLString=SQLString.append(" AND Kleidungsstuecke.Traeger=%1").arg(Traeger);
     QSqlQuery Abfrage(SQLString,Datenbank);

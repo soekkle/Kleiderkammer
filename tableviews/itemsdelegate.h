@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014,2015 Sören Krecker
+ * Copyright (C) 2015 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -31,14 +31,47 @@
  * <http://www.gnu.org/licenses/>.
 */
 
-#include <QApplication>
-#include "mainwindow.h"
 
-int main(int argc, char *argv[])
+#ifndef ITEMSDELEGATE_H
+#define ITEMSDELEGATE_H
+
+#include <QItemDelegate>
+#include <QComboBox>
+#include <QSpinBox>
+
+#include "datenquelle.h"
+
+class ComboboxGroessenDelegate : public QItemDelegate
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    
-    return a.exec();
-}
+    Q_OBJECT
+public:
+    explicit ComboboxGroessenDelegate(DatenQuelle *Daten, QObject *parent = 0);
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    DatenQuelle *Daten;
+signals:
+
+public slots:
+
+};
+
+class SpinBoxDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    explicit SpinBoxDelegate(QObject *parent = 0);
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+signals:
+
+public slots:
+
+};
+
+#endif // ITEMSDELEGATE_H

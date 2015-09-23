@@ -1,3 +1,36 @@
+/*
+ * Copyright (C) 2014,2015 Sören Krecker
+ *
+ * This file is part of Kleiderkammer.
+ *
+ * Kleiderkammer is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation version 3 of the License.
+ *
+ * Kleiderkammer is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Kleiderkammer.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Diese Datei ist Teil von Kleiderkammer.
+ *
+ * Kleiderkammer ist Freie Software: Sie können es unter den Bedingungen
+ * der GNU Affero General Public License, wie von der Free Software Foundation,
+ * Version 3 der Lizenz, weiterverbreiten und/oder modifizieren.
+ *
+ * Kleiderkammer wird in der Hoffnung, dass es nützlich sein wird, aber
+ * OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+ * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN
+ * ZWECK.Siehe die GNU Affero General Public License für weitere Details.
+ *
+ * Sie sollten eine Kopie der GNU Affero General Public License zusammen mit
+ * diesem Programm erhalten haben. Wenn nicht, siehe
+ * <http://www.gnu.org/licenses/>.
+*/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -240,6 +273,9 @@ void MainWindow::BerichtSpeichern()
 {
     int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
     QString Datei=QFileDialog::getSaveFileName(this,tr("Bericht Speichern"),QString(),tr("Webseite(*.html)"));
+    // Prüft ob ein eine Dateiendung entahlten ist. Wenn nicht wird sie Gesetzt
+    if (!Datei.endsWith(".html",Qt::CaseInsensitive))
+        Datei.append(".html");
     QFile HDD_Datei(Datei);
     if (!HDD_Datei.open(QIODevice::WriteOnly | QIODevice::Text))//Prüft ob die Datei geöffnet werden kann.
         return;
@@ -407,10 +443,12 @@ void MainWindow::PersonHinClicked()
     int JF=ui->comboPerJFEin->itemData(ui->comboPerJFEin->currentIndex()).toInt();
     if (Vorname.isEmpty())
     {
+        QMessageBox::warning(this,"Vorname Fehlet!",QString::fromUtf8("Bitte Geben sie den Vornamen der Person ein, die hinzugefügt werden soll"));
         return;
     }
     if (Nachname.isEmpty())
     {
+        QMessageBox::warning(this,"Nachname Fehlet!",QString::fromUtf8("Bitte Geben sie den Nachnamen der Person ein, die hinzugefügt werden soll"));
         return;
     }
     Daten->addPerson(Nachname,Vorname,JF);
@@ -459,7 +497,7 @@ void MainWindow::PersonLoeschen()
 void MainWindow::ZeigeInfo()
 {
     QString UberText;
-    UberText="<html><head></head><body><h1>Kleiderkammer</h1><p>Version: %1</p><p>Diese Anwendung dient der Verwaltung einer Kleiderkammer.</p></bod></html>";
+    UberText=QString::fromUtf8("<html><head></head><body><h1>Kleiderkammer</h1><p>Version: %1</p><p>Diese Anwendung dient der Verwaltung einer Kleiderkammer.</p><p>Kleiderkammer ist Freie Software: Sie können es unter den Bedingungen der GNU Affero General Public License, wie von der Free Software Foundation,Version 3 der Lizenz, weiterverbreiten und/oder modifizieren.</p><p>Kleiderkammer wird in der Hoffnung, dass es nützlich sein wird, aber OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK. Siehe die GNU Affero General Public License für weitere Details.</p><p>Sie sollten eine Kopie der GNU Affero General Public License zusammen mit diesem Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.</p></bod></html>");
     UberText=UberText.arg(VER_NUMBER_STRING);
     QMessageBox::about(this,QString::fromUtf8("Über Kleiderkammer"),UberText);
 }

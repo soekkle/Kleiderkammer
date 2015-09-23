@@ -20,9 +20,8 @@ SOURCES += main.cpp\
     bericht.cpp \
     tableviews/kleidungstableview.cpp \
     tableviews/kleidungsgroessentableview.cpp \
-    tableviews/spinboxdelegate.cpp \
-    tableviews/comboboxgroessendelegate.cpp \
-    kleidersuche.cpp
+    kleidersuche.cpp \
+    tableviews/itemsdelegate.cpp
 
 HEADERS  += mainwindow.h \
     datenquelle.h \
@@ -30,13 +29,11 @@ HEADERS  += mainwindow.h \
     kleidungstypenverwaltung.h \
     gruppenverwaltung.h \
     bericht.h \
-    kleidungstableview.h \
     tableviews/kleidungstableview.h \
     tableviews/kleidungsgroessentableview.h \
-    tableviews/spinboxdelegate.h \
-    tableviews/comboboxgroessendelegate.h \
     kleidersuche.h \
-    versioninfo.h
+    versioninfo.h \
+    tableviews/itemsdelegate.h
 
 FORMS    += mainwindow.ui \
     kleidungstypenverwaltung.ui \

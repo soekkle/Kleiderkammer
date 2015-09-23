@@ -23,13 +23,17 @@ QString Bericht::generiereKammerListe()
         int Typ=Typen->ID[i];
         GroessenTabelle *Groessen=Daten->getGroessen(&Typ,1);
         KleiderTabelle *Kleider=Daten->getKleiderinKammer(Typ,-1);
-        HTML=HTML.append(QString::fromUtf8("<p>In der Kliderkammer sind %1 %2 in %3 Größen vohanden.</p><table border=\"1\"><tr><th>Göße</th><th>Anzahl</th><th>Nummer</th></tr>")).arg(
+        HTML=HTML.append(QString::fromUtf8("<p>In der Kleiderkammer sind %1 %2 in %3 Größen vohanden.</p><table border=\"1\"><thead><th style=\"width:20%\">Göße</th><th style=\"width:15%\">Anzahl</th><th>Nummer</th></thead><tbody>")).arg(
                     QString::number(Kleider->Anzahl),Typen->Name[i],QString::number(Groessen->Anzahl));
         for(int j=0;j<Groessen->Anzahl;++j)
         {
             delete Kleider;
             Kleider=Daten->getKleiderinKammer(Typ,Groessen->IDs[j]);
-            HTML=HTML.append(QString::fromUtf8("<tr><td>%1</td><td>%2</td><td>")).arg(
+            if (j%2==0)
+                HTML.append("<tr class=\"UZeile\">");
+            else
+                HTML.append("<tr class=\"GZeile\">");
+            HTML=HTML.append(QString::fromUtf8("<td class=\"Name\">%1</td><td>%2</td><td>")).arg(
                         Groessen->Namen[j],QString::number(Kleider->Anzahl));
             for (int k=0;k<Kleider->Anzahl;++k)
             {
@@ -44,7 +48,11 @@ QString Bericht::generiereKammerListe()
         Kleider=Daten->getKleiderinKammer(Typ,0);
         if (Kleider->Anzahl>0)
         {
-            HTML=HTML.append("<tr><td>Unbekannt</td><td>%1</td><td>").arg(Kleider->Anzahl);
+            if (Groessen->Anzahl%2==0)
+                HTML.append("<tr class=\"UZeile\">");
+            else
+                HTML.append("<tr class=\"GZeile\">");
+            HTML=HTML.append("<td class=\"Name\">Unbekannt</td><td>%1</td><td>").arg(Kleider->Anzahl);
             for (int k=0;k<Kleider->Anzahl;++k)
             {
                 if (k>0)
@@ -53,7 +61,7 @@ QString Bericht::generiereKammerListe()
                     HTML.append(QString::number(Kleider->Nummer[k]));
             }
         }
-        HTML.append("</td></tr></table>");
+        HTML.append("</td></tr></tbody></table>");
         delete Groessen;
         delete Kleider;
     }
@@ -110,7 +118,10 @@ QString Bericht::generierenPersonenListe(int Gruppe)
         for (int j=0;j<anzTypen;++j)
         {
             KleiderTabelle *Kleidung=Daten->getKleidervonPerson(Personen->ID[i],TypenListe[j]);
-            HTML.append("<td>");
+            if (j%2==0)
+                HTML.append("<td class=\"GSpalte\">");
+            else
+                HTML.append("<td class=\"USpalte\">");
             for (int k=0;k<Kleidung->Anzahl;++k)
             {
                 if(k>0)

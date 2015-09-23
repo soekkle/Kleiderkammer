@@ -14,7 +14,9 @@ class Bericht
 public:
     Bericht(DatenQuelle *Daten);
     ~Bericht();
+    //! Gibt den HTML-Code für die Personenliste für die Angegebene Gruppe zurück
     QString generierenPersonenListe(int Gruppe);
+    //! Gibt den HTML-Code für die Inventurliste zurück.
     QString generiereKammerListe();
 
 private:

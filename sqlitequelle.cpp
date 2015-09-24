@@ -480,6 +480,47 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
     return Ausgabe;
 }
 
+PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans, QString NamenFilter)
+{
+    PersonenTabelle *Ausgabe=new PersonenTabelle;
+    Ausgabe->Anzahl=0;
+    QString SQLString="SELECT Personen.id,Personen.Nachname,Personen.Vorname,Jugendfeuerwehr.Name FROM Personen,Jugendfeuerwehr WHERE Personen.jf=Jugendfeuerwehr.id";
+    if (JFans>0)
+    {
+        SQLString=SQLString.append(" AND (Personen.jf=%1").arg(JFFilter[0]);
+        for (int i=1;i<JFans;++i)
+        {
+            SQLString=SQLString.append(" OR Personen.jf=%1").arg(JFFilter[i]);
+        }
+        SQLString=SQLString.append(")");
+    }
+    // Zelegen der Eingabe in Einzelteile
+    QStringList NamenFilterList=NamenFilter.split(' ');
+    if (NamenFilterList.length()>0)
+    {
+        SQLString.append(" AND (");
+        SQLString=SQLString.append(" Personen.Vorname LIKE '%%1%' OR  Personen.Nachname LIKE '%%1%'").arg(NamenFilterList[0]);
+        for (int i=1;i<NamenFilterList.length();++i)
+        {
+            SQLString=SQLString.append(" OR Personen.Vorname LIKE '%%1%' OR  Personen.Nachname LIKE '%%1%'").arg(NamenFilterList[i]);
+        }
+        SQLString.append(")");
+    }
+    SQLString.append(" ORDER BY Nachname,Vorname ASC");
+    //std::cout<< SQLString.toStdString();
+    QSqlQuery Abfrage(SQLString,Datenbank);
+    FehlerAusgabe(Abfrage);
+    while(Abfrage.next())
+    {
+        ++Ausgabe->Anzahl;
+        Ausgabe->ID.append(Abfrage.value(0).toInt());
+        Ausgabe->Nachname.append(Abfrage.value(1).toString());
+        Ausgabe->Vorname.append(Abfrage.value(2).toString());
+        Ausgabe->JugendFeuerwehr.append(Abfrage.value(3).toString());
+    }
+    return Ausgabe;
+}
+
 bool SQLiteQuelle::removeGrosse(int ID)
 {
     QSqlQuery Abfrage(QString("SELECT ID FROM Kleidungsstuecke WHERE Groesse=%1").arg(ID),Datenbank);

@@ -96,7 +96,11 @@ public:
     QVector<QString> Nachname;
     QVector<QString> JugendFeuerwehr;
 };
-
+//! Klasse die die Schnittstelle zu eine DatenQuelle Definirt.
+/*!
+ * \brief Die Klasse DatenQuelle stellt eine Schnittstelle zum Abfragen und setzen der Daten in der Kleiderkammer zur
+ * Verfügung.
+ */
 class DatenQuelle
 {
 public:
@@ -106,7 +110,24 @@ public:
     virtual int addGroesse(QString Groesse,int Typ)=0;
     //! Fügt einen JugendFeuerweher hinzu.
     virtual int addJugendfeuerwehr(QString Name)=0;
+    //! Fügt ein Kleidungsstück hinzu.
+    /*!
+     * \brief addKleiderstueck fügt ein Kleidungsstück in die DatenQuelle hinzu. Es weden die Paramter des
+     * Kleidungsstückes benötigt.
+     * \param Typ ID des Typs des Kleidungsstückes
+     * \param Groesse ID der Größe des Kleidungsstückes
+     * \param Nummer Gewünschte Numme des Kleidungsstückes Optimal
+     * \return Nummer des Kleidungsstückes
+     */
     virtual int addKleiderstueck(int Typ,int Groesse,int Nummer=-1)=0;
+    //! Fügt einen Kleidungstyp hinzu
+    /*!
+     * \brief addKleidungstyp fügt in die DatenQuelle einen neuen Typ von Kleidungsstücken hinzu.
+     * \param Name Name des Typs.
+     * \param AnfangsNummer Erste Nummer die Vegeben werden soll.
+     * \param Endnummer Letzte Nummer die Vergeben weden soll.
+     * \return
+     */
     virtual int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer)=0;
     virtual int addPerson(QString Nachname, QString Vorname,int Gruppe)=0;
     virtual int freieNummer(int Typ)=0;
@@ -124,7 +145,25 @@ public:
     //! Liefert die ID eines Kleidungstyps.
     virtual int getKleidungsTypID(QString Typ)=0;
     virtual void getNummerBereich(int TypID,int *Anfang,int* Ende)=0;
+    //! Liefet die Liste mit den Namen und ID der Personen die den Filter erfüllen.
+    /*!
+     * \brief getPersonen liefet einen Liste mit Namen und weiteren Information zu den Pesonen. Die in den per Filte
+     * angegbenen Guppen sich befinden.
+     * \param JFFilter int Array mit den IDs der Gruppen.
+     * \param JFans Größe des Arrays
+     * \return List der Personen
+     */
     virtual PersonenTabelle *getPersonen(int *JFFilter,int JFans)=0;
+    //! Liefet die Liste mit den Namen und ID der Personen die den Filter erfüllen.
+    /*!
+     * \brief getPersonen liefet einen Liste mit Namen und weiteren Information zu den Pesonen. Die in den per Filte
+     * angegbenen Guppen sich befinden und Teile des Namen Enthalten.
+     * \param JFFilter int Array mit den IDs der Gruppen.
+     * \param JFans Größe des Arrays
+     * \param NamenFilte Sting der im Vor oder Nachnamen enthalten ist.
+     * \return List der Personen
+     */
+    virtual PersonenTabelle *getPersonen(int *JFFilter, int JFans,QString NamenFilter)=0;
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
     virtual bool removeGrosse(int ID)=0;
     virtual bool removeJugendferweher(int ID)=0;
@@ -135,6 +174,7 @@ public:
     virtual bool setKleidungsGroesse(int ID, int GroesseID)=0;
     virtual bool setKleidungsKommentar(int ID, QString Kommentar)=0;
     virtual bool setRangGroesse(int ID,int Rang)=0;
+
 };
 
 #endif // DATENQUELLE_H

@@ -99,7 +99,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
     connect(ui->actionGruppen_Verwalten,SIGNAL(triggered()),Gruppen,SLOT(exec()));
     connect(Gruppen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
-    connect(ui->comboBoxPerJFFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PersonenAnzeigen(int)));
+    connect(ui->comboBoxPerJFFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(ComboboxPerJFFilterGewahlt(int)));
+    connect(ui->lineEditSuchName,SIGNAL(textChanged(QString)),this,SLOT(LineEditSuchNameChange(QString)));
     connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(PersonHinClicked()));
     connect(ui->buttonBox,SIGNAL(rejected()),this,SLOT(PersonHinCancel()));
     connect(ui->comboBoxBekFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(KleidunginKammerAnzeigen(int)));
@@ -203,7 +204,7 @@ void MainWindow::ComboboxFuellen()
         ui->comboPerJFEin->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
         ui->comboBox_BeJF->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
     }
-    PersonenAnzeigen(0);
+    PersonenAnzeigen(0,"");
     delete JfDaten;
     /* Fült alle komboboxen die die Typen der Kleidungsstücke benötigen.
        Ebenfalls werden die ID als Daten dazu gespeichert.*/
@@ -286,6 +287,11 @@ void MainWindow::BerichtSpeichern()
     if (ui->radioButton_2->isChecked())
         HTML<< Drucken->generierenPersonenListe(Gruppe);
     HDD_Datei.close();
+}
+
+void MainWindow::ComboboxPerJFFilterGewahlt(int Pos)
+{
+    PersonenAnzeigen(Pos,ui->lineEditSuchName->text());
 }
 
 /*!
@@ -371,6 +377,11 @@ void MainWindow::Kleidungstypgewaehlt(int Typ)
     ui->spinBoxBeNumEin->setEnabled(true);
 }
 
+void MainWindow::LineEditSuchNameChange(QString SuchFilter)
+{
+    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),SuchFilter);
+}
+
 /*!
  * \brief MainWindow::NamenContextMenuEvent Zeigt das Kontentmenü für die Personenliste an. Es bietet die Möglichkeit zum Löschen einer Person.
  * \param Pos Position an der dan Menü erscheinen soll.
@@ -389,7 +400,12 @@ void MainWindow::PerKleidungslistefuellen(int FilterTyp)
     PerKleider->setFilterTyp(Filter);
 }
 
-void MainWindow::PersonenAnzeigen(int Filter)
+/*!
+ * \brief MainWindow::PersonenAnzeigen füllt die Listview mit Daten der Pesonen
+ * \param JFFilter Ausgewählte Zeile der Combobox
+ * \param NamenFilter Eingegebener Suchbegriff
+ */
+void MainWindow::PersonenAnzeigen(int JFFilter,QString NamenFilter)
 {
     Personen.clear();
     QStringList Zeile;
@@ -399,13 +415,17 @@ void MainWindow::PersonenAnzeigen(int Filter)
     Zeile.append("Jugendfeuerwehr");
     Personen.setHorizontalHeaderLabels(Zeile);
     int FilterNr=0,FilterAns=0;
-    if (Filter>0)
+    if (JFFilter>0)
     {
         FilterAns=1;
-        FilterNr=ui->comboBoxPerJFFilter->itemData(Filter).toInt();
+        FilterNr=ui->comboBoxPerJFFilter->itemData(JFFilter).toInt();
         std::cout<<FilterNr<<std::endl;
     }
-    PersonenTabelle *PerDaten=Daten->getPersonen(&FilterNr,FilterAns);
+    PersonenTabelle *PerDaten=NULL;
+    if (NamenFilter.isEmpty())
+        PerDaten=Daten->getPersonen(&FilterNr,FilterAns);
+    else
+        PerDaten=Daten->getPersonen(&FilterNr,FilterAns,NamenFilter);
     for (int i=0;i<PerDaten->Anzahl;++i)
     {
         QList<QStandardItem*> Zeile;
@@ -452,7 +472,7 @@ void MainWindow::PersonHinClicked()
         return;
     }
     Daten->addPerson(Nachname,Vorname,JF);
-    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex());
+    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
     PersonHinCancel();
 }
 
@@ -485,7 +505,7 @@ void MainWindow::PersonLoeschen()
         if (QMessageBox::information(this,QString::fromUtf8("Person löschen"),QString::fromUtf8("Sind Sie sicher, dass sie ausgewälte die Person löschen wollen?"),
                                       QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
         Daten->removePerson(id);
-        PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex());
+        PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
     }
     else
     {

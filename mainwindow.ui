@@ -38,13 +38,34 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QComboBox" name="comboBoxPerJFFilter">
-             <item>
-              <property name="text">
-               <string>Alle</string>
-              </property>
+            <layout class="QFormLayout" name="formLayout_4">
+             <item row="0" column="1">
+              <widget class="QComboBox" name="comboBoxPerJFFilter">
+               <item>
+                <property name="text">
+                 <string>Alle</string>
+                </property>
+               </item>
+              </widget>
              </item>
-            </widget>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="lineEditSuchName"/>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>Name</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>Jugendfeuewehr</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QTableView" name="tablePersonen">
@@ -330,8 +351,8 @@
          </layout>
         </item>
         <item>
-         <widget class="QWebView" name="webView">
-          <property name="url">
+         <widget class="QWebView" name="webView" native="true">
+          <property name="url" stdset="0">
            <url>
             <string>about:blank</string>
            </url>
@@ -375,7 +396,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>23</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -458,8 +479,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>comboBoxPerJFFilter</tabstop>
-  <tabstop>tablePersonen</tabstop>
   <tabstop>linePerVor</tabstop>
   <tabstop>lineEditPerNach</tabstop>
   <tabstop>comboPerJFEin</tabstop>

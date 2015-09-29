@@ -58,10 +58,11 @@ public:
     QVector<QString>Name;
 };
 
+//! Klasse zum zwischenspeichern von Abfrageergebnissen mit Kleidungsstücken.
 class KleiderTabelle
 {
-    //! Klasse zum zwischenspeichern von Abfrageergebnissen mit Kleidungsstücken.
 public:
+    //! Anzahl der Kleidungsstücke
     int Anzahl;
     //! ID des Kleidungsstück
     QVector<int> ID;
@@ -87,6 +88,7 @@ public:
     QVector<int> EndNummer;
 };
 
+//! Klassre zur Speicherung von Rückgabedaten über Personen
 class PersonenTabelle
 {
 public:
@@ -129,6 +131,7 @@ public:
      * \return
      */
     virtual int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer)=0;
+    //! Fügt der Datenquelle eine Person hinzu
     virtual int addPerson(QString Nachname, QString Vorname,int Gruppe)=0;
     virtual int freieNummer(int Typ)=0;
     //! Liefert eine Liste mit den Größen die die Filtereigenschaften der Typen erfülen
@@ -140,7 +143,7 @@ public:
     virtual KleiderTabelle *getKleidervonPerson(int id,int Typ)=0;
     virtual KleiderTabelle *getKleiderinKammer(int Typ,int Groesse)=0;
     //! Liefert die Informationen zu einen Kleidungsstück
-    virtual int getKleidungsInfoByNummer(int Nummer, QString* Typ, QString *Groesse, QDate *Datum, QString *Traeger, QString *Gruppe, QString *Bemerkung, int *Anzahl)=0;
+    virtual int getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)=0;
     virtual Kleidungstypentabelle *getKleidungstypen()=0;
     //! Liefert die ID eines Kleidungstyps.
     virtual int getKleidungsTypID(QString Typ)=0;

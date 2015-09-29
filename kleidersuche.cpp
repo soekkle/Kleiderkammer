@@ -54,11 +54,11 @@ KleiderSuche::~KleiderSuche()
 void KleiderSuche::slotSuchen()
 {
     int Nummer=ui->lineEdit->text().toInt();
-    int Leihen;
+    int Leihen,TraegerID;
     QString Typ,Name,Gruppe,Groesse,Bemerkung;
     QDate Anschaffung;
     // Prüft ob das Kleidungsstück vorhanden ist.
-    if (Daten->getKleidungsInfoByNummer(Nummer,&Typ,&Groesse,&Anschaffung,&Name,&Gruppe,&Bemerkung,&Leihen)>0)
+    if (Daten->getKleidungsInfoByNummer(Nummer,&Typ,&Groesse,&Anschaffung,&Name,&TraegerID,&Gruppe,&Bemerkung,&Leihen)>0)
     {
         // Setzen der Felder im Formular
         ui->label_Typ->setText(Typ);

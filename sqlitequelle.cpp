@@ -341,7 +341,7 @@ KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id, int Typ)
     return getKleider(Typ,-1,id);
 }
 
-int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger, QString *Gruppe, QString *Bemerkung,int *Anzahl)
+int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)
 {
     int ID=-1;
     QSqlQuery Abfrage(QString("SELECT Kleidungsstuecke.id, Kleidungstyp.Name, Kleidungsstuecke.Groesse, Kleidungsstuecke.Traeger, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke, Kleidungstyp WHERE Nummer=%1 AND Kleidungstyp.id=Kleidungsstuecke.Typ").arg(Nummer),Datenbank);
@@ -374,6 +374,7 @@ int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Gr
                 Traeger->append(" ");
                 Traeger->append(Info.value(1).toString());
                 *Gruppe=Info.value(2).toString();
+                *TraegerID=TraID;
 
             }
         }
@@ -499,10 +500,10 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans, QString Nam
     if (NamenFilterList.length()>0)
     {
         SQLString.append(" AND (");
-        SQLString=SQLString.append(" Personen.Vorname LIKE '%%1%' OR  Personen.Nachname LIKE '%%1%'").arg(NamenFilterList[0]);
+        SQLString=SQLString.append(" (Personen.Vorname LIKE '%%1%' OR  Personen.Nachname LIKE '%%1%')").arg(NamenFilterList[0]);
         for (int i=1;i<NamenFilterList.length();++i)
         {
-            SQLString=SQLString.append(" OR Personen.Vorname LIKE '%%1%' OR  Personen.Nachname LIKE '%%1%'").arg(NamenFilterList[i]);
+            SQLString=SQLString.append(" AND (Personen.Vorname LIKE '%%1%' OR  Personen.Nachname LIKE '%%1%')").arg(NamenFilterList[i]);
         }
         SQLString.append(")");
     }

@@ -68,7 +68,7 @@ public:
     int getGroessenID(QString Groesse,int TypID);
     KleiderTabelle *getKleiderinKammer(int Typ, int Groesse);
     KleiderTabelle *getKleidervonPerson(int id, int Typ);
-    int getKleidungsInfoByNummer(int Nummer, QString* Typ, QString *Groesse, QDate *Datum, QString *Traeger, QString *Gruppe, QString *Bemerkung, int *Anzahl);
+    int getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl);
     Kleidungstypentabelle *getKleidungstypen();
     //! Liefert die ID eines Kleidungstyps.
     int getKleidungsTypID(QString Typ);

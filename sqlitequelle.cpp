@@ -522,6 +522,20 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans, QString Nam
     return Ausgabe;
 }
 
+bool SQLiteQuelle::getPersonenInfo(int ID, QString *VorName, QString *Nachnanme, QString *Gruppe, int *GruppenID)
+{
+    QSqlQuery Abfrage(QString("SELECT Personen.Vorname,Personen.Nachname,Personen.Jf,Jugendfeuerwehr.Name FROM Personen,Jugendfeuerwehr WHERE Personen.id=%1 AND Personen.Jf=Jugendfeuerwehr.id").arg(ID),Datenbank);
+    if (Abfrage.next())
+    {
+        *VorName=Abfrage.value(0).toString();
+        *Nachnanme=Abfrage.value(1).toString();
+        *Gruppe=Abfrage.value(2).toString();
+        *GruppenID=Abfrage.value(3).toInt();
+        return true;
+    }
+    return false;
+}
+
 bool SQLiteQuelle::removeGrosse(int ID)
 {
     QSqlQuery Abfrage(QString("SELECT ID FROM Kleidungsstuecke WHERE Groesse=%1").arg(ID),Datenbank);

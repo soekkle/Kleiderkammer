@@ -75,6 +75,7 @@ public:
     JugendFeuerwehrTabelle *getJugendfeuerwehr();
     PersonenTabelle *getPersonen(int *JFFilter,int JFans);
     PersonenTabelle *getPersonen(int *JFFilter, int JFans, QString NamenFilter);
+    bool getPersonenInfo(int ID, QString *VorName,QString *Nachnanme,QString *Gruppe, int * GruppenID);
     void getNummerBereich(int TypID,int *Anfang,int* Ende);
     int getIDByKleidungsNummer(int Nummer);
     //! Fügt einen Kleidungstück einen Träger hinzu.

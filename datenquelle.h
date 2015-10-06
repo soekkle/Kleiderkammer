@@ -42,10 +42,15 @@
 class GroessenTabelle
 {
 public:
+    //! Anzahlder Größen in dem objekt
     int Anzahl;
+    //! IDs der Größen
     QVector<int> IDs;
+    //! Namen der Größen
     QVector<QString> Namen;
+    //! Typen zun den die Größe Gehört
     QVector<QString> Typ;
+    //! Rang nach dem die Größen sortiert werden
     QVector<int> Rang;
 };
 
@@ -109,6 +114,12 @@ public:
     DatenQuelle();
     virtual ~DatenQuelle();
     //! Fügt eine Größe hinzu.
+    /*!
+     * \brief addGroesse Fügt eine Größe in die DatenQuelle hinzu mit den übegebenen eigenschften.
+     * \param Groesse Name der Größe
+     * \param Typ ID des Kleidungsstyps zu dem die Größe gehört
+     * \return
+     */
     virtual int addGroesse(QString Groesse,int Typ)=0;
     //! Fügt einen JugendFeuerweher hinzu.
     virtual int addJugendfeuerwehr(QString Name)=0;
@@ -167,6 +178,17 @@ public:
      * \return List der Personen
      */
     virtual PersonenTabelle *getPersonen(int *JFFilter, int JFans,QString NamenFilter)=0;
+    //! Liefert Informationen zu einer Person
+    /*!
+     * \brief getPersonenInfo liefert Name usw. zu einer übergebenen ID aus der DatenQuelle.
+     * \param ID ID nach der Gesucht wird
+     * \param VorName Vorname der Person
+     * \param Nachnanme Nachname der Person
+     * \param Gruppe Name der Gruppe
+     * \param GruppenID Id der Gruppe
+     * \return Ob die Abfrage erfolgreich war.
+     */
+    virtual bool getPersonenInfo(int ID, QString *VorName,QString *Nachnanme,QString *Gruppe, int * GruppenID)=0;
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
     virtual bool removeGrosse(int ID)=0;
     virtual bool removeJugendferweher(int ID)=0;
@@ -176,6 +198,13 @@ public:
     virtual void rueckgabeKleidungsstueck(int ID)=0;
     virtual bool setKleidungsGroesse(int ID, int GroesseID)=0;
     virtual bool setKleidungsKommentar(int ID, QString Kommentar)=0;
+    //! Setzt den Rang einer Größe
+    /*!
+     * \brief setRangGroesse setzt den Rang zum Sörtieren einer Größe.
+     * \param ID Id der Größe von der der Rang gesezt werden soll.
+     * \param Rang Wert auf den der rang gesetzt wird.
+     * \return Status des setzen.
+     */
     virtual bool setRangGroesse(int ID,int Rang)=0;
 
 };

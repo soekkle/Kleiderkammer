@@ -261,7 +261,10 @@ void MainWindow::BerichtDrucken()
     if (ui->radioButton_2->isChecked())
         HTML=Drucken->generierenPersonenListe(Gruppe);
     QWebView* Flaeche=new QWebView;
+    QEventLoop Loop;
+    connect(Flaeche,SIGNAL(loadFinished(bool)),&Loop,SLOT(quit()));
     Flaeche->setHtml(HTML,Url);
+    Loop.exec();
     Flaeche->print(&Drucker);//rendert den Bericht in einer nicht sichtbaren QWebview und gibt inh an den Drucker weiter.
     delete Flaeche;
 }

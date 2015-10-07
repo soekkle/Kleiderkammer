@@ -88,6 +88,9 @@ private:
     int PersonenID;
     //! Die verschieden Actionen.
     QAction *ActionPersonLoeschen,*ActionKleicungLoeschen;
+
+    //! Funktion zum Aufbereiten der Ausleihen Maske.
+    void PersonAusleih(int ID);
     //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.
     void PersonenAnzeigen(int JFFilter, QString NamenFilter);
 
@@ -132,6 +135,8 @@ private slots:
     void PersonLoeschen();
     //! Zeigt das Infofenser zu diesem Programm
     void ZeigeInfo();
+    //! Zeigt den einkleiden Tab zu einer Person
+    void ZeigePersonKleider(int ID);
     //! Zeigt das Infofenster zu Qt
     void ZeigeQTInfo();
     void Zurueckgeben();

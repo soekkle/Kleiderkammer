@@ -99,6 +99,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
     connect(ui->actionGruppen_Verwalten,SIGNAL(triggered()),Gruppen,SLOT(exec()));
     connect(Gruppen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
+    connect(KleiderInfoSuchen,SIGNAL(PersonGewaehlt(int)),this,SLOT(ZeigePersonKleider(int)));
     connect(ui->comboBoxPerJFFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(ComboboxPerJFFilterGewahlt(int)));
     connect(ui->lineEditSuchName,SIGNAL(textChanged(QString)),this,SLOT(LineEditSuchNameChange(QString)));
     connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(PersonHinClicked()));
@@ -438,21 +439,28 @@ void MainWindow::PersonenAnzeigen(int JFFilter,QString NamenFilter)
     delete PerDaten;
 }
 
+void MainWindow::PersonAusleih(int ID)
+{
+    QString VName,NName,Gruppe,Text="<html><head/><body><p><span style=\" font-size:11pt; font-weight:600;\">%1 %2 - %3</span></p></body></html>";
+    int GID;
+    if (Daten->getPersonenInfo(ID,&VName,&NName,&Gruppe,&GID))
+    {
+        PersonenID=ID;
+        ui->label_Name->setText(Text.arg(VName,NName,Gruppe));
+        ui->tab_einKleiden->setEnabled(true);
+        PerKleider->setFilterPerson(PersonenID);
+        ui->comboBox_AusTypFilter->setCurrentIndex(0);
+        AusTypFiltergeaendert(0);
+    }
+}
+
 void MainWindow::PersonAusgewaehlt(const QModelIndex &neu, const QModelIndex )
 {
 
     QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(neu.row(),0));
     int row=Index.row();
-    QString Name,Text="<html><head/><body><p><span style=\" font-size:11pt; font-weight:600;\">%1</span></p></body></html>";
-    Name=Personen.data(Personen.index(row,1)).toString();
-    Name=Name.append(" ").append(Personen.data(Personen.index(row,2)).toString()).append(" - ");
-    Name.append(Personen.data(Personen.index(row,3)).toString());
-    ui->label_Name->setText(Text.arg(Name));
-    ui->tab_einKleiden->setEnabled(true);
-    AusTypFiltergeaendert(0);
-    ui->comboBox_AusTypFilter->setCurrentIndex(0);
-    PersonenID=Personen.data(Personen.index(row,0)).toInt();
-    PerKleider->setFilterPerson(PersonenID);
+    int ID=Personen.data(Personen.index(row,0)).toInt();
+    PersonAusleih(ID);
     return;
 }
 
@@ -520,6 +528,12 @@ void MainWindow::ZeigeInfo()
     UberText=QString::fromUtf8("<html><head></head><body><h1>Kleiderkammer</h1><p>Version: %1</p><p>Diese Anwendung dient der Verwaltung einer Kleiderkammer.</p><p>Kleiderkammer ist Freie Software: Sie können es unter den Bedingungen der GNU Affero General Public License, wie von der Free Software Foundation,Version 3 der Lizenz, weiterverbreiten und/oder modifizieren.</p><p>Kleiderkammer wird in der Hoffnung, dass es nützlich sein wird, aber OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK. Siehe die GNU Affero General Public License für weitere Details.</p><p>Sie sollten eine Kopie der GNU Affero General Public License zusammen mit diesem Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.</p></bod></html>");
     UberText=UberText.arg(VER_NUMBER_STRING);
     QMessageBox::about(this,QString::fromUtf8("Über Kleiderkammer"),UberText);
+}
+
+void MainWindow::ZeigePersonKleider(int ID)
+{
+    ui->tabWidget->setCurrentIndex(2);
+    PersonAusleih(ID);
 }
 
 void MainWindow::ZeigeQTInfo()

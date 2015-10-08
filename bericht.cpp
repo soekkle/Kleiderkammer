@@ -33,10 +33,12 @@
 
 #include "bericht.h"
 
-Bericht::Bericht(DatenQuelle *Daten)
+Bericht::Bericht(DatenQuelle *Daten, QString Ort)
 {
     this->Daten=Daten;
-    Typ=1;
+    FileDir=Ort;
+    CSSFile="style.css";
+    CSSextern=false;
 }
 
 Bericht::~Bericht()
@@ -45,8 +47,9 @@ Bericht::~Bericht()
 
 QString Bericht::generiereKammerListe()
 {
-    QString HTML="<!DOCTYPE html >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de-DE\" prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#\">\n<head >\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"stylesheet\" href=\"style.css\">";
-    HTML=HTML.append("<title> Inventurliste von %1 </title>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
+    QString HTML="<!DOCTYPE html >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de-DE\" prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#\">\n<head >\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
+    HTML.append(CSSHeader());
+    HTML.append("<title> Inventurliste von %1 </title>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
     HTML.append("</head><body>");
     HTML=HTML.append("<h1> Inventurliste von %1 <h1>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
     Kleidungstypentabelle *Typen=Daten->getKleidungstypen();
@@ -110,7 +113,8 @@ QString Bericht::generiereKammerListe()
  */
 QString Bericht::generierenPersonenListe(int Gruppe)
 {
-    QString HTML="<!DOCTYPE html >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de-DE\" prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#\">\n<head >\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n<link rel=\"stylesheet\" href=\"style.css\">";
+    QString HTML="<!DOCTYPE html >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de-DE\" prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#\">\n<head >\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
+    HTML.append(CSSHeader());
     QString GName="";
     {
         JugendFeuerwehrTabelle *GruppenNamen=Daten->getJugendfeuerwehr();
@@ -170,4 +174,62 @@ QString Bericht::generierenPersonenListe(int Gruppe)
     delete Personen;
     HTML.append("</tbody></table>");
     return HTML.append("</body></html>");
+}
+
+QString Bericht::CSSHeader()
+{
+    QString header="";
+    if (CSSextern)
+    {
+        header="<link rel=\"stylesheet\" href=\"%1\">\n";
+        header=header.arg(CSSFile);
+    }
+    else
+    {
+        header="<style>";
+        QFile CSSText(CSSFile);
+        QString OrtCSS=FileDir;
+        OrtCSS.append(CSSFile);
+        QFile CSSOrt(OrtCSS);
+        if (CSSText.open(QIODevice::ReadOnly|QIODevice::Text))
+        {
+            QTextStream CSS(&CSSText);
+            header.append(CSS.readAll());
+            CSSText.close();
+        }
+        else if (CSSOrt.open(QIODevice::ReadOnly|QIODevice::Text))
+        {
+            QTextStream CSS(&CSSOrt);
+            header.append(CSS.readAll());
+            CSSOrt.close();
+        }
+        header.append("</style>");
+    }
+    return header;
+}
+
+
+/*!
+ * \brief Bericht::setCSS setzt den pfard auf die zu verwendene CSS-Datei. Vorher wird geprüft ob die Datei vorhanden ist.
+ * Wenn sie nicht vorhanden ist, so wird die alte Datei behalten und false zurückgegeben.
+ * \param Ort Ort an der die CSS-Datei liegt.
+ * \return Rückgabe ob das sätzen Erfolgreich war.
+ */
+bool Bericht::setCSS(QString Ort)
+{
+    QFile CSS(Ort);
+    if (CSS.exists())
+    {
+        CSSFile=Ort;
+        return true;
+    }
+    QString OrtE=FileDir;
+    OrtE.append(Ort);
+    CSS.setFileName(OrtE);
+    if (CSS.exists())
+    {
+        CSSFile=Ort;
+        return true;
+    }
+    return false;
 }

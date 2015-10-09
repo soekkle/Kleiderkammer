@@ -89,6 +89,11 @@ private:
     //! Die verschieden Actionen.
     QAction *ActionPersonLoeschen,*ActionKleicungLoeschen;
 
+    //! Funktion zum Aufbereiten der Ausleihen Maske.
+    void PersonAusleih(int ID);
+    //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.
+    void PersonenAnzeigen(int JFFilter, QString NamenFilter);
+
 private slots:
     void AusGroessenFiltergeaendert(int Typ);
     void Auslehenclicked();
@@ -101,18 +106,20 @@ private slots:
     void BerichtSpeichern();
     //! Slot der die Komboboxen füllt.
     void ComboboxFuellen();
+    //! Slot, der nach dem Ändern der Combobox ComboboxPerJFFilter geändert wurde.
+    void ComboboxPerJFFilterGewahlt(int Pos);
     //! Solt zum Anzeigen des Contextmenüs in der Kleidungs Tabelle
     void KleidungContextMenuEvent(const QPoint Pos);
     //! Slot zum Löschen eines Kleidungsstückes.
     void KleidungLoeschen();
     //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
     void Kleidungstypgewaehlt(int Typ);
-    //! Slot der für die Anzeige der Personen zuständig ist.
-    void PersonenAnzeigen(int Filter);
     //! Slot der für die Anzeige der Kleiderstücke zusändig ist.
     void KleidunginKammerAnzeigen(int Filter);
     void KleidungHinClicked();
     void KleidungHinCancel();
+    //! Slot der Aufgerufen wird wenn der LineEditSuchName geändert wurde
+    void LineEditSuchNameChange(QString SuchFilter);
     //! Slot für das ContextMenü bei den Namen
     void NamenContextMenuEvent(const QPoint &Pos);
     void PerKleidungslistefuellen(int FilterTyp);
@@ -128,6 +135,8 @@ private slots:
     void PersonLoeschen();
     //! Zeigt das Infofenser zu diesem Programm
     void ZeigeInfo();
+    //! Zeigt den einkleiden Tab zu einer Person
+    void ZeigePersonKleider(int ID);
     //! Zeigt das Infofenster zu Qt
     void ZeigeQTInfo();
     void Zurueckgeben();

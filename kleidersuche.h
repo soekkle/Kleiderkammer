@@ -57,9 +57,14 @@ private:
     Ui::KleiderSuche *ui;
     DatenQuelle *Daten;
 
+signals:
+    void PersonGewaehlt(int ID);
+
 private slots:
     //! Slot zum ausführen der Suche
     void slotSuchen();
+    //! Slot zum Ausführen des geklikten Links
+    void slotLinkPerson(QString ID);
 };
 
 #endif // KLEIDERSUCHE_H

@@ -40,6 +40,7 @@ KleiderSuche::KleiderSuche(DatenQuelle *Daten, QWidget *parent) :
 {
     ui->setupUi(this);
     this->Daten=Daten;
+    connect(ui->label_Ort,SIGNAL(linkActivated(QString)),this,SLOT(slotLinkPerson(QString)));
     connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(slotSuchen()));
 }
 
@@ -47,6 +48,13 @@ KleiderSuche::~KleiderSuche()
 {
     delete ui;
 }
+
+void KleiderSuche::slotLinkPerson(QString ID)
+{
+    PersonGewaehlt(ID.toInt());
+    this->close();
+}
+
 /*!
  * \brief KleiderSuche::slotSuchen Fürt die suche nach einen Kleidungsstück mit der eingebenen Nummer aus. Und füllt
  *  das Formular mit den Daten.
@@ -54,11 +62,11 @@ KleiderSuche::~KleiderSuche()
 void KleiderSuche::slotSuchen()
 {
     int Nummer=ui->lineEdit->text().toInt();
-    int Leihen;
+    int Leihen,TraegerID;
     QString Typ,Name,Gruppe,Groesse,Bemerkung;
     QDate Anschaffung;
     // Prüft ob das Kleidungsstück vorhanden ist.
-    if (Daten->getKleidungsInfoByNummer(Nummer,&Typ,&Groesse,&Anschaffung,&Name,&Gruppe,&Bemerkung,&Leihen)>0)
+    if (Daten->getKleidungsInfoByNummer(Nummer,&Typ,&Groesse,&Anschaffung,&Name,&TraegerID,&Gruppe,&Bemerkung,&Leihen)>0)
     {
         // Setzen der Felder im Formular
         ui->label_Typ->setText(Typ);
@@ -70,8 +78,10 @@ void KleiderSuche::slotSuchen()
             ui->label_Ort->setText(QString::fromUtf8("Kleidungsstück ist in der Kleiderkammer."));
         }
         else {
+            QString Text=QString("<html><head/><body><a href=\"%1\">").arg(TraegerID);
             Name.append(" - ").append(Gruppe);
-            ui->label_Ort->setText(Name);
+            Text.append(Name).append("</a></body></html>");
+            ui->label_Ort->setText(Text);
         }
     }
     else

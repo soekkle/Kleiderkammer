@@ -99,7 +99,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
     connect(ui->actionGruppen_Verwalten,SIGNAL(triggered()),Gruppen,SLOT(exec()));
     connect(Gruppen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
-    connect(ui->comboBoxPerJFFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PersonenAnzeigen(int)));
+    connect(KleiderInfoSuchen,SIGNAL(PersonGewaehlt(int)),this,SLOT(ZeigePersonKleider(int)));
+    connect(ui->comboBoxPerJFFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(ComboboxPerJFFilterGewahlt(int)));
+    connect(ui->lineEditSuchName,SIGNAL(textChanged(QString)),this,SLOT(LineEditSuchNameChange(QString)));
     connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(PersonHinClicked()));
     connect(ui->buttonBox,SIGNAL(rejected()),this,SLOT(PersonHinCancel()));
     connect(ui->comboBoxBekFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(KleidunginKammerAnzeigen(int)));
@@ -157,7 +159,20 @@ void MainWindow::Auslehenclicked()
     int id=KleiderAus->getKleidungsId(Index.row());
     if (id==0)
         return;
-    //std::clog<<PersonenID<<" : "<<id<<std::endl;
+    int Nummer,Typ,Groesse;
+    if (!Daten->getKleidungsInfoByID(id,&Nummer,&Typ,&Groesse))
+        return;
+    KleiderTabelle *Bestand=Daten->getKleidervonPerson(PersonenID,Typ);
+    if (Bestand->Anzahl==1)
+    {
+        int ruck=QMessageBox::question(this,QString::fromUtf8("Rückgebe"),QString::fromUtf8("Wurde das Kleidungsstück mit der Nummer %1 zurückgegeben?").arg(Bestand->Nummer[0]),
+                QMessageBox::Yes|QMessageBox::No);
+        if (ruck==QMessageBox::Yes)
+        {
+            Daten->rueckgabeKleidungsstueck(Bestand->ID[0]);
+        }
+    }
+    delete Bestand;
     Daten->KleidungsstueckzuordnenbyID(id,PersonenID);
     //Ausleihlistefuellen
     KleiderAus->setFilterTyp(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt());
@@ -203,7 +218,7 @@ void MainWindow::ComboboxFuellen()
         ui->comboPerJFEin->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
         ui->comboBox_BeJF->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
     }
-    PersonenAnzeigen(0);
+    PersonenAnzeigen(0,"");
     delete JfDaten;
     /* Fült alle komboboxen die die Typen der Kleidungsstücke benötigen.
        Ebenfalls werden die ID als Daten dazu gespeichert.*/
@@ -293,6 +308,11 @@ void MainWindow::BerichtSpeichern()
     Drucken->CSSextern=true;
 }
 
+void MainWindow::ComboboxPerJFFilterGewahlt(int Pos)
+{
+    PersonenAnzeigen(Pos,ui->lineEditSuchName->text());
+}
+
 /*!
  * \brief MainWindow::KleidungContextMenuEvent Zeigt ein Kontextmenü für das Tableview TabelleKleider an.
  * \param Pos Position Auf der TableView, wo das Contextmenü angezeigt wird,
@@ -376,6 +396,11 @@ void MainWindow::Kleidungstypgewaehlt(int Typ)
     ui->spinBoxBeNumEin->setEnabled(true);
 }
 
+void MainWindow::LineEditSuchNameChange(QString SuchFilter)
+{
+    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),SuchFilter);
+}
+
 /*!
  * \brief MainWindow::NamenContextMenuEvent Zeigt das Kontentmenü für die Personenliste an. Es bietet die Möglichkeit zum Löschen einer Person.
  * \param Pos Position an der dan Menü erscheinen soll.
@@ -394,7 +419,12 @@ void MainWindow::PerKleidungslistefuellen(int FilterTyp)
     PerKleider->setFilterTyp(Filter);
 }
 
-void MainWindow::PersonenAnzeigen(int Filter)
+/*!
+ * \brief MainWindow::PersonenAnzeigen füllt die Listview mit Daten der Pesonen
+ * \param JFFilter Ausgewählte Zeile der Combobox
+ * \param NamenFilter Eingegebener Suchbegriff
+ */
+void MainWindow::PersonenAnzeigen(int JFFilter,QString NamenFilter)
 {
     Personen.clear();
     QStringList Zeile;
@@ -404,13 +434,17 @@ void MainWindow::PersonenAnzeigen(int Filter)
     Zeile.append("Jugendfeuerwehr");
     Personen.setHorizontalHeaderLabels(Zeile);
     int FilterNr=0,FilterAns=0;
-    if (Filter>0)
+    if (JFFilter>0)
     {
         FilterAns=1;
-        FilterNr=ui->comboBoxPerJFFilter->itemData(Filter).toInt();
+        FilterNr=ui->comboBoxPerJFFilter->itemData(JFFilter).toInt();
         std::cout<<FilterNr<<std::endl;
     }
-    PersonenTabelle *PerDaten=Daten->getPersonen(&FilterNr,FilterAns);
+    PersonenTabelle *PerDaten=NULL;
+    if (NamenFilter.isEmpty())
+        PerDaten=Daten->getPersonen(&FilterNr,FilterAns);
+    else
+        PerDaten=Daten->getPersonen(&FilterNr,FilterAns,NamenFilter);
     for (int i=0;i<PerDaten->Anzahl;++i)
     {
         QList<QStandardItem*> Zeile;
@@ -423,21 +457,28 @@ void MainWindow::PersonenAnzeigen(int Filter)
     delete PerDaten;
 }
 
+void MainWindow::PersonAusleih(int ID)
+{
+    QString VName,NName,Gruppe,Text="<html><head/><body><p><span style=\" font-size:11pt; font-weight:600;\">%1 %2 - %3</span></p></body></html>";
+    int GID;
+    if (Daten->getPersonenInfo(ID,&VName,&NName,&Gruppe,&GID))
+    {
+        PersonenID=ID;
+        ui->label_Name->setText(Text.arg(VName,NName,Gruppe));
+        ui->tab_einKleiden->setEnabled(true);
+        PerKleider->setFilterPerson(PersonenID);
+        ui->comboBox_AusTypFilter->setCurrentIndex(0);
+        AusTypFiltergeaendert(0);
+    }
+}
+
 void MainWindow::PersonAusgewaehlt(const QModelIndex &neu, const QModelIndex )
 {
 
     QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(neu.row(),0));
     int row=Index.row();
-    QString Name,Text="<html><head/><body><p><span style=\" font-size:11pt; font-weight:600;\">%1</span></p></body></html>";
-    Name=Personen.data(Personen.index(row,1)).toString();
-    Name=Name.append(" ").append(Personen.data(Personen.index(row,2)).toString()).append(" - ");
-    Name.append(Personen.data(Personen.index(row,3)).toString());
-    ui->label_Name->setText(Text.arg(Name));
-    ui->tab_einKleiden->setEnabled(true);
-    AusTypFiltergeaendert(0);
-    ui->comboBox_AusTypFilter->setCurrentIndex(0);
-    PersonenID=Personen.data(Personen.index(row,0)).toInt();
-    PerKleider->setFilterPerson(PersonenID);
+    int ID=Personen.data(Personen.index(row,0)).toInt();
+    PersonAusleih(ID);
     return;
 }
 
@@ -457,7 +498,7 @@ void MainWindow::PersonHinClicked()
         return;
     }
     Daten->addPerson(Nachname,Vorname,JF);
-    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex());
+    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
     PersonHinCancel();
 }
 
@@ -490,7 +531,7 @@ void MainWindow::PersonLoeschen()
         if (QMessageBox::information(this,QString::fromUtf8("Person löschen"),QString::fromUtf8("Sind Sie sicher, dass sie ausgewälte die Person löschen wollen?"),
                                       QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
         Daten->removePerson(id);
-        PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex());
+        PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
     }
     else
     {
@@ -505,6 +546,12 @@ void MainWindow::ZeigeInfo()
     UberText=QString::fromUtf8("<html><head></head><body><h1>Kleiderkammer</h1><p>Version: %1</p><p>Diese Anwendung dient der Verwaltung einer Kleiderkammer.</p><p>Kleiderkammer ist Freie Software: Sie können es unter den Bedingungen der GNU Affero General Public License, wie von der Free Software Foundation,Version 3 der Lizenz, weiterverbreiten und/oder modifizieren.</p><p>Kleiderkammer wird in der Hoffnung, dass es nützlich sein wird, aber OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK. Siehe die GNU Affero General Public License für weitere Details.</p><p>Sie sollten eine Kopie der GNU Affero General Public License zusammen mit diesem Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.</p></bod></html>");
     UberText=UberText.arg(VER_NUMBER_STRING);
     QMessageBox::about(this,QString::fromUtf8("Über Kleiderkammer"),UberText);
+}
+
+void MainWindow::ZeigePersonKleider(int ID)
+{
+    ui->tabWidget->setCurrentIndex(2);
+    PersonAusleih(ID);
 }
 
 void MainWindow::ZeigeQTInfo()

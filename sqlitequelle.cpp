@@ -341,7 +341,19 @@ KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id, int Typ)
     return getKleider(Typ,-1,id);
 }
 
-int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger, QString *Gruppe, QString *Bemerkung,int *Anzahl)
+bool SQLiteQuelle::getKleidungsInfoByID(int ID, int *Nummer, int *Typ, int *Groesse)
+{
+    QSqlQuery Abfrage(QString("SELECT Nummer,Typ,Groesse FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
+    if (Abfrage.next())
+    {
+        *Nummer=Abfrage.value(0).toInt();
+        *Typ=Abfrage.value(1).toInt();
+        *Groesse=Abfrage.value(2).toInt();
+    }
+    return FehlerAusgabe(Abfrage);
+}
+
+int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)
 {
     int ID=-1;
     QSqlQuery Abfrage(QString("SELECT Kleidungsstuecke.id, Kleidungstyp.Name, Kleidungsstuecke.Groesse, Kleidungsstuecke.Traeger, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke, Kleidungstyp WHERE Nummer=%1 AND Kleidungstyp.id=Kleidungsstuecke.Typ").arg(Nummer),Datenbank);
@@ -374,6 +386,7 @@ int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Gr
                 Traeger->append(" ");
                 Traeger->append(Info.value(1).toString());
                 *Gruppe=Info.value(2).toString();
+                *TraegerID=TraID;
 
             }
         }
@@ -478,6 +491,61 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans)
         Ausgabe->JugendFeuerwehr.append(Abfrage.value(3).toString());
     }
     return Ausgabe;
+}
+
+PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans, QString NamenFilter)
+{
+    PersonenTabelle *Ausgabe=new PersonenTabelle;
+    Ausgabe->Anzahl=0;
+    QString SQLString="SELECT Personen.id,Personen.Nachname,Personen.Vorname,Jugendfeuerwehr.Name FROM Personen,Jugendfeuerwehr WHERE Personen.jf=Jugendfeuerwehr.id";
+    if (JFans>0)
+    {
+        SQLString=SQLString.append(" AND (Personen.jf=%1").arg(JFFilter[0]);
+        for (int i=1;i<JFans;++i)
+        {
+            SQLString=SQLString.append(" OR Personen.jf=%1").arg(JFFilter[i]);
+        }
+        SQLString=SQLString.append(")");
+    }
+    // Zelegen der Eingabe in Einzelteile
+    QStringList NamenFilterList=NamenFilter.split(' ');
+    if (NamenFilterList.length()>0)
+    {
+        SQLString.append(" AND (");
+        SQLString=SQLString.append(" (Personen.Vorname LIKE '%%1%' OR  Personen.Nachname LIKE '%%1%')").arg(NamenFilterList[0]);
+        for (int i=1;i<NamenFilterList.length();++i)
+        {
+            SQLString=SQLString.append(" AND (Personen.Vorname LIKE '%%1%' OR  Personen.Nachname LIKE '%%1%')").arg(NamenFilterList[i]);
+        }
+        SQLString.append(")");
+    }
+    SQLString.append(" ORDER BY Nachname,Vorname ASC");
+    //std::cout<< SQLString.toStdString();
+    QSqlQuery Abfrage(SQLString,Datenbank);
+    FehlerAusgabe(Abfrage);
+    while(Abfrage.next())
+    {
+        ++Ausgabe->Anzahl;
+        Ausgabe->ID.append(Abfrage.value(0).toInt());
+        Ausgabe->Nachname.append(Abfrage.value(1).toString());
+        Ausgabe->Vorname.append(Abfrage.value(2).toString());
+        Ausgabe->JugendFeuerwehr.append(Abfrage.value(3).toString());
+    }
+    return Ausgabe;
+}
+
+bool SQLiteQuelle::getPersonenInfo(int ID, QString *VorName, QString *Nachnanme, QString *Gruppe, int *GruppenID)
+{
+    QSqlQuery Abfrage(QString("SELECT Personen.Vorname,Personen.Nachname,Jugendfeuerwehr.Name,Personen.Jf FROM Personen,Jugendfeuerwehr WHERE Personen.id=%1 AND Personen.Jf=Jugendfeuerwehr.id").arg(ID),Datenbank);
+    if (Abfrage.next())
+    {
+        *VorName=Abfrage.value(0).toString();
+        *Nachnanme=Abfrage.value(1).toString();
+        *Gruppe=Abfrage.value(2).toString();
+        *GruppenID=Abfrage.value(3).toInt();
+        return true;
+    }
+    return false;
 }
 
 bool SQLiteQuelle::removeGrosse(int ID)

@@ -97,6 +97,12 @@
         <property name="text">
          <string/>
         </property>
+        <property name="textFormat">
+         <enum>Qt::RichText</enum>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::LinksAccessibleByMouse</set>
+        </property>
        </widget>
       </item>
       <item row="3" column="0">

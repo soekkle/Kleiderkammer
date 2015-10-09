@@ -68,13 +68,15 @@ public:
     int getGroessenID(QString Groesse,int TypID);
     KleiderTabelle *getKleiderinKammer(int Typ, int Groesse);
     KleiderTabelle *getKleidervonPerson(int id, int Typ);
-    int getKleidungsInfoByNummer(int Nummer, QString* Typ, QString *Groesse, QDate *Datum, QString *Traeger, QString *Gruppe, QString *Bemerkung, int *Anzahl);
+    bool getKleidungsInfoByID(int ID,int *Nummer, int *Typ, int *Groesse);
+    int getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl);
     Kleidungstypentabelle *getKleidungstypen();
     //! Liefert die ID eines Kleidungstyps.
     int getKleidungsTypID(QString Typ);
     JugendFeuerwehrTabelle *getJugendfeuerwehr();
     PersonenTabelle *getPersonen(int *JFFilter,int JFans);
-
+    PersonenTabelle *getPersonen(int *JFFilter, int JFans, QString NamenFilter);
+    bool getPersonenInfo(int ID, QString *VorName,QString *Nachnanme,QString *Gruppe, int * GruppenID);
     void getNummerBereich(int TypID,int *Anfang,int* Ende);
     int getIDByKleidungsNummer(int Nummer);
     //! Fügt einen Kleidungstück einen Träger hinzu.

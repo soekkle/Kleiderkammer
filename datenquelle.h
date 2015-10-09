@@ -153,7 +153,32 @@ public:
     virtual JugendFeuerwehrTabelle *getJugendfeuerwehr()=0;
     virtual KleiderTabelle *getKleidervonPerson(int id,int Typ)=0;
     virtual KleiderTabelle *getKleiderinKammer(int Typ,int Groesse)=0;
+    //! Liefert Informationen zu dem Kleidungsstück mit der ID.
+    /*!
+     * \brief getKleidungsInfoByID liefert einige Informationen zu dem Kleidungsstück mit der übergebenen ID
+     * \param ID[in] ID des Kleidungsstückes
+     * \param Nummer[out] Nummer unter der das Kleidungsstück geführt wird
+     * \param Typ[out] Id des Kleidungsstyps des Kleidungsstckes
+     * \param Groesse[out] ID der Kleidungsgröße des Kleidungsstückes
+     * \return Ob das Kleidungsstück existiert.
+     */
+    virtual bool getKleidungsInfoByID(int ID,int *Nummer, int *Typ, int *Groesse)=0;
     //! Liefert die Informationen zu einen Kleidungsstück
+    /*!
+     * \brief  getKleidungsInfoByNummer liefert alle gespeicherten Informationen zu einen Kleidungsstück mit der
+     * Angegeben Nummer. Wenn zwei Kleidungsstücke mit der selben Nummer vorhanden sind, ist das Verhalten nicht
+     * definirt
+     * \param[in] Nummer Nummer des Kleidungsstücks
+     * \param[out] Typ Typ des gesuchten Kleidungsstücks
+     * \param[out] Groesse Größe des gesuchten Kleidungsstücks
+     * \param[out] Datum Datum an den das Kleidungsstück angelegt wurde
+     * \param[out] Traeger Name des aktuellen Trägers
+     * \param[out] TraegerID ID des aktuellen Trägers
+     * \param[out] Gruppe Gruppe des aktuellen Trägers
+     * \param[out] Bemerkung Bemerkung zu dem Kleidungsstück
+     * \param[out] Anzahl Wieoft das Kleidungsstück Ausgeliehnen wurde
+     * \return ID Des Ausgegbenen Kleidungsstücks
+     */
     virtual int getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)=0;
     virtual Kleidungstypentabelle *getKleidungstypen()=0;
     //! Liefert die ID eines Kleidungstyps.

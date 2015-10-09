@@ -341,6 +341,18 @@ KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id, int Typ)
     return getKleider(Typ,-1,id);
 }
 
+bool SQLiteQuelle::getKleidungsInfoByID(int ID, int *Nummer, int *Typ, int *Groesse)
+{
+    QSqlQuery Abfrage(QString("SELECT Nummer,Typ,Groesse FROM Kleidungsstuecke WHERE id=%1").arg(ID),Datenbank);
+    if (Abfrage.next())
+    {
+        *Nummer=Abfrage.value(0).toInt();
+        *Typ=Abfrage.value(1).toInt();
+        *Groesse=Abfrage.value(2).toInt();
+    }
+    return FehlerAusgabe(Abfrage);
+}
+
 int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)
 {
     int ID=-1;
@@ -524,7 +536,7 @@ PersonenTabelle *SQLiteQuelle::getPersonen(int *JFFilter, int JFans, QString Nam
 
 bool SQLiteQuelle::getPersonenInfo(int ID, QString *VorName, QString *Nachnanme, QString *Gruppe, int *GruppenID)
 {
-    QSqlQuery Abfrage(QString("SELECT Personen.Vorname,Personen.Nachname,Personen.Jf,Jugendfeuerwehr.Name FROM Personen,Jugendfeuerwehr WHERE Personen.id=%1 AND Personen.Jf=Jugendfeuerwehr.id").arg(ID),Datenbank);
+    QSqlQuery Abfrage(QString("SELECT Personen.Vorname,Personen.Nachname,Jugendfeuerwehr.Name,Personen.Jf FROM Personen,Jugendfeuerwehr WHERE Personen.id=%1 AND Personen.Jf=Jugendfeuerwehr.id").arg(ID),Datenbank);
     if (Abfrage.next())
     {
         *VorName=Abfrage.value(0).toString();

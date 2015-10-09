@@ -159,7 +159,20 @@ void MainWindow::Auslehenclicked()
     int id=KleiderAus->getKleidungsId(Index.row());
     if (id==0)
         return;
-    //std::clog<<PersonenID<<" : "<<id<<std::endl;
+    int Nummer,Typ,Groesse;
+    if (!Daten->getKleidungsInfoByID(id,&Nummer,&Typ,&Groesse))
+        return;
+    KleiderTabelle *Bestand=Daten->getKleidervonPerson(PersonenID,Typ);
+    if (Bestand->Anzahl==1)
+    {
+        int ruck=QMessageBox::question(this,QString::fromUtf8("Rückgebe"),QString::fromUtf8("Wurde das Kleidungsstück mit der Nummer %1 zurückgegeben?").arg(Bestand->Nummer[0]),
+                QMessageBox::Yes|QMessageBox::No);
+        if (ruck==QMessageBox::Yes)
+        {
+            Daten->rueckgabeKleidungsstueck(Bestand->ID[0]);
+        }
+    }
+    delete Bestand;
     Daten->KleidungsstueckzuordnenbyID(id,PersonenID);
     //Ausleihlistefuellen
     KleiderAus->setFilterTyp(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt());

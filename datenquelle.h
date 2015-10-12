@@ -93,20 +93,29 @@ public:
     QVector<int> EndNummer;
 };
 
-//! Klassre zur Speicherung von Rückgabedaten über Personen
+//! Klasse zur Speicherung von Rückgabedaten über Personen
+/*!
+ * \brief Die Klasse PersonenTabelle speichert daten zu verschieden Personen als structure of arryas
+ */
 class PersonenTabelle
 {
 public:
+    //! Anzahl der Personen in dem Objekt
     int Anzahl;
+    //! ID der Dersonen
     QVector<int> ID;
+    //! Vornamen der Personen
     QVector<QString> Vorname;
+    //! Nachnanmen der Personen
     QVector<QString> Nachname;
+    //! Gruppe der Personen
     QVector<QString> JugendFeuerwehr;
 };
+
 //! Klasse die die Schnittstelle zu eine DatenQuelle Definirt.
 /*!
- * \brief Die Klasse DatenQuelle stellt eine Schnittstelle zum Abfragen und setzen der Daten in der Kleiderkammer zur
- * Verfügung.
+ * \brief Die Klasse DatenQuelle stellt eine abstrakte Schnittstelle zum Abfragen und setzen der Daten in der
+ *  Kleiderkammer zur Verfügung.
  */
 class DatenQuelle
 {
@@ -115,13 +124,18 @@ public:
     virtual ~DatenQuelle();
     //! Fügt eine Größe hinzu.
     /*!
-     * \brief addGroesse Fügt eine Größe in die DatenQuelle hinzu mit den übegebenen eigenschften.
+     * \brief addGroesse Fügt eine Größe in die DatenQuelle hinzu mit den übegebenen Eigenschften.
      * \param Groesse Name der Größe
      * \param Typ ID des Kleidungsstyps zu dem die Größe gehört
      * \return
      */
     virtual int addGroesse(QString Groesse,int Typ)=0;
     //! Fügt einen JugendFeuerweher hinzu.
+    /*!
+     * \brief addJugendfeuerwehr fügt eine neue Gruppe für die Personen hinzu.
+     * \param Name Name der neuen Gruppe
+     * \return ID der Gruppe
+     */
     virtual int addJugendfeuerwehr(QString Name)=0;
     //! Fügt ein Kleidungsstück hinzu.
     /*!
@@ -133,7 +147,7 @@ public:
      * \return Nummer des Kleidungsstückes
      */
     virtual int addKleiderstueck(int Typ,int Groesse,int Nummer=-1)=0;
-    //! Fügt einen Kleidungstyp hinzu
+    //! Fügt einen Kleidungstyp hinzu.
     /*!
      * \brief addKleidungstyp fügt in die DatenQuelle einen neuen Typ von Kleidungsstücken hinzu.
      * \param Name Name des Typs.
@@ -142,13 +156,50 @@ public:
      * \return
      */
     virtual int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer)=0;
-    //! Fügt der Datenquelle eine Person hinzu
+    //! Fügt der Datenquelle eine Person hinzu.
+    /*!
+     * \brief addPerson fügt eine neue Person in den Bestand hinzu. Die Berson hat die Übergeben eigenschaften und
+     * noch keine Kleidung. Wenn ein Fehler Auftritt wird -1 als ID zurückgegeben.
+     * \param Nachname Nachname der neuen Person
+     * \param Vorname Vorname der neuen Person
+     * \param Gruppe Gruppe zu der die neue Person gehört
+     * \return ID der hinzugefügten Person
+     */
     virtual int addPerson(QString Nachname, QString Vorname,int Gruppe)=0;
+    //! Liefert die erste Freie Nummer des Typs zurück.
+    /*!
+     * \brief freieNummer liefert die erste freie Nummer für ein Kleidungsstück des übergebenen Typs aus dem hinterlegten
+     * Nummerbereich des Kleidungsstyps.
+     * \param Typ ID des Typs.
+     * \return Erste freie Nummer
+     */
     virtual int freieNummer(int Typ)=0;
-    //! Liefert eine Liste mit den Größen die die Filtereigenschaften der Typen erfülen
+    //! Liefert eine Liste mit den Größen die die Filtereigenschaften der Typen erfülen.
+    /*!
+     * \brief getGroessen Liefert eine Liste mit den Größen für die als Filter übergeben Kleidungstypen. Die
+     * Kleidungstypen werden durch ihre ID übergeben.
+     * \param Filter Int Arrya mit den Filter ID
+     * \param anz Anzahl der Filter
+     * \return Tabelle mit den entsprechenden Größen.
+     */
     virtual GroessenTabelle *getGroessen(int *Filter, int anz)=0;
-    //! Liefert die ID zu einer Größe von Einen Bestimten Kleidungstyp
+    //! Liefert die ID zu einer Größe von Einen Bestimten Kleidungstyp.
+    /*!
+     * \brief getGroessenID gibt eine ID zurück die zu einer Größe Passt, die bis auf Groß- und Kleinschreibeung der
+     * Übergebenen Größe entspricht. Wenn mehrere Größen mit der Bezeichnung für den Typ vorhanden sind, ist das
+     * Verhalten nicht definirt.
+     * \param Groesse Name der Größe
+     * \param TypID ID des Kleidertyps der Größe
+     * \return
+     */
     virtual int getGroessenID(QString Groesse,int TypID)=0;
+    //! Liefert die ID zu einen Kleidungsstük mit der übergeben Nummer.
+    /*!
+     * \brief getIDByKleidungsNummer liefert die ID des Kleidungstückes mit der übergeben Nummer. Wenn die Nummer
+     * doppeltvergeben ist, ist das verhalten nicht definirt.
+     * \param Nummer Nummer des Kleidungsstückes
+     * \return ID des Kleidungsstückes
+     */
     virtual int getIDByKleidungsNummer(int Nummer)=0;
     virtual JugendFeuerwehrTabelle *getJugendfeuerwehr()=0;
     virtual KleiderTabelle *getKleidervonPerson(int id,int Typ)=0;

@@ -52,7 +52,7 @@ public:
     //! gibt an ob die CSS datei extern bleibt oder eingebunden wird.
     bool CSSextern;
     //! Gibt den HTML-Code für die Personenliste für die Angegebene Gruppe zurück
-    QString generierenPersonenListe(int Gruppe);
+    QString generierenPersonenListe(int Gruppe, QVector<int> TypenListe=QVector<int>());
     //! Gibt den HTML-Code für die Inventurliste zurück.
     QString generiereKammerListe();
     //! Setzt den Pfard auf die zu verwendene CSS-Datei

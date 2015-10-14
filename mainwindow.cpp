@@ -117,6 +117,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_BeAn,SIGNAL(clicked()),this,SLOT(BerichtAnzeigen()));
     connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
     connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
+    connect(ui->radioButton,SIGNAL(clicked()),this,SLOT(RadiobuttomCilcked()));
+    connect(ui->radioButton_2,SIGNAL(clicked()),this,SLOT(RadiobuttomCilcked()));
+    connect(ui->groupBox_BeTyp,SIGNAL(clicked(bool)),this,SLOT(Groupchecked(bool)));
     // Verbinden der Mainmenü einträgen
     connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->actionKleidungsst_ck,SIGNAL(triggered()),KleiderInfoSuchen,SLOT(exec()));
@@ -220,6 +223,12 @@ void MainWindow::ComboboxFuellen()
     }
     PersonenAnzeigen(0,"");
     delete JfDaten;
+    for (int i=0;i<CheckBoxBeType.size();++i)
+    {
+        ui->gridLayout_4->removeWidget(CheckBoxBeType[i]);
+        delete CheckBoxBeType[i];
+    }
+    CheckBoxBeType.clear();
     /* Fült alle komboboxen die die Typen der Kleidungsstücke benötigen.
        Ebenfalls werden die ID als Daten dazu gespeichert.*/
     ui->comboBoxBekFilter->clear();
@@ -239,6 +248,10 @@ void MainWindow::ComboboxFuellen()
         ui->comboBoxBeTypEin->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
         ui->comboBox_AusTypFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
         ui->comboBox_eigenFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
+        QCheckBox *Box=new QCheckBox(KleiTyp->Name[i],this);
+        Box->setHidden(!ui->groupBox_BeTyp->isChecked());
+        ui->gridLayout_4->addWidget(Box,i/4,i%4);
+        CheckBoxBeType.append(Box);
     }
     KleidunginKammerAnzeigen(0);
     delete KleiTyp;
@@ -306,6 +319,14 @@ void MainWindow::BerichtSpeichern()
 void MainWindow::ComboboxPerJFFilterGewahlt(int Pos)
 {
     PersonenAnzeigen(Pos,ui->lineEditSuchName->text());
+}
+
+void MainWindow::Groupchecked(bool checked)
+{
+    for (int i=0;i<CheckBoxBeType.size();++i)
+    {
+        CheckBoxBeType[i]->setHidden(!checked);
+    }
 }
 
 /*!
@@ -534,6 +555,23 @@ void MainWindow::PersonLoeschen()
     }
     delete Kleider;
 }
+
+void MainWindow::RadiobuttomCilcked()
+{
+    if (ui->radioButton->isChecked())
+    {
+        ui->comboBox_BeJF->setEnabled(false);
+        ui->groupBox_BeTyp->setChecked(false);
+        ui->groupBox_BeTyp->setEnabled(false);
+        Groupchecked(false);
+    }
+    else
+    {
+        ui->comboBox_BeJF->setEnabled(true);
+        ui->groupBox_BeTyp->setEnabled(true);
+    }
+}
+
 
 void MainWindow::ZeigeInfo()
 {

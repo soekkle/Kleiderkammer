@@ -38,6 +38,8 @@
 #include <QPrintDialog>
 #include <QPainter>
 #include <QDateTime>
+#include <QFile>
+#include <QTextStream>
 #include "datenquelle.h"
 
 
@@ -45,16 +47,24 @@
 class Bericht
 {
 public:
-    Bericht(DatenQuelle *Daten);
+    Bericht(DatenQuelle *Daten, QString Ort);
     ~Bericht();
+    //! gibt an ob die CSS datei extern bleibt oder eingebunden wird.
+    bool CSSextern;
     //! Gibt den HTML-Code für die Personenliste für die Angegebene Gruppe zurück
-    QString generierenPersonenListe(int Gruppe);
+    QString generierenPersonenListe(int Gruppe, QVector<int> TypenListe=QVector<int>());
     //! Gibt den HTML-Code für die Inventurliste zurück.
     QString generiereKammerListe();
+    //! Setzt den Pfard auf die zu verwendene CSS-Datei
+    bool setCSS(QString Ort);
+
 
 private:
-    int Typ;
     DatenQuelle *Daten;
+    QString CSSFile;
+    QString FileDir;
+    //! Generirt CSS Bereich im Header und gibt ihn zurück.
+    QString CSSHeader();
 };
 
 #endif // BERICHT_H

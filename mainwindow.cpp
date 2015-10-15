@@ -93,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView_KleiPerson->setModel(&ProPerKleider);
     ui->tableView_KleiPerson->setItemDelegateForColumn(2,ComboBox);
     ComboboxFuellen();//Inizalisiert alle Comboboxen.
-    Drucken=new Bericht(Daten);
+    Drucken=new Bericht(Daten,this->Ort);
     //Stellt alle Eventverbindungen her.
     connect(ui->actionKleidungstypen_verwalten,SIGNAL(triggered()),Typen,SLOT(exec()));
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
@@ -289,7 +289,10 @@ void MainWindow::BerichtDrucken()
     if (ui->radioButton_2->isChecked())
         HTML=Drucken->generierenPersonenListe(Gruppe);
     QWebView* Flaeche=new QWebView;
+    QEventLoop Loop;
+    connect(Flaeche,SIGNAL(loadFinished(bool)),&Loop,SLOT(quit()));
     Flaeche->setHtml(HTML,Url);
+    Loop.exec();
     Flaeche->print(&Drucker);//rendert den Bericht in einer nicht sichtbaren QWebview und gibt inh an den Drucker weiter.
     delete Flaeche;
 }
@@ -309,11 +312,13 @@ void MainWindow::BerichtSpeichern()
         return;
     QTextStream HTML(&HDD_Datei);
     HTML.setCodec("UTF-8");
+    Drucken->CSSextern=false;
     if (ui->radioButton->isChecked())
         HTML<<Drucken->generiereKammerListe();
     if (ui->radioButton_2->isChecked())
         HTML<< Drucken->generierenPersonenListe(Gruppe);
     HDD_Datei.close();
+    Drucken->CSSextern=true;
 }
 
 void MainWindow::ComboboxPerJFFilterGewahlt(int Pos)

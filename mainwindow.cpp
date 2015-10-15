@@ -205,6 +205,25 @@ void MainWindow::AusTypFiltergeaendert(int Typ)
     ui->comboBox_AusGroFilter->setEnabled(true);
 }
 
+/*!
+ * \brief MainWindow::BerichtSpalten liefert einen Vektor mit den für den aktuellen Bericht ausgewählten Spalten.
+ * Wenn alle die option alle Spalten gewählt wurde wird ein leerer Vektor zurückgegeben.
+ * \return Vector mit den ID der Kleidertypen.
+ */
+QVector<int> MainWindow::BerichtSpalten()
+{
+    QVector<int> Spalten;
+    if (ui->groupBox_BeTyp->isChecked())
+    {
+        for (int i=0;i<CheckBoxBeType.size();++i)
+        {
+            if (CheckBoxBeType[i]->isChecked())
+                Spalten.append(Daten->getKleidungsTypID(CheckBoxBeType[i]->text()));
+        }
+    }
+    return Spalten;
+}
+
 void MainWindow::ComboboxFuellen()
 {
     /* Fült zwei Comboboxen mit den Namen der Eingetragenen Gruppen.
@@ -269,7 +288,7 @@ void MainWindow::BerichtAnzeigen()
     if (ui->radioButton->isChecked())
         ui->webView->setHtml(Drucken->generiereKammerListe(),Url);
     if (ui->radioButton_2->isChecked())
-        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe),Url);
+        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe,BerichtSpalten()),Url);
 }
 
 /*!
@@ -287,7 +306,7 @@ void MainWindow::BerichtDrucken()
     if (ui->radioButton->isChecked())
         HTML=Drucken->generiereKammerListe();
     if (ui->radioButton_2->isChecked())
-        HTML=Drucken->generierenPersonenListe(Gruppe);
+        HTML=Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
     QWebView* Flaeche=new QWebView;
     QEventLoop Loop;
     connect(Flaeche,SIGNAL(loadFinished(bool)),&Loop,SLOT(quit()));
@@ -316,7 +335,7 @@ void MainWindow::BerichtSpeichern()
     if (ui->radioButton->isChecked())
         HTML<<Drucken->generiereKammerListe();
     if (ui->radioButton_2->isChecked())
-        HTML<< Drucken->generierenPersonenListe(Gruppe);
+        HTML<< Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
     HDD_Datei.close();
     Drucken->CSSextern=true;
 }

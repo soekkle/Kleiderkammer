@@ -90,6 +90,8 @@ private:
     int PersonenID;
     //! Die verschieden Actionen.
     QAction *ActionPersonLoeschen,*ActionKleicungLoeschen;
+    //! DIe Fuktion liefert die Ausgwählten Spalten für den Bericht
+    QVector<int> BerichtSpalten();
     //! Funktion zum Aufbereiten der Ausleihen Maske.
     void PersonAusleih(int ID);
     //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.

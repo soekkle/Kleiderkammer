@@ -41,3 +41,8 @@ FORMS    += mainwindow.ui \
     kleidersuche.ui
 # Setzen der VersionsInfos
 VERSION= 0.0.1
+
+# Da unter Qt 5 Probleme mit dem Drucken von WebWidgeds auftreten wird es hier deaktivirt
+equals(QT_MAJOR_VERSION,5):{
+    DEFINES +=NOPRINT
+}

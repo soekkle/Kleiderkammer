@@ -36,7 +36,9 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#ifndef NOPRINT
 #include <QPrintDialog>
+#endif
 #include "datenquelle.h"
 #include "sqlitequelle.h"
 #include "kleidersuche.h"
@@ -100,8 +102,10 @@ private slots:
     void AusTypFiltergeaendert(int Typ);
     //! Slot zum Anzagen des Beichtes
     void BerichtAnzeigen();
+#ifndef NOPRINT
     //! Slot zum Starten des Druckens
     void BerichtDrucken();
+#endif
     //! Slot zum Speichern des Berichtes als HTML-Datei.
     void BerichtSpeichern();
     //! Slot der die Komboboxen füllt.

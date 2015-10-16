@@ -115,7 +115,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->comboBox_eigenFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PerKleidungslistefuellen(int)));
     connect(ui->pushButton_zuruck,SIGNAL(clicked()),this,SLOT(Zurueckgeben()));
     connect(ui->pushButton_BeAn,SIGNAL(clicked()),this,SLOT(BerichtAnzeigen()));
+#ifndef NOPRINT
     connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
+#endif
     connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
     // Verbinden der Mainmenü einträgen
     connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
@@ -133,7 +135,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ActionKleicungLoeschen=new QAction(QString::fromUtf8("Löschen"),this);
     ActionKleicungLoeschen->setToolTip(QString::fromUtf8("Löscht das Ausgewalte Kleidungsstück."));
     connect(ActionKleicungLoeschen,SIGNAL(triggered()),this,SLOT(KleidungLoeschen()));
-
+#ifdef NOPRINT
+    ui->pushButton_BeDr->close();
+#endif
 }
 
 MainWindow::~MainWindow()
@@ -259,6 +263,7 @@ void MainWindow::BerichtAnzeigen()
         ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe),Url);
 }
 
+#ifndef NOPRINT
 /*!
  * \brief MainWindow::BerichtDrucken Starte den Vorgang des Drucken eines Bereichtes. Es wird de standad Dialog mit den Druckereinstellungen angezeigt.
  */
@@ -283,6 +288,7 @@ void MainWindow::BerichtDrucken()
     Flaeche->print(&Drucker);//rendert den Bericht in einer nicht sichtbaren QWebview und gibt inh an den Drucker weiter.
     delete Flaeche;
 }
+#endif
 
 /*!
  * \brief MainWindow::BerichtSpeichern Speicher den Generierten Bericht in einem HTML Dokument.

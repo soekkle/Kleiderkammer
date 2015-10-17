@@ -201,8 +201,29 @@ public:
      * \return ID des Kleidungsstückes
      */
     virtual int getIDByKleidungsNummer(int Nummer)=0;
+    //! Liefert einen Pointer auf ein Struckture of Array mit den daten aller Angelegten Gruppen.
+    /*!
+     * \brief getJugendfeuerwehr liefert eine Liste mit allen angelegten Gruppen zurück. Sie hat keine Eingabeparameter.
+     *
+     * \return Zeiger auf die  Struckture of Array mit den Daten.
+     */
     virtual JugendFeuerwehrTabelle *getJugendfeuerwehr()=0;
+    //! Gibt einen Liste mit den Kleidungsstücken des typs der Person zurück.
+    /*!
+     * \brief getKleidervonPerson liefert eine Liste mit den Typentsprechenden Kleidungstyp der angegeben Person zurück.
+     * \param id ID der Person von der die Kleidungsstücke ausgegebnen werden soll.
+     * \param Typ Kleidungsstyp nach dem Gefilter wird.
+     * \return TAbelle mit den Kleidungsstcken einer Person.
+     */
     virtual KleiderTabelle *getKleidervonPerson(int id,int Typ)=0;
+    //! Gibt eine Liste mit den Kleidungsstückenn die in der Kleiderkammer sind und der Größe entsprechen.
+    /*!
+     * \brief getKleiderinKammer liefer einen Pointer auf ein Structure of Arrys, mit den Kleidungsstücken die in der
+     * Kleiderkammer sind und den übergebenen Filtern entsprechen, zurück.
+     * \param Typ Kleidungstyp nach dem gefilter wird.
+     * \param Groesse Größe nach der Gefilter wird.
+     * \return Pointer auf die Liste mit den Kleidungsstücken.
+     */
     virtual KleiderTabelle *getKleiderinKammer(int Typ,int Groesse)=0;
     //! Liefert Informationen zu dem Kleidungsstück mit der ID.
     /*!
@@ -231,9 +252,30 @@ public:
      * \return ID Des Ausgegbenen Kleidungsstücks
      */
     virtual int getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)=0;
+    //! Liefert alle Kleidungstypen zurück.
+    /*!
+     * \brief getKleidungstypen liefert einen Pointer auf ein Strucktur of Array mit informationen zu allen Größen
+     *  wieder.
+     * \return Pointer der Liste.
+     */
     virtual Kleidungstypentabelle *getKleidungstypen()=0;
     //! Liefert die ID eines Kleidungstyps.
+    /*!
+     * \brief getKleidungsTypID gibt die ID eines Kleidungstyps zurück der mit den übergeben Namen übereinstimmt.
+     * Bei doppeldeutigkeit ist das verhalten der Funktion nicht definirt und von der konkreten klasse abhänig. Beim
+     * vergleich der Namen wird nicht auf Groß- und Kleinschreibung geachtet.
+     * \param Typ Name des Kleidungstyps
+     * \return ID des Kleidungstyps.
+     */
     virtual int getKleidungsTypID(QString Typ)=0;
+    //! Liefert den Bereich der Nummern der für einen Kleidungstypen vorgesehen ist.
+    /*!
+     * \brief getNummerBereich setzt dei Variabelen Anfang und dende auf die Werte des Bereiches der Nummern die
+     * für einen Kleidungstypen vorgesehen sind. Die Pointer Anfang und Ende müssen auf existierende Variablen zeigen.
+     * \param [in]TypID ID des abzufragenden Kleidungspypen
+     * \param [out]Anfang Zeiger auf die Erste Nummer
+     * \param [out]Ende Zeiger auf die Letzte Nummer
+     */
     virtual void getNummerBereich(int TypID,int *Anfang,int* Ende)=0;
     //! Liefet die Liste mit den Namen und ID der Personen die den Filter erfüllen.
     /*!

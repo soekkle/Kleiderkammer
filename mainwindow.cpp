@@ -148,6 +148,26 @@ MainWindow::~MainWindow()
     delete Kleidungstuecke;
     delete Daten;
     delete Drucken;
+    QString DBAktuell,DBBack;
+    DBAktuell=Ort;
+    DBAktuell.append("Daten.sqlite");
+    DBBack=Ort;
+    DBBack.append("Backup/");
+    QDir BackDir(DBBack);
+    if (!BackDir.exists())
+    {
+        BackDir.mkpath(DBBack);
+    }
+    QStringList Datein=BackDir.entryList(QDir::Files,QDir::Name);
+    if (Datein.length()>10)
+    {
+        QString BackAlt=DBBack;
+        BackAlt.append(Datein[0]);
+        QFile Alt(BackAlt);
+        Alt.remove();
+    }
+    DBBack.append(QDateTime::currentDateTime().toString("yyMMddhhmmss")).append(".db");
+    QFile::copy(DBAktuell,DBBack);
 }
 
 void MainWindow::AusGroessenFiltergeaendert(int Groesse)

@@ -307,18 +307,85 @@ public:
      * \return Ob die Abfrage erfolgreich war.
      */
     virtual bool getPersonenInfo(int ID, QString *VorName,QString *Nachnanme,QString *Gruppe, int * GruppenID)=0;
+    //! Ordnet einen Trägeren einen Kleidungsstück zu.
+    /*!
+     * \brief KleidungsstueckzuordnenbyID stellt die Verbindung zwieschen einen Kleidungsstück und einer Person die
+     * das Kleidungsstück hat her. Eine Perosn kann mehrere Kleidungsstücke haben, aber ein Kleidungstück kann nur
+     * einer Person zugeordnet werden.
+     * \param ID ID des Kleidungsstückes
+     * \param Traeger ID der Person
+     * \return Ob das zuordnen erfolgreich war
+     */
     virtual bool KleidungsstueckzuordnenbyID(int ID,int Traeger)=0;
+    //! Entfernt eine Größe aus der DatenQuelle.
+    /*!
+     * \brief removeGrosse entfernt die Größe mit der angegebenen ID aus dem Speicher der DatenQuelle.
+     * Wenn noch Kleidungsstücke mit der Größe vorhanden sind soll das entfernen fehlschlagen.
+     * \param ID ID der Größe die Entfend werden soll.
+     * \return Ob das Entfernen erfolgreich war
+     */
     virtual bool removeGrosse(int ID)=0;
+    //! Entfernd eine Gruppe aus der Datenquelle
+    /*!
+     * \brief removeJugendferweher entfernd einen Gruppe mit der angegeben ID aus der Datenquelle. Die Gruppe soll
+     * sich nur entfernen lassen, wenn keine Person mehr in der Gruppe ist.
+     * \param ID ID der zu löschenden Gruppe
+     * \return Ob das Löschen erfolgreich war
+     */
     virtual bool removeJugendferweher(int ID)=0;
+    //! Entfernd ein Kleidungsstück aus der DatenQuelle.
+    /*!
+     * \brief removeKleidungsstueck löscht das Kleidungsstücj mit der Angegebenen ID.
+     * Wenn das Kleidungsstück vergeben ist, hängt das verhalten von der Implementierung der Funktion ab.
+     * \param ID ID des Kleidungsstücks
+     * \return Ob das Löschen erfolgreich war
+     */
     virtual bool removeKleidungsstueck(int ID)=0;
+    //! Entfernd einen Kleidungstyp aus der DatenQuelle.
+    /*!
+     * \brief removeKleidungstyp entfernd den Kleidungstyp mit der angegeben ID aus der DatenQuelle. Das entfernen ist
+     *  nur möglich wenn kein Kleidungsstück von diesem Kleidungsstyp existiert.
+     * \param ID ID des KleidungsTyp
+     * \return Ob das Entfernen erfolgreich war
+     */
     virtual bool removeKleidungstyp(int ID)=0;
+    //! Entfernt eine Person aus der Datenquelle.
+    /*!
+     * \brief removePerson entfernt die Person mit der angebenen ID aus der DatenQuelle, wenn die Peron keine
+     * Kleidungsstücke mehr hat. Sonst ist das entfernen der Person nicht möglich. Die Funktion gibt zurück ob das
+     * Entfernen der Person efrolgreich ist.
+     * \param ID ID der Peron die
+     * \return Ob das Entfernen erfolgreich war
+     */
     virtual bool removePerson(int ID)=0;
+    //! Markiert ein Kleidungsstück als zurückgegeben.
+    /*!
+     * \brief rueckgabeKleidungsstueck markiert das Kleidungsstück mit der angegeben ID als frei und das es in der
+     * Kleiderkammer liegt.
+     * \param ID ID Des zurückgegeben Kleidungsstücks
+     */
     virtual void rueckgabeKleidungsstueck(int ID)=0;
+    //! Setzt nachträglich die Größe eines Kleidungsstückes.
+    /*!
+     * \brief setKleidungsGroesse setzt die Größe des angegbenen Kleidungsstückes auf die angegebene Größe.
+     * Diese Klappt nur einmal bei Kleidungsstücke mit der Größe "Größe Unbekannt". Ist das Setzen nicht erfolgreich
+     * das ein Fehler auftritt oder das Kleidungsstück schon eine Größe hat, so wird false zurückgegeben.
+     * \param ID ID des Kleidungsstückes
+     * \param GroesseID ID der Größe des Kleidungsstückes
+     * \return Ob das setzen der Größe erfolgreich war.
+     */
     virtual bool setKleidungsGroesse(int ID, int GroesseID)=0;
+    //! Setzt den Kommentar eines Kleidungsstückes.
+    /*!
+     * \brief setKleidungsKommentar Überschreibt den Inhalt des Kommentarfeldes eines Kleidungsstückes.
+     * \param ID ID des Kleidungsstückes
+     * \param Kommentar Inhalt des Kommentars
+     * \return false wenn ein Fehler aufgetreten ist
+     */
     virtual bool setKleidungsKommentar(int ID, QString Kommentar)=0;
     //! Setzt den Rang einer Größe
     /*!
-     * \brief setRangGroesse setzt den Rang zum Sörtieren einer Größe.
+     * \brief setRangGroesse setzt den Rang zum Sortieren einer Größe.
      * \param ID Id der Größe von der der Rang gesezt werden soll.
      * \param Rang Wert auf den der rang gesetzt wird.
      * \return Status des setzen.

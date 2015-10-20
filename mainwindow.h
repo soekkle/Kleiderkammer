@@ -52,6 +52,7 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <QTextStream>
+#include <QCheckBox>
 
 #if __WIN32__||_MSC_VER
 //#define WINVER 0x0602
@@ -76,6 +77,7 @@ private:
     Ui::MainWindow *ui;
 
     ComboboxGroessenDelegate *ComboBox;
+    QVector<QCheckBox*> CheckBoxBeType;
     Bericht *Drucken;
     SQLiteQuelle *Daten;
     KleiderSuche *KleiderInfoSuchen;
@@ -90,7 +92,8 @@ private:
     int PersonenID;
     //! Die verschieden Actionen.
     QAction *ActionPersonLoeschen,*ActionKleicungLoeschen;
-
+    //! DIe Fuktion liefert die Ausgwählten Spalten für den Bericht
+    QVector<int> BerichtSpalten();
     //! Funktion zum Aufbereiten der Ausleihen Maske.
     void PersonAusleih(int ID);
     //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.
@@ -112,6 +115,8 @@ private slots:
     void ComboboxFuellen();
     //! Slot, der nach dem Ändern der Combobox ComboboxPerJFFilter geändert wurde.
     void ComboboxPerJFFilterGewahlt(int Pos);
+    //! Slot der die Checkboxen im Bericht ausblendet.
+    void Groupchecked(bool checked);
     //! Solt zum Anzeigen des Contextmenüs in der Kleidungs Tabelle
     void KleidungContextMenuEvent(const QPoint Pos);
     //! Slot zum Löschen eines Kleidungsstückes.
@@ -137,6 +142,8 @@ private slots:
     void PersonListeDoubleClicked(const QModelIndex &Index);
     //! Löscht die Ausgewälte Person.
     void PersonLoeschen();
+    //! Aktivirt und deaktivirt die Combobox
+    void RadiobuttomCilcked();
     //! Zeigt das Infofenser zu diesem Programm
     void ZeigeInfo();
     //! Zeigt den einkleiden Tab zu einer Person

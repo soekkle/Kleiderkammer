@@ -119,6 +119,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
 #endif
     connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
+    connect(ui->radioButton,SIGNAL(clicked()),this,SLOT(RadiobuttomCilcked()));
+    connect(ui->radioButton_2,SIGNAL(clicked()),this,SLOT(RadiobuttomCilcked()));
+    connect(ui->groupBox_BeTyp,SIGNAL(clicked(bool)),this,SLOT(Groupchecked(bool)));
     // Verbinden der Mainmenü einträgen
     connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->actionKleidungsst_ck,SIGNAL(triggered()),KleiderInfoSuchen,SLOT(exec()));
@@ -226,6 +229,25 @@ void MainWindow::AusTypFiltergeaendert(int Typ)
     ui->comboBox_AusGroFilter->setEnabled(true);
 }
 
+/*!
+ * \brief MainWindow::BerichtSpalten liefert einen Vektor mit den für den aktuellen Bericht ausgewählten Spalten.
+ * Wenn alle die option alle Spalten gewählt wurde wird ein leerer Vektor zurückgegeben.
+ * \return Vector mit den ID der Kleidertypen.
+ */
+QVector<int> MainWindow::BerichtSpalten()
+{
+    QVector<int> Spalten;
+    if (ui->groupBox_BeTyp->isChecked())
+    {
+        for (int i=0;i<CheckBoxBeType.size();++i)
+        {
+            if (CheckBoxBeType[i]->isChecked())
+                Spalten.append(Daten->getKleidungsTypID(CheckBoxBeType[i]->text()));
+        }
+    }
+    return Spalten;
+}
+
 void MainWindow::ComboboxFuellen()
 {
     /* Fült zwei Comboboxen mit den Namen der Eingetragenen Gruppen.
@@ -244,6 +266,12 @@ void MainWindow::ComboboxFuellen()
     }
     PersonenAnzeigen(0,"");
     delete JfDaten;
+    for (int i=0;i<CheckBoxBeType.size();++i)
+    {
+        ui->gridLayout_4->removeWidget(CheckBoxBeType[i]);
+        delete CheckBoxBeType[i];
+    }
+    CheckBoxBeType.clear();
     /* Fült alle komboboxen die die Typen der Kleidungsstücke benötigen.
        Ebenfalls werden die ID als Daten dazu gespeichert.*/
     ui->comboBoxBekFilter->clear();
@@ -263,6 +291,10 @@ void MainWindow::ComboboxFuellen()
         ui->comboBoxBeTypEin->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
         ui->comboBox_AusTypFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
         ui->comboBox_eigenFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
+        QCheckBox *Box=new QCheckBox(KleiTyp->Name[i],this);
+        Box->setHidden(!ui->groupBox_BeTyp->isChecked());
+        ui->gridLayout_4->addWidget(Box,i/4,i%4);
+        CheckBoxBeType.append(Box);
     }
     KleidunginKammerAnzeigen(0);
     delete KleiTyp;
@@ -280,7 +312,7 @@ void MainWindow::BerichtAnzeigen()
     if (ui->radioButton->isChecked())
         ui->webView->setHtml(Drucken->generiereKammerListe(),Url);
     if (ui->radioButton_2->isChecked())
-        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe),Url);
+        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe,BerichtSpalten()),Url);
 }
 
 #ifndef NOPRINT
@@ -299,7 +331,7 @@ void MainWindow::BerichtDrucken()
     if (ui->radioButton->isChecked())
         HTML=Drucken->generiereKammerListe();
     if (ui->radioButton_2->isChecked())
-        HTML=Drucken->generierenPersonenListe(Gruppe);
+        HTML=Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
     QWebView* Flaeche=new QWebView;
     QEventLoop Loop;
     connect(Flaeche,SIGNAL(loadFinished(bool)),&Loop,SLOT(quit()));
@@ -329,7 +361,7 @@ void MainWindow::BerichtSpeichern()
     if (ui->radioButton->isChecked())
         HTML<<Drucken->generiereKammerListe();
     if (ui->radioButton_2->isChecked())
-        HTML<< Drucken->generierenPersonenListe(Gruppe);
+        HTML<< Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
     HDD_Datei.close();
     Drucken->CSSextern=true;
 }
@@ -337,6 +369,14 @@ void MainWindow::BerichtSpeichern()
 void MainWindow::ComboboxPerJFFilterGewahlt(int Pos)
 {
     PersonenAnzeigen(Pos,ui->lineEditSuchName->text());
+}
+
+void MainWindow::Groupchecked(bool checked)
+{
+    for (int i=0;i<CheckBoxBeType.size();++i)
+    {
+        CheckBoxBeType[i]->setHidden(!checked);
+    }
 }
 
 /*!
@@ -565,6 +605,23 @@ void MainWindow::PersonLoeschen()
     }
     delete Kleider;
 }
+
+void MainWindow::RadiobuttomCilcked()
+{
+    if (ui->radioButton->isChecked())
+    {
+        ui->comboBox_BeJF->setEnabled(false);
+        ui->groupBox_BeTyp->setChecked(false);
+        ui->groupBox_BeTyp->setEnabled(false);
+        Groupchecked(false);
+    }
+    else
+    {
+        ui->comboBox_BeJF->setEnabled(true);
+        ui->groupBox_BeTyp->setEnabled(true);
+    }
+}
+
 
 void MainWindow::ZeigeInfo()
 {

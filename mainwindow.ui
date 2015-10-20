@@ -18,7 +18,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="0">
+    <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
        <bool>true</bool>
@@ -39,6 +39,16 @@
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <layout class="QFormLayout" name="formLayout_4">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>Jugendfeuewehr</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="1">
               <widget class="QComboBox" name="comboBoxPerJFFilter">
                <item>
@@ -48,9 +58,6 @@
                </item>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QLineEdit" name="lineEditSuchName"/>
-             </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_9">
                <property name="text">
@@ -58,12 +65,8 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_10">
-               <property name="text">
-                <string>Jugendfeuewehr</string>
-               </property>
-              </widget>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="lineEditSuchName"/>
              </item>
             </layout>
            </item>
@@ -313,33 +316,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_7">
         <item>
          <layout class="QFormLayout" name="formLayout_3">
-          <item row="0" column="1">
-           <layout class="QGridLayout" name="gridLayout_3">
-            <item row="1" column="1">
-             <widget class="QRadioButton" name="radioButton">
-              <property name="text">
-               <string>Inventarliste</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QRadioButton" name="radioButton_2">
-              <property name="text">
-               <string>Namenliste</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_7">
             <property name="text">
              <string>Bericht Typ</string>
             </property>
            </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QComboBox" name="comboBox_BeJF"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_8">
@@ -348,11 +330,67 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Kleidungstypen:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="comboBox_BeJF">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="2" column="1">
+             <widget class="QRadioButton" name="radioButton_2">
+              <property name="text">
+               <string>Namenliste</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QRadioButton" name="radioButton">
+              <property name="text">
+               <string>Inventarliste</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="1">
+           <widget class="QGroupBox" name="groupBox_BeTyp">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="title">
+             <string>einzelnen Auswählen</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_5">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout_4"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
-         <widget class="QWebView" name="webView" native="true">
-          <property name="url" stdset="0">
+         <widget class="QWebView" name="webView">
+          <property name="url">
            <url>
             <string>about:blank</string>
            </url>
@@ -396,7 +434,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

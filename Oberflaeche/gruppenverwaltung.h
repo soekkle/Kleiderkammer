@@ -31,58 +31,44 @@
  * <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KLEIDUNGSTYPENVERWALTUNG_H
-#define KLEIDUNGSTYPENVERWALTUNG_H
+#ifndef GRUPPENVERWALTUNG_H
+#define GRUPPENVERWALTUNG_H
 
 #include <QDialog>
 #include <QStandardItemModel>
-#include <QItemSelectionModel>
-#include <QMenu>
+#include <QStandardItem>
 #include <QMessageBox>
-#include <datenquelle.h>
-#include "tableviews/itemsdelegate.h"
-#include "tableviews/kleidungsgroessentableview.h"
+#include <QMenu>
+#include "DatenQuellen/datenquelle.h"
 
 namespace Ui {
-class KleidungsTypenVerwaltung;
+class Gruppenverwaltung;
 }
 
-class KleidungsTypenVerwaltung : public QDialog
+class Gruppenverwaltung : public QDialog
 {
     Q_OBJECT
     
 public:
-    explicit KleidungsTypenVerwaltung(DatenQuelle *Quelle,QWidget *parent = 0);
-    ~KleidungsTypenVerwaltung();
+    explicit Gruppenverwaltung(DatenQuelle *Daten,QWidget *parent = 0);
+    ~Gruppenverwaltung();
     
-private:
-
-    void Typentable();
-
-    Ui::KleidungsTypenVerwaltung *ui;
-    DatenQuelle *Daten;
-    QStandardItemModel *Typen;
-    KleidungsGroessenTableView *Groessen;
-    int GroessenFilter;
-    SpinBoxDelegate SpinBox;
-    QAction *ActionTypLoeschen,*ActionGroesseLoeschen;
-
 signals:
     void datenGeaendert();
 
-public slots:
-        int exec();
+private:
+    Ui::Gruppenverwaltung *ui;
+    DatenQuelle *Daten;
+    QStandardItemModel Gruppen;
+    //! Actions für das Contextmenü.
+    QAction *ActionGruppeLoeschen;
+
+    void gruppenTabelleFullen();
+
 private slots:
-        void GroesseAnlegen();
-        //! Zeigt das Contextmenue Für die Tableview mit den Größen an
-        void GrossenContextMenu(QPoint Pos);
-        //! Löscht die Aktuell ausgewälte Größe.
-        void GroesseLoeschen();
-        void Typanlegen();
-        //! Zeigt das Contextmenü in der Tablevie mit den Typen.
-        void TypContextMenu(QPoint Pos);
-        //! Löscht die Aktuell Ausgewälte Größe.
-        void TypLoeschen();
-        void Typwahlen(const QItemSelection& neu  , const QItemSelection &);
+    void gruppenHin();
+    void GruppeLoeschen();
+    void GruppenContextMenu(QPoint Pos);
 };
-#endif // KLEIDUNGSTYPENVERWALTUNG_H
+
+#endif // GRUPPENVERWALTUNG_H

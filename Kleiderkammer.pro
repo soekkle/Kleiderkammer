@@ -12,33 +12,33 @@ TARGET = Kleiderkammer
 TEMPLATE = app
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    datenquelle.cpp \
-    sqlitequelle.cpp \
-    kleidungstypenverwaltung.cpp \
-    gruppenverwaltung.cpp \
+    Oberflaeche/mainwindow.cpp \
+    DatenQuellen/datenquelle.cpp \
+    DatenQuellen/sqlitequelle.cpp \
+    Oberflaeche/kleidungstypenverwaltung.cpp \
+    Oberflaeche/gruppenverwaltung.cpp \
     bericht.cpp \
     tableviews/kleidungstableview.cpp \
     tableviews/kleidungsgroessentableview.cpp \
-    kleidersuche.cpp \
+    Oberflaeche/kleidersuche.cpp \
     tableviews/itemsdelegate.cpp
 
-HEADERS  += mainwindow.h \
-    datenquelle.h \
-    sqlitequelle.h \
-    kleidungstypenverwaltung.h \
-    gruppenverwaltung.h \
+HEADERS  += Oberflaeche/mainwindow.h \
+    DatenQuellen/datenquelle.h \
+    DatenQuellen/sqlitequelle.h \
+    Oberflaeche/kleidungstypenverwaltung.h \
+    Oberflaeche/gruppenverwaltung.h \
     bericht.h \
     tableviews/kleidungstableview.h \
     tableviews/kleidungsgroessentableview.h \
-    kleidersuche.h \
+    Oberflaeche/kleidersuche.h \
     versioninfo.h \
     tableviews/itemsdelegate.h
 
-FORMS    += mainwindow.ui \
-    kleidungstypenverwaltung.ui \
-    gruppenverwaltung.ui \
-    kleidersuche.ui
+FORMS    += Oberflaeche/mainwindow.ui \
+    Oberflaeche/kleidungstypenverwaltung.ui \
+    Oberflaeche/gruppenverwaltung.ui \
+    Oberflaeche/kleidersuche.ui
 # Setzen der VersionsInfos
 VERSION= 0.2.0
 

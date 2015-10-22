@@ -35,7 +35,7 @@
 #define KLEIDUNGSGROESSENTABLEVIEW_H
 
 #include <QAbstractTableModel>
-#include <datenquelle.h>
+#include <DatenQuellen/datenquelle.h>
 /*!
  * \brief Die KleidungsGroessenTableView Klasse bereitet die Daten zum anzeigenin der Größen einer Tablewiev auf.
  * Und bietet die möglichkeit den Rang nach dem die Größen sortiert werden anzupassen.

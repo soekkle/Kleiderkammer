@@ -39,7 +39,7 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-#include "datenquelle.h"
+#include "DatenQuellen/datenquelle.h"
 
 class ComboboxGroessenDelegate : public QItemDelegate
 {

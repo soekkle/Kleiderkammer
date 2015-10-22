@@ -31,44 +31,58 @@
  * <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GRUPPENVERWALTUNG_H
-#define GRUPPENVERWALTUNG_H
+#ifndef KLEIDUNGSTYPENVERWALTUNG_H
+#define KLEIDUNGSTYPENVERWALTUNG_H
 
 #include <QDialog>
 #include <QStandardItemModel>
-#include <QStandardItem>
-#include <QMessageBox>
+#include <QItemSelectionModel>
 #include <QMenu>
-#include "datenquelle.h"
+#include <QMessageBox>
+#include <DatenQuellen/datenquelle.h>
+#include "tableviews/itemsdelegate.h"
+#include "tableviews/kleidungsgroessentableview.h"
 
 namespace Ui {
-class Gruppenverwaltung;
+class KleidungsTypenVerwaltung;
 }
 
-class Gruppenverwaltung : public QDialog
+class KleidungsTypenVerwaltung : public QDialog
 {
     Q_OBJECT
     
 public:
-    explicit Gruppenverwaltung(DatenQuelle *Daten,QWidget *parent = 0);
-    ~Gruppenverwaltung();
+    explicit KleidungsTypenVerwaltung(DatenQuelle *Quelle,QWidget *parent = 0);
+    ~KleidungsTypenVerwaltung();
     
+private:
+
+    void Typentable();
+
+    Ui::KleidungsTypenVerwaltung *ui;
+    DatenQuelle *Daten;
+    QStandardItemModel *Typen;
+    KleidungsGroessenTableView *Groessen;
+    int GroessenFilter;
+    SpinBoxDelegate SpinBox;
+    QAction *ActionTypLoeschen,*ActionGroesseLoeschen;
+
 signals:
     void datenGeaendert();
 
-private:
-    Ui::Gruppenverwaltung *ui;
-    DatenQuelle *Daten;
-    QStandardItemModel Gruppen;
-    //! Actions für das Contextmenü.
-    QAction *ActionGruppeLoeschen;
-
-    void gruppenTabelleFullen();
-
+public slots:
+        int exec();
 private slots:
-    void gruppenHin();
-    void GruppeLoeschen();
-    void GruppenContextMenu(QPoint Pos);
+        void GroesseAnlegen();
+        //! Zeigt das Contextmenue Für die Tableview mit den Größen an
+        void GrossenContextMenu(QPoint Pos);
+        //! Löscht die Aktuell ausgewälte Größe.
+        void GroesseLoeschen();
+        void Typanlegen();
+        //! Zeigt das Contextmenü in der Tablevie mit den Typen.
+        void TypContextMenu(QPoint Pos);
+        //! Löscht die Aktuell Ausgewälte Größe.
+        void TypLoeschen();
+        void Typwahlen(const QItemSelection& neu  , const QItemSelection &);
 };
-
-#endif // GRUPPENVERWALTUNG_H
+#endif // KLEIDUNGSTYPENVERWALTUNG_H

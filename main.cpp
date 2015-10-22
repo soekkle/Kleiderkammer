@@ -32,7 +32,7 @@
 */
 
 #include <QApplication>
-#include "mainwindow.h"
+#include "Oberflaeche/mainwindow.h"
 
 int main(int argc, char *argv[])
 {

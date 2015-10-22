@@ -36,7 +36,7 @@
 
 #include <QDialog>
 #include <QMessageBox>
-#include "datenquelle.h"
+#include "DatenQuellen/datenquelle.h"
 
 namespace Ui {
 class KleiderSuche;

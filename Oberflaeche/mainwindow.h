@@ -39,8 +39,8 @@
 #ifndef NOPRINT
 #include <QPrintDialog>
 #endif
-#include "datenquelle.h"
-#include "sqlitequelle.h"
+#include "DatenQuellen/datenquelle.h"
+#include "DatenQuellen/sqlitequelle.h"
 #include "kleidersuche.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"

@@ -35,7 +35,7 @@
 #define KLEIDUNGSTABLEVIEW_H
 
 #include <QAbstractTableModel>
-#include "datenquelle.h"
+#include "DatenQuellen/datenquelle.h"
 #include <QDebug>
 /*!
  * \brief The KleidungsTableview class

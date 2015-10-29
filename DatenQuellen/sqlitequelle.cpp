@@ -593,6 +593,17 @@ void SQLiteQuelle::rueckgabeKleidungsstueck(int ID)
     QSqlQuery Abfrage(QString("UPDATE Kleidungsstuecke SET 'Traeger'=0 WHERE id=%1").arg(ID),Datenbank);
     FehlerAusgabe(Abfrage);
 }
+/*!
+ * \brief SQLiteQuelle::setGruppeVonPerson ändert die Gruppe in der sich eine Person befindet.
+ * \param Person ID der Person von der die Gruppe geändert wird.
+ * \param Gruppe Id Der neuen Gruppe.
+ * \return ob das setzen erfolgreich war.
+ */
+bool SQLiteQuelle::setGruppeVonPerson(int Person, int Gruppe)
+{
+    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Jf'=%2 WHERE id=%1").arg(Person).arg(Gruppe),Datenbank);
+    return FehlerAusgabe(Abfrage);
+}
 
 bool SQLiteQuelle::setKleidungsGroesse(int ID, int GroesseID)
 {

@@ -365,6 +365,15 @@ public:
      * \param ID ID Des zurückgegeben Kleidungsstücks
      */
     virtual void rueckgabeKleidungsstueck(int ID)=0;
+    //! Setzt die Gruppe zu der eine Person Gehört.
+    /*!
+     * \brief setGruppeVonPerson setzt die Gruppe zu der eine Person gehört. Bein setzen der Gruppe wird die alte
+     * Gruppenzuordnung gelöscht.
+     * \param Person ID der Person von der die Gruppe geändert werden soll.
+     * \param Gruppe Id der Gruppe auf die geändert wird.
+     * \return Ob das setzen erfolgreich war.
+     */
+    virtual bool setGruppeVonPerson(int Person, int Gruppe)=0;
     //! Setzt nachträglich die Größe eines Kleidungsstückes.
     /*!
      * \brief setKleidungsGroesse setzt die Größe des angegbenen Kleidungsstückes auf die angegebene Größe.

@@ -89,6 +89,8 @@ public:
     //! Löscht das Kleidungsstück aus der Datenbank.
     bool removeKleidungsstueck(int ID);
     void rueckgabeKleidungsstueck(int ID);
+    //! Setzt die Gruppe in der sich die Person Befindet.
+    bool setGruppeVonPerson(int Person, int Gruppe);
     //! Setzt die Größe eines Kleidungsstück wenn sie Unbekannt ist.
     bool setKleidungsGroesse(int ID, int GroesseID);
     //! Setzt den Komentar eines Kleidungsstückes.

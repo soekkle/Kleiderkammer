@@ -55,7 +55,7 @@ public:
     //! Fügt einen JugendFeuerweher hinzu.
     int addJugendfeuerwehr(QString Name);
     //! Fügt ein Kleidngsstück den Datenbestand hinzu.
-    int addKleiderstueck(int Typ, int Groesse, int Nummer=-1);
+    int addKleiderstueck(int Typ, int Groesse, int Nummer=-1,bool uberschreibe=false);
     //! Fügt einen Kleidungstyp hinzu.
     int addKleidungstyp(QString Name, int AnfangsNummer, int Endnummer);
     //! Fügt einen Person den Datenbestand hinzu.

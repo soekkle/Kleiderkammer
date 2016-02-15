@@ -42,6 +42,7 @@ KleidungsGroessenTableView::KleidungsGroessenTableView(DatenQuelle* Daten, QObje
     QAbstractTableModel(parent)
 {
     this->Daten=Daten;
+    Groessen=NULL;
 }
 
 void KleidungsGroessenTableView::clear()

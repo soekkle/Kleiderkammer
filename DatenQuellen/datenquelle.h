@@ -146,7 +146,7 @@ public:
      * \param Nummer Gewünschte Numme des Kleidungsstückes Optimal
      * \return Nummer des Kleidungsstückes
      */
-    virtual int addKleiderstueck(int Typ,int Groesse,int Nummer=-1)=0;
+    virtual int addKleiderstueck(int Typ,int Groesse,int Nummer=-1,bool uberschreibe=false)=0;
     //! Fügt einen Kleidungstyp hinzu.
     /*!
      * \brief addKleidungstyp fügt in die DatenQuelle einen neuen Typ von Kleidungsstücken hinzu.

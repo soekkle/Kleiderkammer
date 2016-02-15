@@ -80,7 +80,7 @@ int SQLiteQuelle::addJugendfeuerwehr(QString Name)
  * \param Nummer Gewünschte Nummer für das Kleidungsstück.
  * \return Die Nummer des Hinzugefügten Kleidungsstück.
  */
-int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
+int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer, bool uberschreibe)
 {
     QSqlQuery Abfrage("",Datenbank);
     QString SQLString;
@@ -93,6 +93,8 @@ int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer)
         Abfrage.exec(SQLString);
         if(Abfrage.next())
         {
+            if (!uberschreibe)
+                return -1;
             //Wenn das der Fall ist so wird die nächsste freie Nummer verwendet.
             Nummer=freieNummer(Typ);
         }

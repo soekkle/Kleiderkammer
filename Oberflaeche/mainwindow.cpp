@@ -408,7 +408,8 @@ void MainWindow::KleidungHinClicked()
     GroID=ui->comboBoxBeGroEin->itemData(ui->comboBoxBeGroEin->currentIndex()).toInt();
     Nummer=ui->spinBoxBeNumEin->value();
     std::cout<<TypID<<" : "<<GroID<<" : "<<Nummer<<std::endl;
-    Daten->addKleiderstueck(TypID,GroID,Nummer);
+    if (Daten->addKleiderstueck(TypID,GroID,Nummer,false)==-1)
+        QMessageBox::warning(this,QString::fromUtf8("Kleidungsstück schon vorhanden"),QString::fromUtf8("Das Kleidungsstück mit der Nummer %1 ist schon angelegt und kann deshalb nicht angelegt werden").arg(Nummer));
     Kleidungstypgewaehlt(ui->comboBoxBeTypEin->currentIndex());
     KleidunginKammerAnzeigen(ui->comboBoxBekFilter->currentIndex());
 }

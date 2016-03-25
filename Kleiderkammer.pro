@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     tableviews/kleidungstableview.cpp \
     tableviews/kleidungsgroessentableview.cpp \
     Oberflaeche/kleidersuche.cpp \
-    tableviews/itemsdelegate.cpp
+    tableviews/itemsdelegate.cpp \
+    Oberflaeche/personbearbeitendialog.cpp
 
 HEADERS  += Oberflaeche/mainwindow.h \
     DatenQuellen/datenquelle.h \
@@ -33,12 +34,14 @@ HEADERS  += Oberflaeche/mainwindow.h \
     tableviews/kleidungsgroessentableview.h \
     Oberflaeche/kleidersuche.h \
     versioninfo.h \
-    tableviews/itemsdelegate.h
+    tableviews/itemsdelegate.h \
+    Oberflaeche/personbearbeitendialog.h
 
 FORMS    += Oberflaeche/mainwindow.ui \
     Oberflaeche/kleidungstypenverwaltung.ui \
     Oberflaeche/gruppenverwaltung.ui \
-    Oberflaeche/kleidersuche.ui
+    Oberflaeche/kleidersuche.ui \
+    Oberflaeche/personbearbeitendialog.ui
 # Setzen der VersionsInfos
 VERSION= 0.2.0
 

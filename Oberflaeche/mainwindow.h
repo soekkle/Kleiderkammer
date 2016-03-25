@@ -44,6 +44,7 @@
 #include "kleidersuche.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
+#include "personbearbeitendialog.h"
 #include "bericht.h"
 #include "tableviews/kleidungstableview.h"
 #include "tableviews/itemsdelegate.h"
@@ -83,6 +84,8 @@ private:
     KleiderSuche *KleiderInfoSuchen;
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
+    //* Pointer auf den BersonenBearbeiten Dialog
+    PersonBearbeitenDialog *PersonBeabeiten;
     QString Ort;
     //! Modelle für das Anzeigen der Daten.
     QStandardItemModel Personen;
@@ -91,7 +94,7 @@ private:
     QSortFilterProxyModel ProPersonen, ProKleidungstuecke, ProPerKleider, ProKleiderAus;
     int PersonenID;
     //! Die verschieden Actionen.
-    QAction *ActionPersonLoeschen,*ActionKleicungLoeschen;
+    QAction *ActionPersonLoeschen,*ActionPersonBearbeiten,*ActionKleicungLoeschen;
     //! DIe Fuktion liefert die Ausgwählten Spalten für den Bericht
     QVector<int> BerichtSpalten();
     //! Funktion zum Aufbereiten der Ausleihen Maske.
@@ -132,6 +135,8 @@ private slots:
     //! Slot für das ContextMenü bei den Namen
     void NamenContextMenuEvent(const QPoint &Pos);
     void PerKleidungslistefuellen(int FilterTyp);
+    //! Slot Zum Bearbeiten einer Person.
+    void PersonBearbeitenClicked();
     //! Slot der die Eingabemaske für Personen zurücksetzt.
     void PersonHinCancel();
     //! Solt der die Eingegebene Person Speichert.

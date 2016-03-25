@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Typen=new KleidungsTypenVerwaltung(Daten,this);//Erzeugt die Modelle zur Anzeige der Daten.
     Gruppen=new Gruppenverwaltung(Daten,this);
     KleiderInfoSuchen=new KleiderSuche(Daten,this);
+    PersonBeabeiten=new PersonBearbeitenDialog(Daten,this);
     Kleidungstuecke = new KleidungsTableview(Daten,0,this);
     KleiderAus = new KleidungsTableview(Daten,0,this);
     PerKleider = new KleidungsTableview(Daten,1,this);
@@ -133,6 +134,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->tablePersonen,SIGNAL(doubleClicked(const QModelIndex &)),this,SLOT(PersonListeDoubleClicked(const QModelIndex &)));
     //Anlegen der Actionen
+    ActionPersonBearbeiten=new QAction(QString::fromUtf8("Bearbeiten"),this);
+    connect(ActionPersonBearbeiten,SIGNAL(triggered()),this,SLOT(PersonBearbeitenClicked()));
     ActionPersonLoeschen= new QAction(QString::fromUtf8("Löschen"),this);
     connect(ActionPersonLoeschen,SIGNAL(triggered()),this,SLOT(PersonLoeschen()));
     ActionKleicungLoeschen=new QAction(QString::fromUtf8("Löschen"),this);
@@ -475,7 +478,7 @@ void MainWindow::LineEditSuchNameChange(QString SuchFilter)
 void MainWindow::NamenContextMenuEvent(const QPoint &Pos)
 {
     QMenu menu(this);
-    //menu.addAction("Bearbeiten");
+    menu.addAction(ActionPersonBearbeiten);
     menu.addAction(ActionPersonLoeschen);
     menu.exec(ui->tablePersonen->viewport()->mapToGlobal(Pos));
 }
@@ -567,6 +570,16 @@ void MainWindow::PersonHinClicked()
     Daten->addPerson(Nachname,Vorname,JF);
     PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
     PersonHinCancel();
+}
+
+/*!
+ * \brief MainWindow::PersonBearbeitenClicked öffent ein Personbearbeiten Fester für die Ausgewälte Person
+ */
+void MainWindow::PersonBearbeitenClicked()
+{
+    QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(ui->tablePersonen->currentIndex().row(),0));
+    int ID=Personen.data(Index).toInt();
+    PersonBeabeiten->bearbeiten(ID);
 }
 
 void MainWindow::PersonHinCancel()

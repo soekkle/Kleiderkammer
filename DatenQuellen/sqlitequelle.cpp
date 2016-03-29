@@ -629,12 +629,12 @@ bool SQLiteQuelle::setRangGroesse(int ID, int Rang)
 }
 
 /*!
- * \brief SQLiteQuelle::SetPersonNachname änder den Nachnamen der Person auf den Angegeben Nachnamen.
+ * \brief SQLiteQuelle::setPersonNachname änder den Nachnamen der Person auf den Angegeben Nachnamen.
  * \param ID ID der Person von der der Name geändert werden soll.
  * \param Vorname Der neue Nachname der Person
  * \return ob das Ändern Erfolgereich war.
  */
-bool SQLiteQuelle::SetPersonNachname(int ID, QString Nachname)
+bool SQLiteQuelle::setPersonNachname(int ID, QString Nachname)
 {
     QSqlQuery Abfrage(QString("UPDATE Personen SET 'Nachname'=%2 WHERE id=%1").arg(ID).arg(Nachname),Datenbank);
     return FehlerAusgabe(Abfrage);
@@ -658,7 +658,7 @@ bool SQLiteQuelle::setPersonToGruppe(int Person, int Gruppe)
  * \param Vorname Der neue Vorname der Person
  * \return ob das Ändern Erfolgereich war.
  */
-bool SetPersonVorname(int ID, QString Vorname)
+bool SQLiteQuelle::SetPersonVorname(int ID, QString Vorname)
 {
     QSqlQuery Abfrage(QString("UPDATE Personen SET 'Vorname'=%2 WHERE id=%1").arg(ID).arg(Vorname),Datenbank);
     return FehlerAusgabe(Abfrage);

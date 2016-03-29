@@ -391,7 +391,30 @@ public:
      * \return Status des setzen.
      */
     virtual bool setRangGroesse(int ID,int Rang)=0;
-
+    //! Andert den Nachnamen der Person
+    /*!
+     * \brief SetPersonNachname änder den Nachnamen der Person auf den Angegeben Nachnamen.
+     * \param ID ID der Person von der der Name geändert werden soll.
+     * \param Vorname Der neue Nachname der Person
+     * \return ob das Ändern Erfolgereich war.
+     */
+    virtual bool SetPersonNachname(int ID, QString Nachname)=0;
+    //! Ändert die Gruppe zu der Eine Person Gehört
+    /*!
+     * \brief setPersonToGruppe Fügt die Person zu einer neuen Gruppe hinzu und entfrend sie aus der alten Gruppe
+     * \param PersonenID ID der Person die die Gruppe wechsel.
+     * \param GruppenID ID Der neuen Gruppe.
+     * \return ob das wechsel erfolgreich war.
+     */
+    virtual bool setPersonToGruppe(int PersonenID,int GruppenID)=0;
+    //! Andert den Vornamen der Person
+    /*!
+     * \brief SetPersonVorname änder den Vornamen der Person auf den Angegeben Vornamen.
+     * \param ID ID der Person von der der Name geändert werden soll.
+     * \param Vorname Der neue Vorname der Person
+     * \return ob das Ändern Erfolgereich war.
+     */
+    virtual bool SetPersonVorname(int ID, QString Vorname)=0;
 };
 
 #endif // DATENQUELLE_H

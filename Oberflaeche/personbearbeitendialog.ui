@@ -60,6 +60,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>EditVName</tabstop>
+  <tabstop>EditNName</tabstop>
+  <tabstop>comboBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

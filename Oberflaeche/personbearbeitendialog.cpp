@@ -40,6 +40,7 @@ PersonBearbeitenDialog::PersonBearbeitenDialog(DatenQuelle *Daten, QWidget *pare
     ui->setupUi(this);
     this->Daten=Daten;
     ID=-1;
+    connect(ui->buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(Buttons(QAbstractButton*)));
 }
 
 PersonBearbeitenDialog::~PersonBearbeitenDialog()
@@ -50,6 +51,47 @@ PersonBearbeitenDialog::~PersonBearbeitenDialog()
 bool PersonBearbeitenDialog::bearbeiten(int ID)
 {
     this->ID=ID;
-    exec();
+    QString Gruppe;
+    if (Daten->getPersonenInfo(ID,&VName,&NName,&Gruppe,&GruppenID))
+    {
+        ui->EditVName->setText(VName);
+        ui->EditNName->setText(NName);
+        {
+            JugendFeuerwehrTabelle *JfDaten=Daten->getJugendfeuerwehr();
+            ui->comboBox->clear();
+            for (int i=0;i<JfDaten->Anzahl;++i)
+            {
+                ui->comboBox->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
+                if (JfDaten->ID[i]==GruppenID)
+                {
+                    ui->comboBox->setCurrentIndex(i);
+                }
+            }
+            delete JfDaten;
+        }
+        DatenGeaendert=false;
+        exec();
+    }
     return false;
+}
+
+void PersonBearbeitenDialog::Buttons(QAbstractButton *button)
+{
+    QFlag standardButton = ui->buttonBox->standardButton(button);
+    if (standardButton==QDialogButtonBox::Reset)
+        DatenZuruecksetzen();
+    else if (standardButton==QDialogButtonBox::Discard)
+        this->close();
+}
+
+void PersonBearbeitenDialog::DatenZuruecksetzen()
+{
+    ui->EditVName->setText(VName);
+    ui->EditNName->setText(NName);
+    for (int i=0;i<ui->comboBox->count();++i)
+    {
+        if (ui->comboBox->itemData(i)==GruppenID)
+            ui->comboBox->setCurrentIndex(i);
+    }
+    DatenGeaendert=false;
 }

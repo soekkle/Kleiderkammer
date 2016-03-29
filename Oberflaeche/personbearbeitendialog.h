@@ -34,6 +34,7 @@
 #define PERSONBEARBEITENDIALOG_H
 
 #include <QDialog>
+#include <QAbstractButton>
 #include "DatenQuellen/datenquelle.h"
 
 namespace Ui {
@@ -52,7 +53,13 @@ public:
 private:
     Ui::PersonBearbeitenDialog *ui;
     DatenQuelle *Daten;
-    int ID;
+    int ID,GruppenID;
+    QString VName,NName;
+    bool DatenGeaendert;
+
+private slots:
+    void Buttons(QAbstractButton *button);
+    void DatenZuruecksetzen();
 };
 
 #endif // PERSONBEARBEITENDIALOG_H

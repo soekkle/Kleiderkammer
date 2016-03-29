@@ -42,7 +42,7 @@
 /*!
  * \brief Die Klasse SQLiteQuelle stellt die Daten aus einer SQLite Datenbank zur verfügung. Und implementirt die
  *Funktionen der Klasse Datenquelle.
- *version :0.1
+ *version :0.2
  *author :soekkle
  */
 
@@ -89,14 +89,21 @@ public:
     //! Löscht das Kleidungsstück aus der Datenbank.
     bool removeKleidungsstueck(int ID);
     void rueckgabeKleidungsstueck(int ID);
-    //! Setzt die Gruppe in der sich die Person Befindet.
-    bool setGruppeVonPerson(int Person, int Gruppe);
     //! Setzt die Größe eines Kleidungsstück wenn sie Unbekannt ist.
     bool setKleidungsGroesse(int ID, int GroesseID);
     //! Setzt den Komentar eines Kleidungsstückes.
     bool setKleidungsKommentar(int ID, QString Kommentar);
     //! Setzt den Rang der Größe zum Sortiern in den Listen.
     bool setRangGroesse(int ID,int Rang);
+    //! Andert den Nachnamen der Person
+    bool SetPersonNachname(int ID, QString Nachname);
+    //! Andert den Nachnamen der Person
+    bool SetPersonNachname(int ID, QString Nachname);
+    //! Ändert die Gruppe zu der Eine Person Gehört
+    bool setPersonToGruppe(int PersonenID,int GruppenID);
+    //! Andert den Vornamen der Person
+    bool SetPersonVorname(int ID, QString Vorname);
+};
 private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.

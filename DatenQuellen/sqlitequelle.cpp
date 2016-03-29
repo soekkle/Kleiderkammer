@@ -593,17 +593,6 @@ void SQLiteQuelle::rueckgabeKleidungsstueck(int ID)
     QSqlQuery Abfrage(QString("UPDATE Kleidungsstuecke SET 'Traeger'=0 WHERE id=%1").arg(ID),Datenbank);
     FehlerAusgabe(Abfrage);
 }
-/*!
- * \brief SQLiteQuelle::setGruppeVonPerson ändert die Gruppe in der sich eine Person befindet.
- * \param Person ID der Person von der die Gruppe geändert wird.
- * \param Gruppe Id Der neuen Gruppe.
- * \return ob das setzen erfolgreich war.
- */
-bool SQLiteQuelle::setGruppeVonPerson(int Person, int Gruppe)
-{
-    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Jf'=%2 WHERE id=%1").arg(Person).arg(Gruppe),Datenbank);
-    return FehlerAusgabe(Abfrage);
-}
 
 bool SQLiteQuelle::setKleidungsGroesse(int ID, int GroesseID)
 {
@@ -637,4 +626,40 @@ bool SQLiteQuelle::setRangGroesse(int ID, int Rang)
     Abfrage.bindValue(1, ID);
     Abfrage.exec();
     return true;;
+}
+
+/*!
+ * \brief SQLiteQuelle::SetPersonNachname änder den Nachnamen der Person auf den Angegeben Nachnamen.
+ * \param ID ID der Person von der der Name geändert werden soll.
+ * \param Vorname Der neue Nachname der Person
+ * \return ob das Ändern Erfolgereich war.
+ */
+bool SQLiteQuelle::SetPersonNachname(int ID, QString Nachname)
+{
+    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Nachname'=%2 WHERE id=%1").arg(ID).arg(Nachname),Datenbank);
+    return FehlerAusgabe(Abfrage);
+}
+
+/*!
+ * \brief SQLiteQuelle::setPersonToGruppe ändert die Gruppe in der sich eine Person befindet.
+ * \param Person ID der Person von der die Gruppe geändert wird.
+ * \param Gruppe Id Der neuen Gruppe.
+ * \return ob das setzen erfolgreich war.
+ */
+bool SQLiteQuelle::setPersonToGruppe(int Person, int Gruppe)
+{
+    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Jf'=%2 WHERE id=%1").arg(Person).arg(Gruppe),Datenbank);
+    return FehlerAusgabe(Abfrage);
+}
+
+/*!
+ * \brief SQLiteQuelle::SetPersonVorname änder den Vornamen der Person auf den Angegeben Vornamen.
+ * \param ID ID der Person von der der Name geändert werden soll.
+ * \param Vorname Der neue Vorname der Person
+ * \return ob das Ändern Erfolgereich war.
+ */
+bool SetPersonVorname(int ID, QString Vorname)
+{
+    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Vorname'=%2 WHERE id=%1").arg(ID).arg(Vorname),Datenbank);
+    return FehlerAusgabe(Abfrage);
 }

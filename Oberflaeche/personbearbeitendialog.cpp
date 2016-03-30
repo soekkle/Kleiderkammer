@@ -41,6 +41,9 @@ PersonBearbeitenDialog::PersonBearbeitenDialog(DatenQuelle *Daten, QWidget *pare
     this->Daten=Daten;
     ID=-1;
     connect(ui->buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(Buttons(QAbstractButton*)));
+    connect(ui->comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(DatenAenderung()));
+    connect(ui->EditNName,SIGNAL(textEdited(QString)),this,SLOT(DatenAenderung()));
+    connect(ui->EditVName,SIGNAL(textEdited(QString)),this,SLOT(DatenAenderung()));
 }
 
 PersonBearbeitenDialog::~PersonBearbeitenDialog()
@@ -82,6 +85,29 @@ void PersonBearbeitenDialog::Buttons(QAbstractButton *button)
         DatenZuruecksetzen();
     else if (standardButton==QDialogButtonBox::Discard)
         this->close();
+}
+
+void PersonBearbeitenDialog::accept()
+{
+    if (!DatenGeaendert)
+        return;
+    if (QMessageBox::question(this,tr("Geänderte Daten Speichern"),tr("Sollen die geänderten Daten gespeichert werden?"),
+                              QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+    {
+        if (ui->EditNName->text()!=NName)
+            Daten->setPersonNachname(ID,ui->EditNName->text());
+        if (ui->EditVName->text()!=VName)
+            Daten->setPersonVorname(ID,ui->EditVName->text());
+        int nGID=ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt();
+        if (nGID!=GruppenID)
+            Daten->setPersonToGruppe(ID,nGID);
+    }
+    QDialog::accept();
+}
+
+void PersonBearbeitenDialog::DatenAenderung()
+{
+    DatenGeaendert=true;
 }
 
 void PersonBearbeitenDialog::DatenZuruecksetzen()

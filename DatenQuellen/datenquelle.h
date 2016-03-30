@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014,2015 Sören Krecker
+ * Copyright (C) 2014-2016 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -414,7 +414,7 @@ public:
      * \param Vorname Der neue Vorname der Person
      * \return ob das Ändern Erfolgereich war.
      */
-    virtual bool SetPersonVorname(int ID, QString Vorname)=0;
+    virtual bool setPersonVorname(int ID, QString Vorname)=0;
 };
 
 #endif // DATENQUELLE_H

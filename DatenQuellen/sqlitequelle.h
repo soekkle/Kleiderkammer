@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014,2015 Sören Krecker
+ * Copyright (C) 2014-2016 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -100,7 +100,7 @@ public:
     //! Andert den Nachnamen der Person
     bool setPersonToGruppe(int PersonenID,int GruppenID);
     //! Andert den Vornamen der Person
-    bool SetPersonVorname(int ID, QString Vorname);
+    bool setPersonVorname(int ID, QString Vorname);
 private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.

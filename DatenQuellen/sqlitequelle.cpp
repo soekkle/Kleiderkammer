@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014,2015 Sören Krecker
+ * Copyright (C) 2014-2016 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -660,7 +660,7 @@ bool SQLiteQuelle::setPersonToGruppe(int Person, int Gruppe)
  * \param Vorname Der neue Vorname der Person
  * \return ob das Ändern Erfolgereich war.
  */
-bool SQLiteQuelle::SetPersonVorname(int ID, QString Vorname)
+bool SQLiteQuelle::setPersonVorname(int ID, QString Vorname)
 {
     QSqlQuery Abfrage(QString("UPDATE Personen SET 'Vorname'=%2 WHERE id=%1").arg(ID).arg(Vorname),Datenbank);
     return FehlerAusgabe(Abfrage);

@@ -35,6 +35,7 @@
 
 #include <QDialog>
 #include <QAbstractButton>
+#include <QMessageBox>
 #include "DatenQuellen/datenquelle.h"
 
 namespace Ui {
@@ -60,6 +61,8 @@ private:
 private slots:
     void Buttons(QAbstractButton *button);
     void DatenZuruecksetzen();
+    void  accept();
+    void DatenAenderung();
 };
 
 #endif // PERSONBEARBEITENDIALOG_H

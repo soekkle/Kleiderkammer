@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014,2015 Sören Krecker
+ * Copyright (C) 2014-2016 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -580,6 +580,7 @@ void MainWindow::PersonBearbeitenClicked()
     QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(ui->tablePersonen->currentIndex().row(),0));
     int ID=Personen.data(Index).toInt();
     PersonBeabeiten->bearbeiten(ID);
+    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
 }
 
 void MainWindow::PersonHinCancel()

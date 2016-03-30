@@ -96,14 +96,11 @@ public:
     //! Setzt den Rang der Größe zum Sortiern in den Listen.
     bool setRangGroesse(int ID,int Rang);
     //! Andert den Nachnamen der Person
-    bool SetPersonNachname(int ID, QString Nachname);
+    bool setPersonNachname(int ID, QString Nachname);
     //! Andert den Nachnamen der Person
-    bool SetPersonNachname(int ID, QString Nachname);
-    //! Ändert die Gruppe zu der Eine Person Gehört
     bool setPersonToGruppe(int PersonenID,int GruppenID);
     //! Andert den Vornamen der Person
     bool SetPersonVorname(int ID, QString Vorname);
-};
 private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.

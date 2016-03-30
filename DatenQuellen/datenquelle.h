@@ -398,7 +398,7 @@ public:
      * \param Vorname Der neue Nachname der Person
      * \return ob das Ändern Erfolgereich war.
      */
-    virtual bool SetPersonNachname(int ID, QString Nachname)=0;
+    virtual bool setPersonNachname(int ID, QString Nachname)=0;
     //! Ändert die Gruppe zu der Eine Person Gehört
     /*!
      * \brief setPersonToGruppe Fügt die Person zu einer neuen Gruppe hinzu und entfrend sie aus der alten Gruppe

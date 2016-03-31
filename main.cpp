@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014,2015 Sören Krecker
+ * Copyright (C) 2014-2016 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -37,6 +37,10 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QTranslator qtTranslator;
+    qtTranslator.load("qt_" + QLocale::system().name(),
+               QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    a.installTranslator(&qtTranslator);
     MainWindow w;
     w.show();
     

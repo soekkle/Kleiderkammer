@@ -91,7 +91,7 @@ void PersonBearbeitenDialog::accept()
 {
     if (!DatenGeaendert)
         return;
-    if (QMessageBox::question(this,tr("Geänderte Daten Speichern"),tr("Sollen die geänderten Daten gespeichert werden?"),
+    if (QMessageBox::question(this,QString::fromUtf8("Geänderte Daten Speichern"),QString::fromUtf8("Sollen die geänderten Daten gespeichert werden?"),
                               QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
     {
         if (ui->EditNName->text()!=NName)

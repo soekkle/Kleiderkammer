@@ -638,7 +638,7 @@ bool SQLiteQuelle::setRangGroesse(int ID, int Rang)
  */
 bool SQLiteQuelle::setPersonNachname(int ID, QString Nachname)
 {
-    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Nachname'=%2 WHERE id=%1").arg(ID).arg(Nachname),Datenbank);
+    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Nachname'='%2' WHERE id=%1").arg(ID).arg(Nachname),Datenbank);
     return FehlerAusgabe(Abfrage);
 }
 
@@ -662,6 +662,6 @@ bool SQLiteQuelle::setPersonToGruppe(int Person, int Gruppe)
  */
 bool SQLiteQuelle::setPersonVorname(int ID, QString Vorname)
 {
-    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Vorname'=%2 WHERE id=%1").arg(ID).arg(Vorname),Datenbank);
+    QSqlQuery Abfrage(QString("UPDATE Personen SET 'Vorname'='%2' WHERE id=%1").arg(ID).arg(Vorname),Datenbank);
     return FehlerAusgabe(Abfrage);
 }

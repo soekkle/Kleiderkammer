@@ -154,6 +154,7 @@ MainWindow::~MainWindow()
     delete Kleidungstuecke;
     delete Daten;
     delete Drucken;
+    delete PersonBeabeiten;
     QString DBAktuell,DBBack;
     DBAktuell=Ort;
     DBAktuell.append("Daten.sqlite");
@@ -165,10 +166,10 @@ MainWindow::~MainWindow()
         BackDir.mkpath(DBBack);
     }
     QStringList Datein=BackDir.entryList(QDir::Files,QDir::Name);
-    if (Datein.length()>10)
+    for (int i=0;i<Datein.length()-9;++i)
     {
         QString BackAlt=DBBack;
-        BackAlt.append(Datein[0]);
+        BackAlt.append(Datein[i]);
         QFile Alt(BackAlt);
         Alt.remove();
     }

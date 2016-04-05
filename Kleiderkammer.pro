@@ -43,7 +43,7 @@ FORMS    += Oberflaeche/mainwindow.ui \
     Oberflaeche/kleidersuche.ui \
     Oberflaeche/personbearbeitendialog.ui
 # Setzen der VersionsInfos
-VERSION= 0.2.0
+VERSION= 0.3.0
 
 # Da unter Qt 5 Probleme mit dem Drucken von WebWidgeds auftreten wird es hier deaktivirt
 equals(QT_MAJOR_VERSION,5):{

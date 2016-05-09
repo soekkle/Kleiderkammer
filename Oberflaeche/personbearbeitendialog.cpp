@@ -40,6 +40,7 @@ PersonBearbeitenDialog::PersonBearbeitenDialog(DatenQuelle *Daten, QWidget *pare
     ui->setupUi(this);
     this->Daten=Daten;
     ID=-1;
+    // Verbinden der Buttons mit den Entsprechenden slots
     connect(ui->buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(Buttons(QAbstractButton*)));
     connect(ui->comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(DatenAenderung()));
     connect(ui->EditNName,SIGNAL(textEdited(QString)),this,SLOT(DatenAenderung()));
@@ -50,13 +51,20 @@ PersonBearbeitenDialog::~PersonBearbeitenDialog()
 {
     delete ui;
 }
-
+/*!
+ * \brief PersonBearbeitenDialog::bearbeiten Öfnnet den Dialog und füllt ihn mit aktuellen Daten aus der
+ * Datenquelle auf.
+ * \param ID ID der zu bearbeitenden Person
+ * \return Ob Daten Geändert wurden
+ */
 bool PersonBearbeitenDialog::bearbeiten(int ID)
 {
     this->ID=ID;
     QString Gruppe;
+    // Prüfen ob die übergebene Person wirklich existiert
     if (Daten->getPersonenInfo(ID,&VName,&NName,&Gruppe,&GruppenID))
     {
+        // Füllen der Datenfelder in der Eingabe maske
         ui->EditVName->setText(VName);
         ui->EditNName->setText(NName);
         {
@@ -104,12 +112,18 @@ void PersonBearbeitenDialog::accept()
     }
     QDialog::accept();
 }
-
+/*!
+ * \brief PersonBearbeitenDialog::DatenAenderung speicher ob Daten im Dialog geändert wurden sind.
+ */
 void PersonBearbeitenDialog::DatenAenderung()
 {
     DatenGeaendert=true;
 }
 
+/*!
+ * \brief PersonBearbeitenDialog::DatenZuruecksetzen Setzt die Felder der Eingabemaske auf die Werte
+ * aus der DatenQuelle zurück.
+ */
 void PersonBearbeitenDialog::DatenZuruecksetzen()
 {
     ui->EditVName->setText(VName);

@@ -46,7 +46,7 @@
 namespace Ui {
 class KleidungsTypenVerwaltung;
 }
-
+//! Diese Klasse stellt einen Dialog zum bearbeiten von den Kleidungstypen und den dazugehörigen Größen bereit.
 class KleidungsTypenVerwaltung : public QDialog
 {
     Q_OBJECT
@@ -71,8 +71,10 @@ signals:
     void datenGeaendert();
 
 public slots:
+        //! Ausführen des Dialoges
         int exec();
 private slots:
+        //! Anlegen der angegbenen Größe
         void GroesseAnlegen();
         //! Zeigt das Contextmenue Für die Tableview mit den Größen an
         void GrossenContextMenu(QPoint Pos);

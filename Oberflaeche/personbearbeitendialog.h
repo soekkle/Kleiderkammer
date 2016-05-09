@@ -41,7 +41,11 @@
 namespace Ui {
 class PersonBearbeitenDialog;
 }
-
+//! Diese Klasse stellt einen Dialog zum Bearbeiten von Bersonen bereit.
+/*!
+ * \brief Die Klasse PersonBearbeitenDialog stellt einen Dialog zum bearbeiten
+ * von Namen und der Gruppen zugehörigkeit einer ausgwählten Person
+ */
 class PersonBearbeitenDialog : public QDialog
 {
     Q_OBJECT
@@ -49,6 +53,7 @@ class PersonBearbeitenDialog : public QDialog
 public:
     explicit PersonBearbeitenDialog(DatenQuelle *Daten, QWidget *parent = 0);
     ~PersonBearbeitenDialog();
+    //! Öffnet den Dialog für die angegebene Person
     bool bearbeiten(int ID);
 
 private:
@@ -60,8 +65,11 @@ private:
 
 private slots:
     void Buttons(QAbstractButton *button);
+    //! Setzt die Maske in den Ausgabgszustand zurück
     void DatenZuruecksetzen();
-    void  accept();
+    //! Schließt den Dialog
+    void accept();
+
     void DatenAenderung();
 };
 

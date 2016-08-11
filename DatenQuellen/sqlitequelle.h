@@ -66,7 +66,7 @@ public:
     GroessenTabelle *getGroessen(int *Filter, int anz);
     //! Liefert die ID zu einer Größe von Einen Bestimten Kleidungstyp
     int getGroessenID(QString Groesse,int TypID);
-    KleiderTabelle *getKleiderinKammer(int Typ, int Groesse);
+    KleiderTabelle *getKleiderinKammer(int Typ, int Groesse,QString Nummer=QString());
     KleiderTabelle *getKleidervonPerson(int id, int Typ);
     bool getKleidungsInfoByID(int ID,int *Nummer, int *Typ, int *Groesse);
     int getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl);
@@ -106,7 +106,7 @@ private:
     //! Erstellt die Datenbank.
     void createDB();
     bool FehlerAusgabe(QSqlQuery Abfrage);
-    KleiderTabelle* getKleider(int Typ, int Groesse,int Traeger);
+    KleiderTabelle* getKleider(int Typ, int Groesse, int Traeger, QString Nummer);
 };
 
 #endif // SQLITEQUELLE_H

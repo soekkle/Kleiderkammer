@@ -182,6 +182,12 @@ void KleidungsTableview::setFilterGroesse(int Groesse)
     update();
 }
 
+void KleidungsTableview::setFilterNummer(QString Nummer)
+{
+    FilterNummer=Nummer;
+    update();
+}
+
 void KleidungsTableview::setFilterPerson(int Person)
 {
     if (Person>=0)
@@ -207,7 +213,7 @@ void KleidungsTableview::update()
         endRemoveRows();
     }
     if (Modus==0)
-        Kleidung=Daten->getKleiderinKammer(FilterTyp,FilterGroesse);
+        Kleidung=Daten->getKleiderinKammer(FilterTyp,FilterGroesse,FilterNummer);
     if (Modus==1)
         Kleidung=Daten->getKleidervonPerson(FilterPerson,FilterTyp);
     beginInsertRows(QModelIndex(),0,Kleidung->Anzahl-1);

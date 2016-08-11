@@ -112,6 +112,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tablePersonen->selectionModel(),SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),this,SLOT(PersonAusgewaehlt(QModelIndex,QModelIndex)));
     connect(ui->comboBox_AusTypFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(AusTypFiltergeaendert(int)));
     connect(ui->comboBox_AusGroFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(AusGroessenFiltergeaendert(int)));
+    connect(ui->lineEdit_AusNum,SIGNAL(textChanged(QString)),this,SLOT(LineEditAusNummerChange(QString)));
     connect(ui->pushButton_leihen,SIGNAL(clicked()),this,SLOT(Auslehenclicked()));
     connect(ui->comboBox_eigenFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PerKleidungslistefuellen(int)));
     connect(ui->pushButton_zuruck,SIGNAL(clicked()),this,SLOT(Zurueckgeben()));
@@ -215,6 +216,7 @@ void MainWindow::Auslehenclicked()
 void MainWindow::AusTypFiltergeaendert(int Typ)
 {
     ui->comboBox_AusGroFilter->clear();
+    ui->lineEdit_AusNum->clear();
     if (Typ==0)
     {
         ui->comboBox_AusGroFilter->setEnabled(false);
@@ -465,6 +467,11 @@ void MainWindow::Kleidungstypgewaehlt(int Typ)
     ui->spinBoxBeNumEin->setValue(Daten->freieNummer(TypID));
     ui->comboBoxBeGroEin->setEnabled(true);
     ui->spinBoxBeNumEin->setEnabled(true);
+}
+
+void MainWindow::LineEditAusNummerChange(QString Nummer)
+{
+    KleiderAus->setFilterNummer(Nummer);
 }
 
 void MainWindow::LineEditSuchNameChange(QString SuchFilter)

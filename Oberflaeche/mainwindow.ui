@@ -23,6 +23,9 @@
       <property name="enabled">
        <bool>true</bool>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -288,10 +291,42 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
-            <widget class="QComboBox" name="comboBox_AusTypFilter"/>
-           </item>
-           <item>
-            <widget class="QComboBox" name="comboBox_AusGroFilter"/>
+            <layout class="QFormLayout" name="formLayout_6">
+             <item row="2" column="1">
+              <widget class="QComboBox" name="comboBox_AusGroFilter"/>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="lineEdit_AusNum">
+               <property name="inputMethodHints">
+                <set>Qt::ImhNone</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QComboBox" name="comboBox_AusTypFilter"/>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>Nummer</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string>Typ</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_14">
+               <property name="text">
+                <string>Größe</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QTableView" name="table_Kleileihen">
@@ -440,7 +475,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -523,6 +558,10 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>comboBoxPerJFFilter</tabstop>
+  <tabstop>lineEditSuchName</tabstop>
+  <tabstop>tablePersonen</tabstop>
   <tabstop>linePerVor</tabstop>
   <tabstop>lineEditPerNach</tabstop>
   <tabstop>comboPerJFEin</tabstop>
@@ -538,8 +577,16 @@
   <tabstop>pushButton_zuruck</tabstop>
   <tabstop>comboBox_AusTypFilter</tabstop>
   <tabstop>comboBox_AusGroFilter</tabstop>
+  <tabstop>lineEdit_AusNum</tabstop>
   <tabstop>table_Kleileihen</tabstop>
   <tabstop>pushButton_leihen</tabstop>
+  <tabstop>radioButton</tabstop>
+  <tabstop>radioButton_2</tabstop>
+  <tabstop>comboBox_BeJF</tabstop>
+  <tabstop>groupBox_BeTyp</tabstop>
+  <tabstop>pushButton_BeDr</tabstop>
+  <tabstop>pushButton_BeAn</tabstop>
+  <tabstop>pushButton_BeSp</tabstop>
  </tabstops>
  <resources/>
  <connections/>

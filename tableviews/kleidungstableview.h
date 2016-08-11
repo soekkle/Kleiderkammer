@@ -56,6 +56,8 @@ public:
     void setFilterTyp(int Typ);
     void setFilterPerson(int Person);
     void setFilterGroesse(int Groesse);
+    //! Setzt den Filter fur den Teil der Nummer der Entalten sein soll.
+    void setFilterNummer(QString Nummer);
 signals:
     
 public slots:
@@ -66,6 +68,7 @@ private:
     int FilterTyp, FilterGroesse, FilterPerson;
     int Modus;
     DatenQuelle* Daten;
+    QString FilterNummer;
 };
 
 #endif // KLEIDUNGSTABLEVIEW_H

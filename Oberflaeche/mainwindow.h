@@ -130,8 +130,10 @@ private slots:
     void KleidunginKammerAnzeigen(int Filter);
     void KleidungHinClicked();
     void KleidungHinCancel();
-    //! Slot der Aufgerufen wird wenn der LineEditSuchName geändert wurde
+    //! Slot der Aufgerufen wird, wenn der LineEditSuchName geändert wurde
     void LineEditSuchNameChange(QString SuchFilter);
+    //! Slot der Aufgerufen wird, wenn der LineEdit_AusNum geändert wurde
+    void LineEditAusNummerChange(QString Nummer);
     //! Slot für das ContextMenü bei den Namen
     void NamenContextMenuEvent(const QPoint &Pos);
     void PerKleidungslistefuellen(int FilterTyp);
@@ -156,7 +158,6 @@ private slots:
     //! Zeigt das Infofenster zu Qt
     void ZeigeQTInfo();
     void Zurueckgeben();
-
 };
 
 #endif // MAINWINDOW_H

@@ -18,7 +18,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
+    <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
        <bool>true</bool>
@@ -350,121 +350,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_berichte">
-       <attribute name="title">
-        <string>Berichte</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <layout class="QFormLayout" name="formLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Bericht Typ</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Gruppe</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Kleidungstypen:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QComboBox" name="comboBox_BeJF">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="editable">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <layout class="QGridLayout" name="gridLayout_3">
-            <item row="2" column="1">
-             <widget class="QRadioButton" name="radioButton_2">
-              <property name="text">
-               <string>Namenliste</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QRadioButton" name="radioButton">
-              <property name="text">
-               <string>Inventarliste</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="1">
-           <widget class="QGroupBox" name="groupBox_BeTyp">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="title">
-             <string>einzelnen Auswählen</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_5">
-             <item row="0" column="0">
-              <layout class="QGridLayout" name="gridLayout_4"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QWebView" name="webView">
-          <property name="url">
-           <url>
-            <string>about:blank</string>
-           </url>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QPushButton" name="pushButton_BeDr">
-            <property name="text">
-             <string>Bericht Drucken</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_BeAn">
-            <property name="text">
-             <string>Bericht Anzeigen</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_BeSp">
-            <property name="text">
-             <string>Bericht Speichern</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -475,7 +360,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>22</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -550,15 +435,7 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>QtWebKitWidgets/QWebView</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
   <tabstop>comboBoxPerJFFilter</tabstop>
   <tabstop>lineEditSuchName</tabstop>
   <tabstop>tablePersonen</tabstop>
@@ -580,13 +457,6 @@
   <tabstop>lineEdit_AusNum</tabstop>
   <tabstop>table_Kleileihen</tabstop>
   <tabstop>pushButton_leihen</tabstop>
-  <tabstop>radioButton</tabstop>
-  <tabstop>radioButton_2</tabstop>
-  <tabstop>comboBox_BeJF</tabstop>
-  <tabstop>groupBox_BeTyp</tabstop>
-  <tabstop>pushButton_BeDr</tabstop>
-  <tabstop>pushButton_BeAn</tabstop>
-  <tabstop>pushButton_BeSp</tabstop>
  </tabstops>
  <resources/>
  <connections/>

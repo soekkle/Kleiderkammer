@@ -35,17 +35,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QFileDialog>
-#ifndef NOPRINT
-#include <QPrintDialog>
-#endif
+
 #include "DatenQuellen/datenquelle.h"
 #include "DatenQuellen/sqlitequelle.h"
+#include "MainTabs/widgetberichttab.h"
 #include "kleidersuche.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
 #include "personbearbeitendialog.h"
-#include "bericht.h"
 #include "tableviews/kleidungstableview.h"
 #include "tableviews/itemsdelegate.h"
 #include "versioninfo.h"
@@ -53,7 +50,6 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <QTextStream>
-#include <QCheckBox>
 
 #if __WIN32__||_MSC_VER
 //#define WINVER 0x0602
@@ -76,10 +72,10 @@ public:
     
 private:
     Ui::MainWindow *ui;
+    WidgetBerichtTab *BerichtTab;
 
     ComboboxGroessenDelegate *ComboBox;
-    QVector<QCheckBox*> CheckBoxBeType;
-    Bericht *Drucken;
+
     SQLiteQuelle *Daten;
     KleiderSuche *KleiderInfoSuchen;
     KleidungsTypenVerwaltung *Typen;
@@ -95,8 +91,6 @@ private:
     int PersonenID;
     //! Die verschieden Actionen.
     QAction *ActionPersonLoeschen,*ActionPersonBearbeiten,*ActionKleicungLoeschen;
-    //! DIe Fuktion liefert die Ausgwählten Spalten für den Bericht
-    QVector<int> BerichtSpalten();
     //! Funktion zum Aufbereiten der Ausleihen Maske.
     void PersonAusleih(int ID);
     //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.
@@ -106,20 +100,10 @@ private slots:
     void AusGroessenFiltergeaendert(int Typ);
     void Auslehenclicked();
     void AusTypFiltergeaendert(int Typ);
-    //! Slot zum Anzagen des Beichtes
-    void BerichtAnzeigen();
-#ifndef NOPRINT
-    //! Slot zum Starten des Druckens
-    void BerichtDrucken();
-#endif
-    //! Slot zum Speichern des Berichtes als HTML-Datei.
-    void BerichtSpeichern();
     //! Slot der die Komboboxen füllt.
     void ComboboxFuellen();
     //! Slot, der nach dem Ändern der Combobox ComboboxPerJFFilter geändert wurde.
     void ComboboxPerJFFilterGewahlt(int Pos);
-    //! Slot der die Checkboxen im Bericht ausblendet.
-    void Groupchecked(bool checked);
     //! Solt zum Anzeigen des Contextmenüs in der Kleidungs Tabelle
     void KleidungContextMenuEvent(const QPoint Pos);
     //! Slot zum Löschen eines Kleidungsstückes.
@@ -149,8 +133,6 @@ private slots:
     void PersonListeDoubleClicked(const QModelIndex &Index);
     //! Löscht die Ausgewälte Person.
     void PersonLoeschen();
-    //! Aktivirt und deaktivirt die Combobox
-    void RadiobuttomCilcked();
     //! Zeigt das Infofenser zu diesem Programm
     void ZeigeInfo();
     //! Zeigt den einkleiden Tab zu einer Person

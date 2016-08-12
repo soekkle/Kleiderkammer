@@ -83,6 +83,11 @@ MainWindow::MainWindow(QWidget *parent) :
     PerKleider = new KleidungsTableview(Daten,1,this);
     ProKleidungstuecke.setSourceModel(Kleidungstuecke);//Verbinden Des Proxiemodell mit dem Datenmodell.
     ComboBox=new ComboboxGroessenDelegate(Daten,this);
+
+    // Einsetzen der ausgelagreten Tabs
+    BerichtTab=new WidgetBerichtTab(Daten,Ort,0);
+    ui->tabWidget->addTab(BerichtTab,"Bericht");
+
     ui->tableKleidung->setModel(&ProKleidungstuecke);//Setzt die Modelle zur Anzeige der Daten.
     ui->tableKleidung->setItemDelegateForColumn(2,ComboBox);// Setzen der Combobox für die Größen
     ProPersonen.setSourceModel(&Personen);
@@ -94,7 +99,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView_KleiPerson->setModel(&ProPerKleider);
     ui->tableView_KleiPerson->setItemDelegateForColumn(2,ComboBox);
     ComboboxFuellen();//Inizalisiert alle Comboboxen.
-    Drucken=new Bericht(Daten,this->Ort);
+
     //Stellt alle Eventverbindungen her.
     connect(ui->actionKleidungstypen_verwalten,SIGNAL(triggered()),Typen,SLOT(exec()));
     connect(Typen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
@@ -116,14 +121,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_leihen,SIGNAL(clicked()),this,SLOT(Auslehenclicked()));
     connect(ui->comboBox_eigenFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PerKleidungslistefuellen(int)));
     connect(ui->pushButton_zuruck,SIGNAL(clicked()),this,SLOT(Zurueckgeben()));
-    connect(ui->pushButton_BeAn,SIGNAL(clicked()),this,SLOT(BerichtAnzeigen()));
-#ifndef NOPRINT
-    connect(ui->pushButton_BeDr,SIGNAL(clicked()),this,SLOT(BerichtDrucken()));
-#endif
-    connect(ui->pushButton_BeSp,SIGNAL(clicked()),this,SLOT(BerichtSpeichern()));
-    connect(ui->radioButton,SIGNAL(clicked()),this,SLOT(RadiobuttomCilcked()));
-    connect(ui->radioButton_2,SIGNAL(clicked()),this,SLOT(RadiobuttomCilcked()));
-    connect(ui->groupBox_BeTyp,SIGNAL(clicked(bool)),this,SLOT(Groupchecked(bool)));
     // Verbinden der Mainmenü einträgen
     connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->actionKleidungsst_ck,SIGNAL(triggered()),KleiderInfoSuchen,SLOT(exec()));
@@ -154,8 +151,8 @@ MainWindow::~MainWindow()
     delete ui;
     delete Kleidungstuecke;
     delete Daten;
-    delete Drucken;
     delete PersonBeabeiten;
+    delete BerichtTab;
     QString DBAktuell,DBBack;
     DBAktuell=Ort;
     DBAktuell.append("Daten.sqlite");
@@ -235,25 +232,6 @@ void MainWindow::AusTypFiltergeaendert(int Typ)
     ui->comboBox_AusGroFilter->setEnabled(true);
 }
 
-/*!
- * \brief MainWindow::BerichtSpalten liefert einen Vektor mit den für den aktuellen Bericht ausgewählten Spalten.
- * Wenn alle die option alle Spalten gewählt wurde wird ein leerer Vektor zurückgegeben.
- * \return Vector mit den ID der Kleidertypen.
- */
-QVector<int> MainWindow::BerichtSpalten()
-{
-    QVector<int> Spalten;
-    if (ui->groupBox_BeTyp->isChecked())
-    {
-        for (int i=0;i<CheckBoxBeType.size();++i)
-        {
-            if (CheckBoxBeType[i]->isChecked())
-                Spalten.append(Daten->getKleidungsTypID(CheckBoxBeType[i]->text()));
-        }
-    }
-    return Spalten;
-}
-
 void MainWindow::ComboboxFuellen()
 {
     /* Fült zwei Comboboxen mit den Namen der Eingetragenen Gruppen.
@@ -261,23 +239,14 @@ void MainWindow::ComboboxFuellen()
     JugendFeuerwehrTabelle *JfDaten=Daten->getJugendfeuerwehr();
     ui->comboBoxPerJFFilter->clear();
     ui->comboBoxPerJFFilter->addItem("Alle",QVariant(0));
-    ui->comboBox_BeJF->clear();
-    ui->comboBox_BeJF->addItem("Alle",QVariant(0));
     ui->comboPerJFEin->clear();
     for (int i=0;i<JfDaten->Anzahl;++i)
     {
         ui->comboBoxPerJFFilter->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
         ui->comboPerJFEin->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
-        ui->comboBox_BeJF->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
     }
     PersonenAnzeigen(0,"");
     delete JfDaten;
-    for (int i=0;i<CheckBoxBeType.size();++i)
-    {
-        ui->gridLayout_4->removeWidget(CheckBoxBeType[i]);
-        delete CheckBoxBeType[i];
-    }
-    CheckBoxBeType.clear();
     /* Fült alle komboboxen die die Typen der Kleidungsstücke benötigen.
        Ebenfalls werden die ID als Daten dazu gespeichert.*/
     ui->comboBoxBekFilter->clear();
@@ -297,92 +266,16 @@ void MainWindow::ComboboxFuellen()
         ui->comboBoxBeTypEin->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
         ui->comboBox_AusTypFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
         ui->comboBox_eigenFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
-        QCheckBox *Box=new QCheckBox(KleiTyp->Name[i],this);
-        Box->setHidden(!ui->groupBox_BeTyp->isChecked());
-        ui->gridLayout_4->addWidget(Box,i/4,i%4);
-        CheckBoxBeType.append(Box);
     }
     KleidunginKammerAnzeigen(0);
     delete KleiTyp;
+    BerichtTab->DatenGeaendert();
 }
 
-/*!
- * \brief MainWindow::BerichtAnzeigen Zeigt den Bericht in der webView des Tabs an. Es werden die in der Oberfläche gewälten einstellungen an die
- * entsprechende Funktion der Klasse Bericht übergeben.
- */
-
-void MainWindow::BerichtAnzeigen()
-{
-    QUrl Url=QUrl::fromLocalFile(Ort);
-    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
-    if (ui->radioButton->isChecked())
-        ui->webView->setHtml(Drucken->generiereKammerListe(),Url);
-    if (ui->radioButton_2->isChecked())
-        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe,BerichtSpalten()),Url);
-}
-
-#ifndef NOPRINT
-/*!
- * \brief MainWindow::BerichtDrucken Starte den Vorgang des Drucken eines Bereichtes. Es wird de standad Dialog mit den Druckereinstellungen angezeigt.
- */
-void MainWindow::BerichtDrucken()
-{
-    QPrinter Drucker;
-    QUrl Url=QUrl::fromLocalFile(Ort);
-    QPrintDialog DruckDialog(&Drucker,this);
-    if (DruckDialog.exec()!= QDialog::Accepted)//Öffnet den Druckendialog und prüft ob gedruckt werden soll.
-        return ;
-    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
-    QString HTML="";
-    if (ui->radioButton->isChecked())
-        HTML=Drucken->generiereKammerListe();
-    if (ui->radioButton_2->isChecked())
-        HTML=Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
-    QWebView* Flaeche=new QWebView;
-    QEventLoop Loop;
-    connect(Flaeche,SIGNAL(loadFinished(bool)),&Loop,SLOT(quit()));
-    Flaeche->setHtml(HTML,Url);
-    Loop.exec();
-    Flaeche->print(&Drucker);//rendert den Bericht in einer nicht sichtbaren QWebview und gibt inh an den Drucker weiter.
-    delete Flaeche;
-}
-#endif
-
-/*!
- * \brief MainWindow::BerichtSpeichern Speicher den Generierten Bericht in einem HTML Dokument.
- */
-void MainWindow::BerichtSpeichern()
-{
-    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
-    QString Datei=QFileDialog::getSaveFileName(this,tr("Bericht Speichern"),QString(),tr("Webseite(*.html)"));
-    // Prüft ob ein eine Dateiendung entahlten ist. Wenn nicht wird sie Gesetzt
-    if (!Datei.endsWith(".html",Qt::CaseInsensitive))
-        Datei.append(".html");
-    QFile HDD_Datei(Datei);
-    if (!HDD_Datei.open(QIODevice::WriteOnly | QIODevice::Text))//Prüft ob die Datei geöffnet werden kann.
-        return;
-    QTextStream HTML(&HDD_Datei);
-    HTML.setCodec("UTF-8");
-    Drucken->CSSextern=false;
-    if (ui->radioButton->isChecked())
-        HTML<<Drucken->generiereKammerListe();
-    if (ui->radioButton_2->isChecked())
-        HTML<< Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
-    HDD_Datei.close();
-    Drucken->CSSextern=true;
-}
 
 void MainWindow::ComboboxPerJFFilterGewahlt(int Pos)
 {
     PersonenAnzeigen(Pos,ui->lineEditSuchName->text());
-}
-
-void MainWindow::Groupchecked(bool checked)
-{
-    for (int i=0;i<CheckBoxBeType.size();++i)
-    {
-        CheckBoxBeType[i]->setHidden(!checked);
-    }
 }
 
 /*!
@@ -629,21 +522,7 @@ void MainWindow::PersonLoeschen()
     delete Kleider;
 }
 
-void MainWindow::RadiobuttomCilcked()
-{
-    if (ui->radioButton->isChecked())
-    {
-        ui->comboBox_BeJF->setEnabled(false);
-        ui->groupBox_BeTyp->setChecked(false);
-        ui->groupBox_BeTyp->setEnabled(false);
-        Groupchecked(false);
-    }
-    else
-    {
-        ui->comboBox_BeJF->setEnabled(true);
-        ui->groupBox_BeTyp->setEnabled(true);
-    }
-}
+
 
 
 void MainWindow::ZeigeInfo()

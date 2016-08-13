@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014,2015 Sören Krecker
+ * Copyright (C) 2014-2016 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -38,7 +38,10 @@
 
 #include "DatenQuellen/datenquelle.h"
 #include "DatenQuellen/sqlitequelle.h"
+// Einbinden der TabWidgets
 #include "MainTabs/widgetberichttab.h"
+#include "MainTabs/widgetkleidungtab.h"
+
 #include "kleidersuche.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
@@ -73,6 +76,7 @@ public:
 private:
     Ui::MainWindow *ui;
     WidgetBerichtTab *BerichtTab;
+    WidgetKleidungTab *KleidungTab;
 
     ComboboxGroessenDelegate *ComboBox;
 
@@ -85,12 +89,12 @@ private:
     QString Ort;
     //! Modelle für das Anzeigen der Daten.
     QStandardItemModel Personen;
-    KleidungsTableview *Kleidungstuecke, *PerKleider, *KleiderAus;
+    KleidungsTableview *PerKleider, *KleiderAus;
     //! Modelle Für die Sortierten Anzeigen.
-    QSortFilterProxyModel ProPersonen, ProKleidungstuecke, ProPerKleider, ProKleiderAus;
+    QSortFilterProxyModel ProPersonen, ProPerKleider, ProKleiderAus;
     int PersonenID;
     //! Die verschieden Actionen.
-    QAction *ActionPersonLoeschen,*ActionPersonBearbeiten,*ActionKleicungLoeschen;
+    QAction *ActionPersonLoeschen,*ActionPersonBearbeiten;
     //! Funktion zum Aufbereiten der Ausleihen Maske.
     void PersonAusleih(int ID);
     //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.
@@ -104,16 +108,6 @@ private slots:
     void ComboboxFuellen();
     //! Slot, der nach dem Ändern der Combobox ComboboxPerJFFilter geändert wurde.
     void ComboboxPerJFFilterGewahlt(int Pos);
-    //! Solt zum Anzeigen des Contextmenüs in der Kleidungs Tabelle
-    void KleidungContextMenuEvent(const QPoint Pos);
-    //! Slot zum Löschen eines Kleidungsstückes.
-    void KleidungLoeschen();
-    //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
-    void Kleidungstypgewaehlt(int Typ);
-    //! Slot der für die Anzeige der Kleiderstücke zusändig ist.
-    void KleidunginKammerAnzeigen(int Filter);
-    void KleidungHinClicked();
-    void KleidungHinCancel();
     //! Slot der Aufgerufen wird, wenn der LineEditSuchName geändert wurde
     void LineEditSuchNameChange(QString SuchFilter);
     //! Slot der Aufgerufen wird, wenn der LineEdit_AusNum geändert wurde

@@ -48,7 +48,10 @@
 namespace Ui {
 class WidgetBerichtTab;
 }
-
+//! Diese Klasse stellt die Funktionen für den Tab Bericht bereit.
+/*!
+ * \brief Die Klasse WidgetBerichtTab stellt die Funktionen Des Tabs Bericht im Hauptfenster zur verfügung.
+ */
 class WidgetBerichtTab : public QFrame
 {
     Q_OBJECT

@@ -78,18 +78,19 @@ MainWindow::MainWindow(QWidget *parent) :
     Gruppen=new Gruppenverwaltung(Daten,this);
     KleiderInfoSuchen=new KleiderSuche(Daten,this);
     PersonBeabeiten=new PersonBearbeitenDialog(Daten,this);
-    Kleidungstuecke = new KleidungsTableview(Daten,0,this);
     KleiderAus = new KleidungsTableview(Daten,0,this);
     PerKleider = new KleidungsTableview(Daten,1,this);
-    ProKleidungstuecke.setSourceModel(Kleidungstuecke);//Verbinden Des Proxiemodell mit dem Datenmodell.
+
     ComboBox=new ComboboxGroessenDelegate(Daten,this);
 
     // Einsetzen der ausgelagreten Tabs
+    KleidungTab=new WidgetKleidungTab(Daten,0);
+    ui->tabWidget->addTab(KleidungTab,QString::fromUtf8("Kleidungsstücke"));
+
     BerichtTab=new WidgetBerichtTab(Daten,Ort,0);
     ui->tabWidget->addTab(BerichtTab,"Bericht");
 
-    ui->tableKleidung->setModel(&ProKleidungstuecke);//Setzt die Modelle zur Anzeige der Daten.
-    ui->tableKleidung->setItemDelegateForColumn(2,ComboBox);// Setzen der Combobox für die Größen
+
     ProPersonen.setSourceModel(&Personen);
     ui->tablePersonen->setModel(&ProPersonen);
     ProKleiderAus.setSourceModel(KleiderAus);
@@ -110,10 +111,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->lineEditSuchName,SIGNAL(textChanged(QString)),this,SLOT(LineEditSuchNameChange(QString)));
     connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(PersonHinClicked()));
     connect(ui->buttonBox,SIGNAL(rejected()),this,SLOT(PersonHinCancel()));
-    connect(ui->comboBoxBekFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(KleidunginKammerAnzeigen(int)));
-    connect(ui->comboBoxBeTypEin,SIGNAL(currentIndexChanged(int)),this,SLOT(Kleidungstypgewaehlt(int)));
-    connect(ui->buttonBox_2,SIGNAL(accepted()),this,SLOT(KleidungHinClicked()));
-    connect(ui->buttonBox_2,SIGNAL(rejected()),this,SLOT(KleidungHinCancel()));
     connect(ui->tablePersonen->selectionModel(),SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),this,SLOT(PersonAusgewaehlt(QModelIndex,QModelIndex)));
     connect(ui->comboBox_AusTypFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(AusTypFiltergeaendert(int)));
     connect(ui->comboBox_AusGroFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(AusGroessenFiltergeaendert(int)));
@@ -128,7 +125,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_ber_QT,SIGNAL(triggered()),this,SLOT(ZeigeQTInfo()));
     //Verboinden der ContextMenüs
     connect(ui->tablePersonen,SIGNAL(customContextMenuRequested(const QPoint)),this,SLOT(NamenContextMenuEvent(QPoint)));
-    connect(ui->tableKleidung,SIGNAL(customContextMenuRequested(const QPoint)),this, SLOT(KleidungContextMenuEvent(QPoint)));
 
     connect(ui->tablePersonen,SIGNAL(doubleClicked(const QModelIndex &)),this,SLOT(PersonListeDoubleClicked(const QModelIndex &)));
     //Anlegen der Actionen
@@ -136,9 +132,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ActionPersonBearbeiten,SIGNAL(triggered()),this,SLOT(PersonBearbeitenClicked()));
     ActionPersonLoeschen= new QAction(QString::fromUtf8("Löschen"),this);
     connect(ActionPersonLoeschen,SIGNAL(triggered()),this,SLOT(PersonLoeschen()));
-    ActionKleicungLoeschen=new QAction(QString::fromUtf8("Löschen"),this);
-    ActionKleicungLoeschen->setToolTip(QString::fromUtf8("Löscht das Ausgewalte Kleidungsstück."));
-    connect(ActionKleicungLoeschen,SIGNAL(triggered()),this,SLOT(KleidungLoeschen()));
 #ifdef NOPRINT
     ui->pushButton_BeDr->close();
 #endif
@@ -149,7 +142,6 @@ MainWindow::~MainWindow()
     delete ComboBox;
     delete ActionPersonLoeschen;
     delete ui;
-    delete Kleidungstuecke;
     delete Daten;
     delete PersonBeabeiten;
     delete BerichtTab;
@@ -249,117 +241,27 @@ void MainWindow::ComboboxFuellen()
     delete JfDaten;
     /* Fült alle komboboxen die die Typen der Kleidungsstücke benötigen.
        Ebenfalls werden die ID als Daten dazu gespeichert.*/
-    ui->comboBoxBekFilter->clear();
-    ui->comboBoxBeTypEin->clear();
     ui->comboBox_AusGroFilter->clear();
     ui->comboBox_eigenFilter->clear();
     ui->comboBox_AusTypFilter->clear();
-    ui->comboBoxBekFilter->addItem("Alle",QVariant(0));
     ui->comboBox_AusGroFilter->addItem("Alle",QVariant(0));
     ui->comboBox_eigenFilter->addItem("Alle",QVariant(0));
     ui->comboBox_AusTypFilter->addItem("Alle",QVariant(0));
-    ui->comboBoxBeTypEin->addItem(QString::fromUtf8("Bitte Wählen"),QVariant(0));
     Kleidungstypentabelle *KleiTyp=Daten->getKleidungstypen();
     for (int i=0;i<KleiTyp->Anzahl;++i)
     {
-        ui->comboBoxBekFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
-        ui->comboBoxBeTypEin->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
         ui->comboBox_AusTypFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
         ui->comboBox_eigenFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
     }
-    KleidunginKammerAnzeigen(0);
     delete KleiTyp;
     BerichtTab->DatenGeaendert();
+    KleidungTab->DatenGeaendert();
 }
 
 
 void MainWindow::ComboboxPerJFFilterGewahlt(int Pos)
 {
     PersonenAnzeigen(Pos,ui->lineEditSuchName->text());
-}
-
-/*!
- * \brief MainWindow::KleidungContextMenuEvent Zeigt ein Kontextmenü für das Tableview TabelleKleider an.
- * \param Pos Position Auf der TableView, wo das Contextmenü angezeigt wird,
- */
-void MainWindow::KleidungContextMenuEvent(const QPoint Pos)
-{
-    QMenu menu(this);
-    menu.addAction(ActionKleicungLoeschen);
-    menu.exec(ui->tableKleidung->viewport()->mapToGlobal(Pos));
-}
-
-void MainWindow::KleidungHinCancel()
-{
-    ui->comboBoxBeTypEin->setCurrentIndex(0);
-    ui->comboBoxBeGroEin->setCurrentIndex(0);
-    KleidunginKammerAnzeigen(ui->comboBoxBekFilter->currentIndex());
-}
-
-void MainWindow::KleidungHinClicked()
-{
-    if (ui->comboBoxBeTypEin->currentIndex()==0)
-        return;
-    if (ui->comboBoxBeGroEin->currentIndex()==0)
-        return;
-    int TypID,GroID,Nummer;
-    TypID=ui->comboBoxBeTypEin->itemData(ui->comboBoxBeTypEin->currentIndex()).toInt();
-    GroID=ui->comboBoxBeGroEin->itemData(ui->comboBoxBeGroEin->currentIndex()).toInt();
-    Nummer=ui->spinBoxBeNumEin->value();
-    std::cout<<TypID<<" : "<<GroID<<" : "<<Nummer<<std::endl;
-    if (Daten->addKleiderstueck(TypID,GroID,Nummer,false)==-1)
-        QMessageBox::warning(this,QString::fromUtf8("Kleidungsstück schon vorhanden"),QString::fromUtf8("Das Kleidungsstück mit der Nummer %1 ist schon angelegt und kann deshalb nicht angelegt werden").arg(Nummer));
-    Kleidungstypgewaehlt(ui->comboBoxBeTypEin->currentIndex());
-    KleidunginKammerAnzeigen(ui->comboBoxBekFilter->currentIndex());
-}
-
-void MainWindow::KleidunginKammerAnzeigen(int Filter)
-{
-    Kleidungstuecke->setFilterTyp(ui->comboBoxBekFilter->itemData(Filter).toInt());
-
-}
-
-/*!
- * \brief MainWindow::KleidungLoeschen Löscht das ausgewälte Kleidungsstück aus der Kleiderkammer.
- */
-void MainWindow::KleidungLoeschen()
-{
-    //Holen des Orginal Indexes.
-    QModelIndex Index=ProKleidungstuecke.mapToSource(ProKleidungstuecke.index(ui->tableKleidung->currentIndex().row(),0));
-    int id=Kleidungstuecke->getKleidungsId(Index.row());
-    if (QMessageBox::information(this,QString::fromUtf8("Kleidungsstück löschen"),QString::fromUtf8("Sind Sie sich sicher, dass sie das Ausgewälte Kleidungsstück löschen wollen?"),
-                                 QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
-        Daten->removeKleidungsstueck(id);
-    KleidunginKammerAnzeigen(ui->comboBoxBekFilter->currentIndex());
-
-}
-
-void MainWindow::Kleidungstypgewaehlt(int Typ)
-{
-    ui->comboBoxBeGroEin->clear();
-    ui->comboBoxBeGroEin->addItem(QString::fromUtf8("Bitte Wählen"),QVariant(-1));
-    int TypID=ui->comboBoxBeTypEin->itemData(Typ).toInt();
-    if (TypID==0)
-    {
-        ui->comboBoxBeGroEin->setEnabled(false);
-        ui->spinBoxBeNumEin->setEnabled(false);
-        return;
-    }
-    GroessenTabelle *Groessen=Daten->getGroessen(&TypID,1);
-    for (int i=0;i<Groessen->Anzahl;++i)
-    {
-        ui->comboBoxBeGroEin->addItem(Groessen->Namen[i],QVariant(Groessen->IDs[i]));
-    }
-    delete Groessen;
-    ui->comboBoxBeGroEin->addItem(QString::fromUtf8("Unbekante Größe"),QVariant(0));
-    std::cout<<Daten->freieNummer(TypID);
-    int An,End;
-    Daten->getNummerBereich(TypID,&An,&End);
-    ui->spinBoxBeNumEin->setMaximum(End);
-    ui->spinBoxBeNumEin->setMinimum(An);
-    ui->spinBoxBeNumEin->setValue(Daten->freieNummer(TypID));
-    ui->comboBoxBeGroEin->setEnabled(true);
-    ui->spinBoxBeNumEin->setEnabled(true);
 }
 
 void MainWindow::LineEditAusNummerChange(QString Nummer)
@@ -553,5 +455,5 @@ void MainWindow::Zurueckgeben()
     Daten->rueckgabeKleidungsstueck(id);
     KleiderAus->update();
     PerKleidungslistefuellen(ui->comboBox_eigenFilter->currentIndex());
-    KleidunginKammerAnzeigen(ui->comboBoxBekFilter->currentIndex());
+    KleidungTab->refrashTable();
 }

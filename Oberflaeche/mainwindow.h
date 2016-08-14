@@ -40,6 +40,7 @@
 #include "DatenQuellen/sqlitequelle.h"
 // Einbinden der TabWidgets
 #include "MainTabs/widgetberichttab.h"
+#include "MainTabs/widgeteinkleidentab.h"
 #include "MainTabs/widgetkleidungtab.h"
 
 #include "kleidersuche.h"
@@ -76,9 +77,9 @@ public:
 private:
     Ui::MainWindow *ui;
     WidgetBerichtTab *BerichtTab;
+    WidgetEinkeleidenTab *EinkeleidenTab;
     WidgetKleidungTab *KleidungTab;
 
-    ComboboxGroessenDelegate *ComboBox;
 
     SQLiteQuelle *Daten;
     KleiderSuche *KleiderInfoSuchen;
@@ -89,32 +90,23 @@ private:
     QString Ort;
     //! Modelle für das Anzeigen der Daten.
     QStandardItemModel Personen;
-    KleidungsTableview *PerKleider, *KleiderAus;
     //! Modelle Für die Sortierten Anzeigen.
-    QSortFilterProxyModel ProPersonen, ProPerKleider, ProKleiderAus;
+    QSortFilterProxyModel ProPersonen;
     int PersonenID;
     //! Die verschieden Actionen.
     QAction *ActionPersonLoeschen,*ActionPersonBearbeiten;
-    //! Funktion zum Aufbereiten der Ausleihen Maske.
-    void PersonAusleih(int ID);
     //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.
     void PersonenAnzeigen(int JFFilter, QString NamenFilter);
 
 private slots:
-    void AusGroessenFiltergeaendert(int Typ);
-    void Auslehenclicked();
-    void AusTypFiltergeaendert(int Typ);
     //! Slot der die Komboboxen füllt.
     void ComboboxFuellen();
     //! Slot, der nach dem Ändern der Combobox ComboboxPerJFFilter geändert wurde.
     void ComboboxPerJFFilterGewahlt(int Pos);
     //! Slot der Aufgerufen wird, wenn der LineEditSuchName geändert wurde
     void LineEditSuchNameChange(QString SuchFilter);
-    //! Slot der Aufgerufen wird, wenn der LineEdit_AusNum geändert wurde
-    void LineEditAusNummerChange(QString Nummer);
     //! Slot für das ContextMenü bei den Namen
     void NamenContextMenuEvent(const QPoint &Pos);
-    void PerKleidungslistefuellen(int FilterTyp);
     //! Slot Zum Bearbeiten einer Person.
     void PersonBearbeitenClicked();
     //! Slot der die Eingabemaske für Personen zurücksetzt.
@@ -133,7 +125,6 @@ private slots:
     void ZeigePersonKleider(int ID);
     //! Zeigt das Infofenster zu Qt
     void ZeigeQTInfo();
-    void Zurueckgeben();
 };
 
 #endif // MAINWINDOW_H

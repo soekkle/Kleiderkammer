@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014,2015 Sören Krecker
+ * Copyright (C) 2014-2016 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -35,25 +35,21 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QFileDialog>
-#ifndef NOPRINT
-#include <QPrintDialog>
-#endif
+
 #include "DatenQuellen/datenquelle.h"
 #include "DatenQuellen/sqlitequelle.h"
+// Einbinden der TabWidgets
+#include "MainTabs/widgetberichttab.h"
+#include "MainTabs/widgeteinkleidentab.h"
+#include "MainTabs/widgetkleidungtab.h"
+#include "MainTabs/widgetpersonentab.h"
+
 #include "kleidersuche.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
-#include "personbearbeitendialog.h"
-#include "bericht.h"
-#include "tableviews/kleidungstableview.h"
-#include "tableviews/itemsdelegate.h"
 #include "versioninfo.h"
 
-#include <QStandardItemModel>
-#include <QSortFilterProxyModel>
 #include <QTextStream>
-#include <QCheckBox>
 
 #if __WIN32__||_MSC_VER
 //#define WINVER 0x0602
@@ -76,87 +72,27 @@ public:
     
 private:
     Ui::MainWindow *ui;
+    WidgetBerichtTab *BerichtTab;
+    WidgetEinkleidenTab *EinkleidenTab;
+    WidgetKleidungTab *KleidungTab;
+    WidgetPersonenTab *PersonenTab;
 
-    ComboboxGroessenDelegate *ComboBox;
-    QVector<QCheckBox*> CheckBoxBeType;
-    Bericht *Drucken;
+
     SQLiteQuelle *Daten;
     KleiderSuche *KleiderInfoSuchen;
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
-    //* Pointer auf den BersonenBearbeiten Dialog
-    PersonBearbeitenDialog *PersonBeabeiten;
     QString Ort;
-    //! Modelle für das Anzeigen der Daten.
-    QStandardItemModel Personen;
-    KleidungsTableview *Kleidungstuecke, *PerKleider, *KleiderAus;
-    //! Modelle Für die Sortierten Anzeigen.
-    QSortFilterProxyModel ProPersonen, ProKleidungstuecke, ProPerKleider, ProKleiderAus;
-    int PersonenID;
-    //! Die verschieden Actionen.
-    QAction *ActionPersonLoeschen,*ActionPersonBearbeiten,*ActionKleicungLoeschen;
-    //! DIe Fuktion liefert die Ausgwählten Spalten für den Bericht
-    QVector<int> BerichtSpalten();
-    //! Funktion zum Aufbereiten der Ausleihen Maske.
-    void PersonAusleih(int ID);
-    //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.
-    void PersonenAnzeigen(int JFFilter, QString NamenFilter);
 
 private slots:
-    void AusGroessenFiltergeaendert(int Typ);
-    void Auslehenclicked();
-    void AusTypFiltergeaendert(int Typ);
-    //! Slot zum Anzagen des Beichtes
-    void BerichtAnzeigen();
-#ifndef NOPRINT
-    //! Slot zum Starten des Druckens
-    void BerichtDrucken();
-#endif
-    //! Slot zum Speichern des Berichtes als HTML-Datei.
-    void BerichtSpeichern();
     //! Slot der die Komboboxen füllt.
     void ComboboxFuellen();
-    //! Slot, der nach dem Ändern der Combobox ComboboxPerJFFilter geändert wurde.
-    void ComboboxPerJFFilterGewahlt(int Pos);
-    //! Slot der die Checkboxen im Bericht ausblendet.
-    void Groupchecked(bool checked);
-    //! Solt zum Anzeigen des Contextmenüs in der Kleidungs Tabelle
-    void KleidungContextMenuEvent(const QPoint Pos);
-    //! Slot zum Löschen eines Kleidungsstückes.
-    void KleidungLoeschen();
-    //! Slot zum Anpassen der Maske zum Anlegen neuer Kleidungstücke.
-    void Kleidungstypgewaehlt(int Typ);
-    //! Slot der für die Anzeige der Kleiderstücke zusändig ist.
-    void KleidunginKammerAnzeigen(int Filter);
-    void KleidungHinClicked();
-    void KleidungHinCancel();
-    //! Slot der Aufgerufen wird wenn der LineEditSuchName geändert wurde
-    void LineEditSuchNameChange(QString SuchFilter);
-    //! Slot für das ContextMenü bei den Namen
-    void NamenContextMenuEvent(const QPoint &Pos);
-    void PerKleidungslistefuellen(int FilterTyp);
-    //! Slot Zum Bearbeiten einer Person.
-    void PersonBearbeitenClicked();
-    //! Slot der die Eingabemaske für Personen zurücksetzt.
-    void PersonHinCancel();
-    //! Solt der die Eingegebene Person Speichert.
-    void PersonHinClicked();
-    //! Füllt den Tab Für einen Person.
-    void PersonAusgewaehlt(const QModelIndex &neu,const QModelIndex);
-    //! Wächselt die Ansuicht
-    void PersonListeDoubleClicked(const QModelIndex &Index);
-    //! Löscht die Ausgewälte Person.
-    void PersonLoeschen();
-    //! Aktivirt und deaktivirt die Combobox
-    void RadiobuttomCilcked();
     //! Zeigt das Infofenser zu diesem Programm
     void ZeigeInfo();
     //! Zeigt den einkleiden Tab zu einer Person
     void ZeigePersonKleider(int ID);
     //! Zeigt das Infofenster zu Qt
     void ZeigeQTInfo();
-    void Zurueckgeben();
-
 };
 
 #endif // MAINWINDOW_H

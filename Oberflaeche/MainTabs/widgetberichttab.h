@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Sören Krecker
+ * Copyright (C) 2016 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Kleiderkammer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Diese Datei ist Teil von kleiderkammer.
+ * Diese Datei ist Teil von Kleiderkammer.
  *
  * Kleiderkammer ist Freie Software: Sie können es unter den Bedingungen
  * der GNU Affero General Public License, wie von der Free Software Foundation,
@@ -31,44 +31,61 @@
  * <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KLEIDUNGSTABLEVIEW_H
-#define KLEIDUNGSTABLEVIEW_H
+#ifndef WIDGETBERICHTTAB_H
+#define WIDGETBERICHTTAB_H
 
-#include <QAbstractTableModel>
+#include <QFrame>
+#include <QCheckBox>
+#include <QFileDialog>
+#ifndef NOPRINT
+#include <QPrintDialog>
+#endif
+
 #include "DatenQuellen/datenquelle.h"
-#include <QDebug>
-/*!
- * \brief The KleidungsTableview class
- */
+#include "bericht.h"
 
-class KleidungsTableview : public QAbstractTableModel
+
+namespace Ui {
+class WidgetBerichtTab;
+}
+//! Diese Klasse stellt die Funktionen für den Tab Bericht bereit.
+/*!
+ * \brief Die Klasse WidgetBerichtTab stellt die Funktionen Des Tabs Bericht im Hauptfenster zur verfügung.
+ */
+class WidgetBerichtTab : public QFrame
 {
     Q_OBJECT
+
 public:
-    KleidungsTableview(DatenQuelle* Daten,int Modus,QObject *parent = 0);
-    int getKleidungsId(int row);
-    int rowCount(const QModelIndex &) const;
-    int columnCount(const QModelIndex &) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role=Qt::EditRole);
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    void setFilterTyp(int Typ);
-    void setFilterPerson(int Person);
-    void setFilterGroesse(int Groesse);
-    //! Setzt den Filter fur den Teil der Nummer der Entalten sein soll.
-    void setFilterNummer(QString Nummer);
-signals:
-    
+    explicit WidgetBerichtTab(DatenQuelle *Daten, QString Ort, QWidget *parent = 0);
+    ~WidgetBerichtTab();
+
 public slots:
-    void update();
+    void DatenGeaendert();
 
 private:
-    KleiderTabelle* Kleidung;
-    int FilterTyp, FilterGroesse, FilterPerson;
-    int Modus;
-    DatenQuelle* Daten;
-    QString FilterNummer;
+    Ui::WidgetBerichtTab *ui;
+    QVector<QCheckBox*> CheckBoxBeType;
+    Bericht *Drucken;
+    DatenQuelle *Daten;
+    QString Ort;
+
+    //! Die Fuktion liefert die Ausgwählten Spalten für den Bericht
+    QVector<int> BerichtSpalten();
+
+private slots:
+    //! Slot zum Anzagen des Beichtes
+    void BerichtAnzeigen();
+#ifndef NOPRINT
+    //! Slot zum Starten des Druckens
+    void BerichtDrucken();
+#endif
+    //! Slot zum Speichern des Berichtes als HTML-Datei.
+    void BerichtSpeichern();
+    //! Slot der die Checkboxen im Bericht ausblendet.
+    void Groupchecked(bool checked);
+    //! Aktivirt und deaktivirt die Combobox
+    void RadiobuttomCilcked();
 };
 
-#endif // KLEIDUNGSTABLEVIEW_H
+#endif // WIDGETBERICHTTAB_H

@@ -22,7 +22,11 @@ SOURCES += main.cpp\
     tableviews/kleidungsgroessentableview.cpp \
     Oberflaeche/kleidersuche.cpp \
     tableviews/itemsdelegate.cpp \
-    Oberflaeche/personbearbeitendialog.cpp
+    Oberflaeche/personbearbeitendialog.cpp \
+    Oberflaeche/MainTabs/widgetberichttab.cpp \
+    Oberflaeche/MainTabs/widgetkleidungtab.cpp \
+    Oberflaeche/MainTabs/widgeteinkleidentab.cpp \
+    Oberflaeche/MainTabs/widgetpersonentab.cpp
 
 HEADERS  += Oberflaeche/mainwindow.h \
     DatenQuellen/datenquelle.h \
@@ -35,13 +39,21 @@ HEADERS  += Oberflaeche/mainwindow.h \
     Oberflaeche/kleidersuche.h \
     versioninfo.h \
     tableviews/itemsdelegate.h \
-    Oberflaeche/personbearbeitendialog.h
+    Oberflaeche/personbearbeitendialog.h \
+    Oberflaeche/MainTabs/widgetberichttab.h \
+    Oberflaeche/MainTabs/widgetkleidungtab.h \
+    Oberflaeche/MainTabs/widgeteinkleidentab.h \
+    Oberflaeche/MainTabs/widgetpersonentab.h
 
 FORMS    += Oberflaeche/mainwindow.ui \
     Oberflaeche/kleidungstypenverwaltung.ui \
     Oberflaeche/gruppenverwaltung.ui \
     Oberflaeche/kleidersuche.ui \
-    Oberflaeche/personbearbeitendialog.ui
+    Oberflaeche/personbearbeitendialog.ui \
+    Oberflaeche/MainTabs/widgetberichttab.ui \
+    Oberflaeche/MainTabs/widgetkleidungtab.ui \
+    Oberflaeche/MainTabs/widgeteinkleidentab.ui \
+    Oberflaeche/MainTabs/widgetpersonentab.ui
 # Setzen der VersionsInfos
 VERSION= 0.3.0
 

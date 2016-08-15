@@ -224,7 +224,7 @@ public:
      * \param Groesse Größe nach der Gefilter wird.
      * \return Pointer auf die Liste mit den Kleidungsstücken.
      */
-    virtual KleiderTabelle *getKleiderinKammer(int Typ,int Groesse)=0;
+    virtual KleiderTabelle *getKleiderinKammer(int Typ, int Groesse, QString Nummer=QString())=0;
     //! Liefert Informationen zu dem Kleidungsstück mit der ID.
     /*!
      * \brief getKleidungsInfoByID liefert einige Informationen zu dem Kleidungsstück mit der übergebenen ID

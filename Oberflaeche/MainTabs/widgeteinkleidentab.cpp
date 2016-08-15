@@ -46,6 +46,11 @@ void WidgetEinkleidenTab::AusGroessenFiltergeaendert(int Groesse)
 
 void WidgetEinkleidenTab::Auslehenclicked()
 {
+    if (!ui->table_Kleileihen->selectionModel()->hasSelection())
+    {
+        QMessageBox::information(this,"Information",QString::fromUtf8("Sie müssen ein Kleidungsteil Auswählen"));
+        return;
+    }
     QModelIndex Index=ProKleiderAus.mapToSource(ProKleiderAus.index(ui->table_Kleileihen->currentIndex().row(),0));
     int id=KleiderAus->getKleidungsId(Index.row());
     if (id==0)
@@ -140,6 +145,11 @@ void WidgetEinkleidenTab::showPerson(int ID)
 
 void WidgetEinkleidenTab::Zurueckgeben()
 {
+    if (!ui->tableView_KleiPerson->selectionModel()->hasSelection())
+    {
+        QMessageBox::information(this,"Information",QString::fromUtf8("Sie müssen ein Kleidungsteil Auswählen"));
+        return;
+    }
     QModelIndex Index=ProPerKleider.mapToSource(ProPerKleider.index(ui->tableView_KleiPerson->currentIndex().row(),0));
     int id=PerKleider->getKleidungsId(Index.row());
     if (id==0)

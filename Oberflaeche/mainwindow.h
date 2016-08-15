@@ -42,17 +42,13 @@
 #include "MainTabs/widgetberichttab.h"
 #include "MainTabs/widgeteinkleidentab.h"
 #include "MainTabs/widgetkleidungtab.h"
+#include "MainTabs/widgetpersonentab.h"
 
 #include "kleidersuche.h"
 #include "kleidungstypenverwaltung.h"
 #include "gruppenverwaltung.h"
-#include "personbearbeitendialog.h"
-#include "tableviews/kleidungstableview.h"
-#include "tableviews/itemsdelegate.h"
 #include "versioninfo.h"
 
-#include <QStandardItemModel>
-#include <QSortFilterProxyModel>
 #include <QTextStream>
 
 #if __WIN32__||_MSC_VER
@@ -77,48 +73,20 @@ public:
 private:
     Ui::MainWindow *ui;
     WidgetBerichtTab *BerichtTab;
-    WidgetEinkeleidenTab *EinkeleidenTab;
+    WidgetEinkleidenTab *EinkleidenTab;
     WidgetKleidungTab *KleidungTab;
+    WidgetPersonenTab *PersonenTab;
 
 
     SQLiteQuelle *Daten;
     KleiderSuche *KleiderInfoSuchen;
     KleidungsTypenVerwaltung *Typen;
     Gruppenverwaltung *Gruppen;
-    //* Pointer auf den BersonenBearbeiten Dialog
-    PersonBearbeitenDialog *PersonBeabeiten;
     QString Ort;
-    //! Modelle für das Anzeigen der Daten.
-    QStandardItemModel Personen;
-    //! Modelle Für die Sortierten Anzeigen.
-    QSortFilterProxyModel ProPersonen;
-    int PersonenID;
-    //! Die verschieden Actionen.
-    QAction *ActionPersonLoeschen,*ActionPersonBearbeiten;
-    //! Funktion für die Anzeige der Personen mit den Übergebenen Parametern.
-    void PersonenAnzeigen(int JFFilter, QString NamenFilter);
 
 private slots:
     //! Slot der die Komboboxen füllt.
     void ComboboxFuellen();
-    //! Slot, der nach dem Ändern der Combobox ComboboxPerJFFilter geändert wurde.
-    void ComboboxPerJFFilterGewahlt(int Pos);
-    //! Slot der Aufgerufen wird, wenn der LineEditSuchName geändert wurde
-    void LineEditSuchNameChange(QString SuchFilter);
-    //! Slot für das ContextMenü bei den Namen
-    void NamenContextMenuEvent(const QPoint &Pos);
-    //! Slot Zum Bearbeiten einer Person.
-    void PersonBearbeitenClicked();
-    //! Slot der die Eingabemaske für Personen zurücksetzt.
-    void PersonHinCancel();
-    //! Solt der die Eingegebene Person Speichert.
-    void PersonHinClicked();
-    //! Füllt den Tab Für einen Person.
-    void PersonAusgewaehlt(const QModelIndex &neu,const QModelIndex);
-    //! Wächselt die Ansuicht
-    void PersonListeDoubleClicked(const QModelIndex &Index);
-    //! Löscht die Ausgewälte Person.
-    void PersonLoeschen();
     //! Zeigt das Infofenser zu diesem Programm
     void ZeigeInfo();
     //! Zeigt den einkleiden Tab zu einer Person

@@ -1,9 +1,9 @@
 #include "widgeteinkleidentab.h"
 #include "ui_widgeteinkleidentab.h"
 
-WidgetEinkeleidenTab::WidgetEinkeleidenTab(DatenQuelle *Daten,QWidget *parent) :
+WidgetEinkleidenTab::WidgetEinkleidenTab(DatenQuelle *Daten,QWidget *parent) :
     QFrame(parent),
-    ui(new Ui::WidgetEinkeleidenTab)
+    ui(new Ui::WidgetEinkleidenTab)
 {
     ui->setupUi(this);
     this->Daten=Daten;
@@ -29,7 +29,7 @@ WidgetEinkeleidenTab::WidgetEinkeleidenTab(DatenQuelle *Daten,QWidget *parent) :
 
 }
 
-WidgetEinkeleidenTab::~WidgetEinkeleidenTab()
+WidgetEinkleidenTab::~WidgetEinkleidenTab()
 {
     delete ComboBox;
     delete ui;
@@ -37,14 +37,14 @@ WidgetEinkeleidenTab::~WidgetEinkeleidenTab()
     delete PerKleider;
 }
 
-void WidgetEinkeleidenTab::AusGroessenFiltergeaendert(int Groesse)
+void WidgetEinkleidenTab::AusGroessenFiltergeaendert(int Groesse)
 {
     int GroFilter;
     GroFilter=ui->comboBox_AusGroFilter->itemData(Groesse).toInt();
     KleiderAus->setFilterGroesse(GroFilter);
 }
 
-void WidgetEinkeleidenTab::Auslehenclicked()
+void WidgetEinkleidenTab::Auslehenclicked()
 {
     QModelIndex Index=ProKleiderAus.mapToSource(ProKleiderAus.index(ui->table_Kleileihen->currentIndex().row(),0));
     int id=KleiderAus->getKleidungsId(Index.row());
@@ -71,7 +71,7 @@ void WidgetEinkeleidenTab::Auslehenclicked()
     PerKleidungslistefuellen(ui->comboBox_eigenFilter->currentIndex());
 }
 
-void WidgetEinkeleidenTab::AusTypFiltergeaendert(int Typ)
+void WidgetEinkleidenTab::AusTypFiltergeaendert(int Typ)
 {
     ui->comboBox_AusGroFilter->clear();
     ui->lineEdit_AusNum->clear();
@@ -93,7 +93,7 @@ void WidgetEinkeleidenTab::AusTypFiltergeaendert(int Typ)
     ui->comboBox_AusGroFilter->setEnabled(true);
 }
 
-void WidgetEinkeleidenTab::DatenGeaendert()
+void WidgetEinkleidenTab::DatenGeaendert()
 {
     ui->comboBox_AusGroFilter->clear();
     ui->comboBox_eigenFilter->clear();
@@ -112,18 +112,18 @@ void WidgetEinkeleidenTab::DatenGeaendert()
     delete KleiTyp;
 }
 
-void WidgetEinkeleidenTab::LineEditAusNummerChange(QString Nummer)
+void WidgetEinkleidenTab::LineEditAusNummerChange(QString Nummer)
 {
     KleiderAus->setFilterNummer(Nummer);
 }
 
-void WidgetEinkeleidenTab::PerKleidungslistefuellen(int FilterTyp)
+void WidgetEinkleidenTab::PerKleidungslistefuellen(int FilterTyp)
 {
     int Filter=ui->comboBox_eigenFilter->itemData(FilterTyp).toInt();
     PerKleider->setFilterTyp(Filter);
 }
 
-void WidgetEinkeleidenTab::showPerson(int ID)
+void WidgetEinkleidenTab::showPerson(int ID)
 {
     QString VName,NName,Gruppe,Text="<html><head/><body><p><span style=\" font-size:11pt; font-weight:600;\">%1 %2 - %3</span></p></body></html>";
     int GID;
@@ -138,7 +138,7 @@ void WidgetEinkeleidenTab::showPerson(int ID)
     }
 }
 
-void WidgetEinkeleidenTab::Zurueckgeben()
+void WidgetEinkleidenTab::Zurueckgeben()
 {
     QModelIndex Index=ProPerKleider.mapToSource(ProPerKleider.index(ui->tableView_KleiPerson->currentIndex().row(),0));
     int id=PerKleider->getKleidungsId(Index.row());

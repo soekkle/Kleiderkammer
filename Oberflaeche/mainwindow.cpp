@@ -39,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    PersonenID=0;
 //#if __linux__||__unix__
     Ort=QDir::homePath();//Setzt den Pfard der Anwendung unter Linux
     Ort=Ort.append("/.config");
@@ -77,22 +76,21 @@ MainWindow::MainWindow(QWidget *parent) :
     Typen=new KleidungsTypenVerwaltung(Daten,this);//Erzeugt die Modelle zur Anzeige der Daten.
     Gruppen=new Gruppenverwaltung(Daten,this);
     KleiderInfoSuchen=new KleiderSuche(Daten,this);
-    PersonBeabeiten=new PersonBearbeitenDialog(Daten,this);
 
     // Einsetzen der ausgelagreten Tabs
+    PersonenTab=new WidgetPersonenTab(Daten,0);
+    ui->tabWidget->addTab(PersonenTab,"Jugendliche");
+
     KleidungTab=new WidgetKleidungTab(Daten,0);
     ui->tabWidget->addTab(KleidungTab,QString::fromUtf8("Kleidungsstücke"));
 
-    EinkeleidenTab=new WidgetEinkeleidenTab(Daten,0);
-    EinkeleidenTab->setEnabled(false);
-    ui->tabWidget->addTab(EinkeleidenTab,"Einkleiden");
+    EinkleidenTab=new WidgetEinkleidenTab(Daten,0);
+    EinkleidenTab->setEnabled(false);
+    ui->tabWidget->addTab(EinkleidenTab,"Einkleiden");
 
     BerichtTab=new WidgetBerichtTab(Daten,Ort,0);
     ui->tabWidget->addTab(BerichtTab,"Bericht");
 
-
-    ProPersonen.setSourceModel(&Personen);
-    ui->tablePersonen->setModel(&ProPersonen);
     ComboboxFuellen();//Inizalisiert alle Comboboxen.
 
     //Stellt alle Eventverbindungen her.
@@ -101,27 +99,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionGruppen_Verwalten,SIGNAL(triggered()),Gruppen,SLOT(exec()));
     connect(Gruppen,SIGNAL(datenGeaendert()),this,SLOT(ComboboxFuellen()));
     connect(KleiderInfoSuchen,SIGNAL(PersonGewaehlt(int)),this,SLOT(ZeigePersonKleider(int)));
-    connect(ui->comboBoxPerJFFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(ComboboxPerJFFilterGewahlt(int)));
-    connect(ui->lineEditSuchName,SIGNAL(textChanged(QString)),this,SLOT(LineEditSuchNameChange(QString)));
-    connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(PersonHinClicked()));
-    connect(ui->buttonBox,SIGNAL(rejected()),this,SLOT(PersonHinCancel()));
-    connect(ui->tablePersonen->selectionModel(),SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),this,SLOT(PersonAusgewaehlt(QModelIndex,QModelIndex)));
+    connect(PersonenTab,SIGNAL(showPerson(int)),this,SLOT(ZeigePersonKleider(int)));
     // Verbinden der Mainmenü einträgen
     connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->actionKleidungsst_ck,SIGNAL(triggered()),KleiderInfoSuchen,SLOT(exec()));
     connect(ui->action_ber,SIGNAL(triggered()),this,SLOT(ZeigeInfo()));
     connect(ui->action_ber_QT,SIGNAL(triggered()),this,SLOT(ZeigeQTInfo()));
-    //Verboinden der ContextMenüs
-    connect(ui->tablePersonen,SIGNAL(customContextMenuRequested(const QPoint)),this,SLOT(NamenContextMenuEvent(QPoint)));
-
-    connect(ui->tablePersonen,SIGNAL(doubleClicked(const QModelIndex &)),this,SLOT(PersonListeDoubleClicked(const QModelIndex &)));
-    //Anlegen der Actionen
-    ActionPersonBearbeiten=new QAction(QString::fromUtf8("Bearbeiten"),this);
-    connect(ActionPersonBearbeiten,SIGNAL(triggered()),this,SLOT(PersonBearbeitenClicked()));
-    ActionPersonLoeschen= new QAction(QString::fromUtf8("Löschen"),this);
-    connect(ActionPersonLoeschen,SIGNAL(triggered()),this,SLOT(PersonLoeschen()));
-
-    connect(EinkeleidenTab,SIGNAL(KleidungVerschoben()),KleidungTab,SLOT(refrashTable()));
+    // Verbinden der Tabs untereinander
+    connect(EinkleidenTab,SIGNAL(KleidungVerschoben()),KleidungTab,SLOT(refrashTable()));
+    connect(PersonenTab,SIGNAL(PersonGewaehlt(int)),EinkleidenTab,SLOT(showPerson(int)));
 #ifdef NOPRINT
     ui->pushButton_BeDr->close();
 #endif
@@ -129,12 +115,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ActionPersonLoeschen;
     delete ui;
     delete Daten;
-    delete PersonBeabeiten;
     delete BerichtTab;
-    delete EinkeleidenTab;
+    delete EinkleidenTab;
     QString DBAktuell,DBBack;
     DBAktuell=Ort;
     DBAktuell.append("Daten.sqlite");
@@ -159,167 +143,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::ComboboxFuellen()
 {
-    /* Fült zwei Comboboxen mit den Namen der Eingetragenen Gruppen.
-       und Speicher die id aus der Datenqelle dazu.*/
-    JugendFeuerwehrTabelle *JfDaten=Daten->getJugendfeuerwehr();
-    ui->comboBoxPerJFFilter->clear();
-    ui->comboBoxPerJFFilter->addItem("Alle",QVariant(0));
-    ui->comboPerJFEin->clear();
-    for (int i=0;i<JfDaten->Anzahl;++i)
-    {
-        ui->comboBoxPerJFFilter->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
-        ui->comboPerJFEin->addItem(JfDaten->Name[i],QVariant(JfDaten->ID[i]));
-    }
-    PersonenAnzeigen(0,"");
-    delete JfDaten;
     BerichtTab->DatenGeaendert();
-    EinkeleidenTab->DatenGeaendert();
+    EinkleidenTab->DatenGeaendert();
     KleidungTab->DatenGeaendert();
+    PersonenTab->DatenGeaendert();
 }
-
-
-void MainWindow::ComboboxPerJFFilterGewahlt(int Pos)
-{
-    PersonenAnzeigen(Pos,ui->lineEditSuchName->text());
-}
-
-void MainWindow::LineEditSuchNameChange(QString SuchFilter)
-{
-    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),SuchFilter);
-}
-
-/*!
- * \brief MainWindow::NamenContextMenuEvent Zeigt das Kontentmenü für die Personenliste an. Es bietet die Möglichkeit zum Löschen einer Person.
- * \param Pos Position an der dan Menü erscheinen soll.
- */
-void MainWindow::NamenContextMenuEvent(const QPoint &Pos)
-{
-    QMenu menu(this);
-    menu.addAction(ActionPersonBearbeiten);
-    menu.addAction(ActionPersonLoeschen);
-    menu.exec(ui->tablePersonen->viewport()->mapToGlobal(Pos));
-}
-
-
-/*!
- * \brief MainWindow::PersonenAnzeigen füllt die Listview mit Daten der Pesonen
- * \param JFFilter Ausgewählte Zeile der Combobox
- * \param NamenFilter Eingegebener Suchbegriff
- */
-void MainWindow::PersonenAnzeigen(int JFFilter,QString NamenFilter)
-{
-    Personen.clear();
-    QStringList Zeile;
-    Zeile.append("ID");
-    Zeile.append("Vorname");
-    Zeile.append("Nachname");
-    Zeile.append("Jugendfeuerwehr");
-    Personen.setHorizontalHeaderLabels(Zeile);
-    int FilterNr=0,FilterAns=0;
-    if (JFFilter>0)
-    {
-        FilterAns=1;
-        FilterNr=ui->comboBoxPerJFFilter->itemData(JFFilter).toInt();
-        std::cout<<FilterNr<<std::endl;
-    }
-    PersonenTabelle *PerDaten=NULL;
-    if (NamenFilter.isEmpty())
-        PerDaten=Daten->getPersonen(&FilterNr,FilterAns);
-    else
-        PerDaten=Daten->getPersonen(&FilterNr,FilterAns,NamenFilter);
-    for (int i=0;i<PerDaten->Anzahl;++i)
-    {
-        QList<QStandardItem*> Zeile;
-        Zeile.append(new QStandardItem(QString::number(PerDaten->ID[i])));
-        Zeile.append(new QStandardItem(PerDaten->Vorname[i]));
-        Zeile.append(new QStandardItem(PerDaten->Nachname[i]));
-        Zeile.append(new QStandardItem(PerDaten->JugendFeuerwehr[i]));
-        Personen.appendRow(Zeile);
-    }
-    delete PerDaten;
-}
-
-void MainWindow::PersonAusgewaehlt(const QModelIndex &neu, const QModelIndex )
-{
-
-    QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(neu.row(),0));
-    int row=Index.row();
-    int ID=Personen.data(Personen.index(row,0)).toInt();
-    EinkeleidenTab->showPerson(ID);
-    return;
-}
-
-void MainWindow::PersonHinClicked()
-{
-    QString Vorname= ui->linePerVor->text();
-    QString Nachname=ui->lineEditPerNach->text();
-    int JF=ui->comboPerJFEin->itemData(ui->comboPerJFEin->currentIndex()).toInt();
-    if (Vorname.isEmpty())
-    {
-        QMessageBox::warning(this,"Vorname Fehlet!",QString::fromUtf8("Bitte Geben sie den Vornamen der Person ein, die hinzugefügt werden soll"));
-        return;
-    }
-    if (Nachname.isEmpty())
-    {
-        QMessageBox::warning(this,"Nachname Fehlet!",QString::fromUtf8("Bitte Geben sie den Nachnamen der Person ein, die hinzugefügt werden soll"));
-        return;
-    }
-    Daten->addPerson(Nachname,Vorname,JF);
-    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
-    PersonHinCancel();
-}
-
-/*!
- * \brief MainWindow::PersonBearbeitenClicked öffent ein Personbearbeiten Fester für die Ausgewälte Person
- */
-void MainWindow::PersonBearbeitenClicked()
-{
-    QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(ui->tablePersonen->currentIndex().row(),0));
-    int ID=Personen.data(Index).toInt();
-    PersonBeabeiten->bearbeiten(ID);
-    PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
-}
-
-void MainWindow::PersonHinCancel()
-{
-    ui->lineEditPerNach->clear();
-    ui->linePerVor->clear();
-}
-
-/*!
- * \brief De Slot MainWindow::PersonListeDoubleClicked Wächselt die aktive Ansicht des Fenstes.
- * \param Index
- */
-void MainWindow::PersonListeDoubleClicked(const QModelIndex &)
-{
-    ui->tabWidget->setCurrentIndex(2);
-}
-
-/*!
- * \brief MainWindow::PersonLoeschen Für den Löschvorgang der markierten Person aus. Und Prüft, ob sie noch Kleidungsstücke ausgelienen hat.
- */
-void MainWindow::PersonLoeschen()
-{
-    //Holen des Orginal Indexes.
-    QModelIndex Index=ProPersonen.mapToSource(ProPersonen.index(ui->tablePersonen->currentIndex().row(),0));
-    int id=Personen.data(Index).toInt();
-    KleiderTabelle *Kleider=Daten->getKleidervonPerson(id,0);
-    if (Kleider->Anzahl==0)
-    {
-        if (QMessageBox::information(this,QString::fromUtf8("Person löschen"),QString::fromUtf8("Sind Sie sicher, dass sie ausgewälte die Person löschen wollen?"),
-                                      QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
-        Daten->removePerson(id);
-        PersonenAnzeigen(ui->comboBoxPerJFFilter->currentIndex(),ui->lineEditSuchName->text());
-    }
-    else
-    {
-        QMessageBox::warning(this,QString::fromUtf8("Die Person hat noch Kleidungsstücke."),QString::fromUtf8("Die Person kann nicht gelöscht werden, da sie noch Kleidungsstücke ausgeliehen hat."),QMessageBox::Ok);
-    }
-    delete Kleider;
-}
-
-
-
 
 void MainWindow::ZeigeInfo()
 {
@@ -332,7 +160,7 @@ void MainWindow::ZeigeInfo()
 void MainWindow::ZeigePersonKleider(int ID)
 {
     ui->tabWidget->setCurrentIndex(2);
-    EinkeleidenTab->showPerson(ID);
+    EinkleidenTab->showPerson(ID);
 }
 
 void MainWindow::ZeigeQTInfo()

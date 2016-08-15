@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     Oberflaeche/personbearbeitendialog.cpp \
     Oberflaeche/MainTabs/widgetberichttab.cpp \
     Oberflaeche/MainTabs/widgetkleidungtab.cpp \
-    Oberflaeche/MainTabs/widgeteinkleidentab.cpp
+    Oberflaeche/MainTabs/widgeteinkleidentab.cpp \
+    Oberflaeche/MainTabs/widgetpersonentab.cpp
 
 HEADERS  += Oberflaeche/mainwindow.h \
     DatenQuellen/datenquelle.h \
@@ -41,7 +42,8 @@ HEADERS  += Oberflaeche/mainwindow.h \
     Oberflaeche/personbearbeitendialog.h \
     Oberflaeche/MainTabs/widgetberichttab.h \
     Oberflaeche/MainTabs/widgetkleidungtab.h \
-    Oberflaeche/MainTabs/widgeteinkleidentab.h
+    Oberflaeche/MainTabs/widgeteinkleidentab.h \
+    Oberflaeche/MainTabs/widgetpersonentab.h
 
 FORMS    += Oberflaeche/mainwindow.ui \
     Oberflaeche/kleidungstypenverwaltung.ui \
@@ -50,7 +52,8 @@ FORMS    += Oberflaeche/mainwindow.ui \
     Oberflaeche/personbearbeitendialog.ui \
     Oberflaeche/MainTabs/widgetberichttab.ui \
     Oberflaeche/MainTabs/widgetkleidungtab.ui \
-    Oberflaeche/MainTabs/widgeteinkleidentab.ui
+    Oberflaeche/MainTabs/widgeteinkleidentab.ui \
+    Oberflaeche/MainTabs/widgetpersonentab.ui
 # Setzen der VersionsInfos
 VERSION= 0.3.0
 

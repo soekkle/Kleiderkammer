@@ -1,5 +1,5 @@
-#ifndef WIDGETEINKELEIDENTAB_H
-#define WIDGETEINKELEIDENTAB_H
+#ifndef WIDGETEINKLEIDENTAB_H
+#define WIDGETEINKLEIDENTAB_H
 
 #include <QFrame>
 #include <QMessageBox>
@@ -10,24 +10,24 @@
 #include "tableviews/itemsdelegate.h"
 
 namespace Ui {
-class WidgetEinkeleidenTab;
+class WidgetEinkleidenTab;
 }
 
-class WidgetEinkeleidenTab : public QFrame
+class WidgetEinkleidenTab : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit WidgetEinkeleidenTab(DatenQuelle *Daten, QWidget *parent = 0);
-    ~WidgetEinkeleidenTab();
+    explicit WidgetEinkleidenTab(DatenQuelle *Daten, QWidget *parent = 0);
+    ~WidgetEinkleidenTab();
     //! Funktion zum Aufbereiten der Ausleihen Maske.
-    void showPerson(int ID);
 public slots:
     void DatenGeaendert();
+    void showPerson(int ID);
 signals:
     void KleidungVerschoben();
 private:
-    Ui::WidgetEinkeleidenTab *ui;
+    Ui::WidgetEinkleidenTab *ui;
     DatenQuelle *Daten;
     ComboboxGroessenDelegate *ComboBox;
 
@@ -45,4 +45,4 @@ private slots:
     void Zurueckgeben();
 };
 
-#endif // WIDGETEINKELEIDENTAB_H
+#endif // WIDGETEINKLEIDENTAB_H

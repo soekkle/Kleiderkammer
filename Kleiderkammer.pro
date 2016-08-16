@@ -61,3 +61,7 @@ VERSION= 0.3.0
 equals(QT_MAJOR_VERSION,5):{
     DEFINES +=NOPRINT
 }
+
+RESOURCES += \
+    Kleiderkammer.qrc
+

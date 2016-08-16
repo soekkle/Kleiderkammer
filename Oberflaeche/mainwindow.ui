@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>Kleiderkammer</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../Kleiderkammer.qrc">
+    <normaloff>:/icon.svg</normaloff>:/icon.svg</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
@@ -39,7 +43,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>18</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -78,6 +82,9 @@
    <property name="text">
     <string>Beenden</string>
    </property>
+   <property name="toolTip">
+    <string>Beendet das Programm</string>
+   </property>
   </action>
   <action name="actionKleidungstypen_verwalten">
    <property name="text">
@@ -106,6 +113,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../Kleiderkammer.qrc"/>
+ </resources>
  <connections/>
 </ui>

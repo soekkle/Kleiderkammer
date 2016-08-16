@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xml:lang="de">
+	<title>Kleiderkammer Icon</title>
+	<defs>
+		<linearGradient id="grad1" x1="50%" y1="0%" x2="50%" y2="100%">
+			<stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />
+			<stop offset="100%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
+		</linearGradient>
+	</defs>
+	<circle fill="url(#grad1)" cx="70" cy="70" r="70" fill-opacity="0.75"/>
+	<g transform="translate(10,0)">
+		<path fill="blue" stroke="black" d=" M 28,20 L 28,120 L 93,120 L 93,20 L 80,20 C 72,20  68,30 60,30 S 48,20 40,20 Z"/>
+		<polygon fill="orange" stroke="black" points="28,20 3,50,18,53 28,40" />
+		<polygon fill="orange" stroke="black" points="28,40 28,20 3,50 18,53 " transform="matrix(-1,0,0,1,121,0)"/>
+		<line x1="60" y1="30" x2="60" y2="120" stroke="black"/>
+	</g>
+</svg>

@@ -108,9 +108,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // Verbinden der Tabs untereinander
     connect(EinkleidenTab,SIGNAL(KleidungVerschoben()),KleidungTab,SLOT(refrashTable()));
     connect(PersonenTab,SIGNAL(PersonGewaehlt(int)),EinkleidenTab,SLOT(showPerson(int)));
-#ifdef NOPRINT
-    ui->pushButton_BeDr->close();
-#endif
 }
 
 MainWindow::~MainWindow()

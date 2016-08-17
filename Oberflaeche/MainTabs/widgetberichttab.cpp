@@ -53,6 +53,9 @@ WidgetBerichtTab::WidgetBerichtTab(DatenQuelle *Daten,QString Ort, QWidget *pare
     connect(ui->radioButton,SIGNAL(clicked()),this,SLOT(RadiobuttomCilcked()));
     connect(ui->radioButton_2,SIGNAL(clicked()),this,SLOT(RadiobuttomCilcked()));
     connect(ui->groupBox_BeTyp,SIGNAL(clicked(bool)),this,SLOT(Groupchecked(bool)));
+#ifdef NOPRINT
+    ui->pushButton_BeDr->close();
+#endif
 }
 
 WidgetBerichtTab::~WidgetBerichtTab()

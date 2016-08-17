@@ -64,4 +64,9 @@ equals(QT_MAJOR_VERSION,5):{
 
 RESOURCES += \
     Kleiderkammer.qrc
+win32 {
+    RC_FILE = Kleiderkammer.rc
+}
 
+DISTFILES += \
+    Kleiderkammer.rc

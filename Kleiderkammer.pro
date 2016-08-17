@@ -55,7 +55,7 @@ FORMS    += Oberflaeche/mainwindow.ui \
     Oberflaeche/MainTabs/widgeteinkleidentab.ui \
     Oberflaeche/MainTabs/widgetpersonentab.ui
 # Setzen der VersionsInfos
-VERSION= 0.3.0
+VERSION= 0.4.0
 
 # Da unter Qt 5 Probleme mit dem Drucken von WebWidgeds auftreten wird es hier deaktivirt
 equals(QT_MAJOR_VERSION,5):{

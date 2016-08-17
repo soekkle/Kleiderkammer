@@ -37,10 +37,10 @@
 
 // definiren der Versionsnummer
 #define VER_NUMBER_MAJOR    0
-#define VER_NUMBER_MINOR    3
+#define VER_NUMBER_MINOR    4
 #define VER_NUMBER_PATCH    0
 // Zusammengesetzte Versionsnummer
-#define VER_NUMBER_STRING "0.3.0"
+#define VER_NUMBER_STRING "0.4.0"
 
 
 #endif // VERSIONINFO_H

@@ -16,9 +16,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="EditVName"/>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
@@ -33,18 +30,21 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Gruppe</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QComboBox" name="comboBox"/>
      </item>
-     <item row="1" column="1">
+     <item row="0" column="1">
       <widget class="QLineEdit" name="EditNName"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="EditVName"/>
      </item>
     </layout>
    </item>
@@ -61,8 +61,6 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>EditVName</tabstop>
-  <tabstop>EditNName</tabstop>
   <tabstop>comboBox</tabstop>
  </tabstops>
  <resources/>

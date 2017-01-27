@@ -50,7 +50,7 @@
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="text">
-         <string>Göße:</string>
+         <string>Größe:</string>
         </property>
        </widget>
       </item>

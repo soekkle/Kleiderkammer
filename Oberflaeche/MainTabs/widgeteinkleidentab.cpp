@@ -27,6 +27,17 @@ WidgetEinkleidenTab::WidgetEinkleidenTab(DatenQuelle *Daten,QWidget *parent) :
     connect(ui->comboBox_eigenFilter,SIGNAL(currentIndexChanged(int)),this,SLOT(PerKleidungslistefuellen(int)));
     connect(ui->pushButton_zuruck,SIGNAL(clicked()),this,SLOT(Zurueckgeben()));
 
+    connect(ui->tableView_KleiPerson,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(TablePerKleiderContextMenuEvent(QPoint)));
+    connect(ui->table_Kleileihen,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(TableKammerKJleiderContextMenuEvent(QPoint)));
+
+    ActKleiderAus=new QAction(QString::fromUtf8("Ausleihen"),this);
+    connect(ActKleiderAus,SIGNAL(triggered()),this,SLOT(Auslehenclicked()));
+    ActKleiderRuck=new QAction(QString::fromUtf8("Zurückgeben"),this);
+    connect(ActKleiderRuck,SIGNAL(triggered()),this,SLOT(Zurueckgeben()));
+    ActLoeschenKleidungKammer=new QAction(QString::fromUtf8("Löschen"),this);
+    connect(ActLoeschenKleidungKammer,SIGNAL(triggered()),this,SLOT(loeschenKleidungKammer()));
+    ActLoeschenKleidungPerson=new QAction(QString::fromUtf8("Löschen"),this);
+    connect(ActLoeschenKleidungPerson,SIGNAL(triggered()),this,SLOT(loeschenKleidungPerson()));
 }
 
 WidgetEinkleidenTab::~WidgetEinkleidenTab()
@@ -115,6 +126,45 @@ void WidgetEinkleidenTab::DatenGeaendert()
         ui->comboBox_eigenFilter->addItem(KleiTyp->Name[i],QVariant(KleiTyp->ID[i]));
     }
     delete KleiTyp;
+}
+
+void WidgetEinkleidenTab::loeschenKleidungKammer()
+{
+    QModelIndex Index=ProKleiderAus.mapToSource(ProKleiderAus.index(ui->table_Kleileihen->currentIndex().row(),0));
+    int id=KleiderAus->getKleidungsId(Index.row());
+    if (id==0)
+        return;
+    Daten->removeKleidungsstueck(id);
+    KleiderAus->setFilterTyp(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt());
+    KleiderAus->setFilterGroesse(ui->comboBox_AusGroFilter->itemData(ui->comboBox_AusGroFilter->currentIndex()).toInt());
+    PerKleidungslistefuellen(ui->comboBox_eigenFilter->currentIndex());
+}
+
+void WidgetEinkleidenTab::loeschenKleidungPerson()
+{
+    QModelIndex Index=ProPerKleider.mapToSource(ProPerKleider.index(ui->tableView_KleiPerson->currentIndex().row(),0));
+    int id=PerKleider->getKleidungsId(Index.row());
+    if (id==0)
+        return;
+    Daten->removeKleidungsstueck(id);
+    KleiderAus->update();
+    PerKleidungslistefuellen(ui->comboBox_eigenFilter->currentIndex());
+}
+
+void WidgetEinkleidenTab::TableKammerKJleiderContextMenuEvent(const QPoint Pos)
+{
+    QMenu menu(this);
+    menu.addAction(ActKleiderAus);
+    menu.addAction(ActLoeschenKleidungKammer);
+    menu.exec(ui->table_Kleileihen->viewport()->mapToGlobal(Pos));
+}
+
+void WidgetEinkleidenTab::TablePerKleiderContextMenuEvent(const QPoint Pos)
+{
+    QMenu menu(this);
+    menu.addAction(ActKleiderRuck);
+    menu.addAction(ActLoeschenKleidungPerson);
+    menu.exec(ui->tableView_KleiPerson->viewport()->mapToGlobal(Pos));
 }
 
 void WidgetEinkleidenTab::LineEditAusNummerChange(QString Nummer)

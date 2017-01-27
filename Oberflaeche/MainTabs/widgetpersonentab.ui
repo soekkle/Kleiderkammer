@@ -34,7 +34,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label_10">
           <property name="text">
-           <string>Jugendfeuewehr</string>
+           <string>Jugendfeuerwehr</string>
           </property>
          </widget>
         </item>

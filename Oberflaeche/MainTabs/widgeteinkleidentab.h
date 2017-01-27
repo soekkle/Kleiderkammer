@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
+#include <QMenu>
 
 #include "DatenQuellen/datenquelle.h"
 #include "tableviews/kleidungstableview.h"
@@ -35,6 +36,11 @@ private:
     QSortFilterProxyModel ProPerKleider, ProKleiderAus;
     int PersonenID;
 
+    QAction *ActKleiderRuck;
+    QAction *ActKleiderAus;
+    QAction *ActLoeschenKleidungPerson;
+    QAction *ActLoeschenKleidungKammer;
+
 private slots:
     void AusGroessenFiltergeaendert(int Typ);
     void Auslehenclicked();
@@ -42,6 +48,12 @@ private slots:
     //! Slot der Aufgerufen wird, wenn der LineEdit_AusNum geändert wurde
     void LineEditAusNummerChange(QString Nummer);
     void PerKleidungslistefuellen(int FilterTyp);
+
+    void loeschenKleidungPerson();
+    void loeschenKleidungKammer();
+
+    void TablePerKleiderContextMenuEvent(const QPoint Pos);
+    void TableKammerKJleiderContextMenuEvent(const QPoint Pos);
     void Zurueckgeben();
 };
 

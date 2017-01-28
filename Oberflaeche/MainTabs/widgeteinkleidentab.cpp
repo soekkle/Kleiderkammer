@@ -134,7 +134,9 @@ void WidgetEinkleidenTab::loeschenKleidungKammer()
     int id=KleiderAus->getKleidungsId(Index.row());
     if (id==0)
         return;
-    Daten->removeKleidungsstueck(id);
+    if (QMessageBox::information(this,QString::fromUtf8("Kleidungsstück löschen"),QString::fromUtf8("Sind Sie sich sicher, dass sie das Ausgewälte Kleidungsstück löschen wollen?"),
+                                 QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+        Daten->removeKleidungsstueck(id);
     KleiderAus->setFilterTyp(ui->comboBox_AusTypFilter->itemData(ui->comboBox_AusTypFilter->currentIndex()).toInt());
     KleiderAus->setFilterGroesse(ui->comboBox_AusGroFilter->itemData(ui->comboBox_AusGroFilter->currentIndex()).toInt());
     PerKleidungslistefuellen(ui->comboBox_eigenFilter->currentIndex());
@@ -146,7 +148,9 @@ void WidgetEinkleidenTab::loeschenKleidungPerson()
     int id=PerKleider->getKleidungsId(Index.row());
     if (id==0)
         return;
-    Daten->removeKleidungsstueck(id);
+    if (QMessageBox::information(this,QString::fromUtf8("Kleidungsstück löschen"),QString::fromUtf8("Sind Sie sich sicher, dass sie das Ausgewälte Kleidungsstück löschen wollen?"),
+                                            QMessageBox::Yes|QMessageBox::No)==QMessageBox::Yes)
+                   Daten->removeKleidungsstueck(id);
     KleiderAus->update();
     PerKleidungslistefuellen(ui->comboBox_eigenFilter->currentIndex());
 }

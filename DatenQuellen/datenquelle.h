@@ -80,6 +80,8 @@ public:
     QVector<int> AnzahlAusleihen;
     QVector<QDateTime> Anschaffung;
     QVector<QString> Bemerkung;
+    //! Datum des letzten Ausleihens oder zurückgebens.
+    QVector<QDateTime> DatumLeihen;
     QVector<bool> Groesseunbekannt;
 };
 

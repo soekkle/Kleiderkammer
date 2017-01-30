@@ -46,7 +46,7 @@ KleidungsTableview::KleidungsTableview(DatenQuelle *Daten, int Modus, QObject *p
 
 int KleidungsTableview::columnCount(const QModelIndex &) const
 {
-    return 6;
+    return 7;
 }
 
 QVariant KleidungsTableview::data(const QModelIndex &index, int role) const
@@ -70,12 +70,16 @@ QVariant KleidungsTableview::data(const QModelIndex &index, int role) const
             }
             case 3:
             {
+                return QVariant(Kleidung->DatumLeihen[index.row()].toString("dd.MM.yy"));
+            }
+            case 4:
+            {
                 int alter=QDate::currentDate().year() - Kleidung->Anschaffung[index.row()].date().year();
                 return QVariant(alter);break;
             }
-            case 4:
-                return QVariant(Kleidung->AnzahlAusleihen[index.row()]);break;
             case 5:
+                return QVariant(Kleidung->AnzahlAusleihen[index.row()]);break;
+            case 6:
                 return QVariant(Kleidung->Bemerkung[index.row()]);break;
             }
     }
@@ -120,12 +124,14 @@ QVariant KleidungsTableview::headerData(int section, Qt::Orientation orientation
                 case 1:
                     return QString("Typ");
                 case 2:
-                    return QString().fromUtf8("Größe");
+                    return QString::fromUtf8("Größe");
                 case 3:
-                    return QString("Alter");
+                    return QString::fromUtf8("Änderung");
                 case 4:
-                    return QString("Ausleihen");
+                    return QString("Alter");
                 case 5:
+                    return QString("Ausleihen");
+                case 6:
                    return QString("Bemerkung");
 
             }
@@ -146,7 +152,7 @@ bool KleidungsTableview::setData(const QModelIndex &index, const QVariant &value
         int row=index.row();
         switch (index.column())
         {
-            case 5:
+            case 6:
             {
                 int ID=Kleidung->ID[row];
                 QString Text=value.toString();

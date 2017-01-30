@@ -359,10 +359,10 @@ bool SQLiteQuelle::getKleidungsInfoByID(int ID, int *Nummer, int *Typ, int *Groe
     return FehlerAusgabe(Abfrage);
 }
 
-int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)
+int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl,QDateTime *LeihDatum)
 {
     int ID=-1;
-    QSqlQuery Abfrage(QString("SELECT Kleidungsstuecke.id, Kleidungstyp.Name, Kleidungsstuecke.Groesse, Kleidungsstuecke.Traeger, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke, Kleidungstyp WHERE Nummer=%1 AND Kleidungstyp.id=Kleidungsstuecke.Typ").arg(Nummer),Datenbank);
+    QSqlQuery Abfrage(QString("SELECT Kleidungsstuecke.id, Kleidungstyp.Name, Kleidungsstuecke.Groesse, Kleidungsstuecke.Traeger, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung, Kleidungsstuecke.DatumLeihe FROM Kleidungsstuecke, Kleidungstyp WHERE Nummer=%1 AND Kleidungstyp.id=Kleidungsstuecke.Typ").arg(Nummer),Datenbank);
     if (Abfrage.next())
     {
         ID=Abfrage.value(0).toInt();
@@ -399,6 +399,7 @@ int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Gr
         *Anzahl=Abfrage.value(4).toInt();
         *Datum=Abfrage.value(5).toDate();
         *Bemerkung=Abfrage.value(6).toString();
+        *LeihDatum=Abfrage.value(7).toDateTime();
     }
     else
         FehlerAusgabe(Abfrage);

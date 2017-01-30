@@ -253,7 +253,7 @@ public:
      * \param[out] Anzahl Wieoft das Kleidungsstück Ausgeliehnen wurde
      * \return ID Des Ausgegbenen Kleidungsstücks
      */
-    virtual int getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)=0;
+    virtual int getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl,QDateTime *LeihDatum)=0;
     //! Liefert alle Kleidungstypen zurück.
     /*!
      * \brief getKleidungstypen liefert einen Pointer auf ein Strucktur of Array mit informationen zu allen Größen

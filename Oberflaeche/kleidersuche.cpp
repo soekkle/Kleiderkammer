@@ -65,23 +65,27 @@ void KleiderSuche::slotSuchen()
     int Leihen,TraegerID;
     QString Typ,Name,Gruppe,Groesse,Bemerkung;
     QDate Anschaffung;
+    QDateTime LeihDatum;
     // Prüft ob das Kleidungsstück vorhanden ist.
-    if (Daten->getKleidungsInfoByNummer(Nummer,&Typ,&Groesse,&Anschaffung,&Name,&TraegerID,&Gruppe,&Bemerkung,&Leihen)>0)
+    if (Daten->getKleidungsInfoByNummer(Nummer,&Typ,&Groesse,&Anschaffung,&Name,&TraegerID,&Gruppe,&Bemerkung,&Leihen,&LeihDatum)>0)
     {
         // Setzen der Felder im Formular
         ui->label_Typ->setText(Typ);
         ui->label_Goesse->setText(Groesse);
         ui->label_Alte->setText(Anschaffung.toString("dd.MM.yyyy"));
         ui->label_Bemerkung->setText(Bemerkung);
+        ui->label_Leihe->setText(LeihDatum.toString("dd.MM.yyyy"));
         if (Name.isEmpty())
         {
             ui->label_Ort->setText(QString::fromUtf8("Kleidungsstück ist in der Kleiderkammer."));
+            ui->label_Leihe_Bez->setText(QString::fromUtf8("Zurückgegben:"));
         }
         else {
             QString Text=QString("<html><head/><body><a href=\"%1\">").arg(TraegerID);
             Name.append(" - ").append(Gruppe);
             Text.append(Name).append("</a></body></html>");
             ui->label_Ort->setText(Text);
+            ui->label_Leihe_Bez->setText(QString::fromUtf8("Ausgeliehnen:"));
         }
     }
     else

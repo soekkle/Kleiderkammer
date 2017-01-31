@@ -103,11 +103,12 @@ int SQLiteQuelle::addKleiderstueck(int Typ, int Groesse, int Nummer, bool ubersc
     {
         Nummer=freieNummer(Typ);
     }
-    Abfrage.prepare("insert into Kleidungsstuecke ('Nummer','Typ','Groesse','DatumHin') Values(:Nummer,:Typ,:Groesse,:Datum);");
+    Abfrage.prepare("insert into Kleidungsstuecke ('Nummer','Typ','Groesse','DatumHin','DatumLeihe') Values(:Nummer,:Typ,:Groesse,:Datum,:DatumLeih);");
     Abfrage.bindValue(0, Nummer);//Einsetzen der Daten
     Abfrage.bindValue(1, Typ);
     Abfrage.bindValue(2,Groesse);
     Abfrage.bindValue(3,QDateTime::currentDateTimeUtc());
+    Abfrage.bindValue(4,QDateTime::currentDateTimeUtc());
     Abfrage.exec();//Ausführen der Abfrage.
     //std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;//Ausgabe deies Fehlers.
     return Nummer;
@@ -150,7 +151,7 @@ void SQLiteQuelle::createDB()
 {
     std::clog<<"Die Tabellen werden in der Datenank erzeugt.\n";
     QSqlQuery Abfrage("",Datenbank);
-    Abfrage.exec("create table Kleidungsstuecke(id integer primary key AUTOINCREMENT,Nummer integer,Typ integer,Groesse integer,Traeger integer DEFAULT(0),AnzAusleih integer DEFAULT(0),DatumHin DateTime, Bemerkung varchar)");
+    Abfrage.exec("create table Kleidungsstuecke(id integer primary key AUTOINCREMENT,Nummer integer,Typ integer,Groesse integer,Traeger integer DEFAULT(0),AnzAusleih integer DEFAULT(0),DatumHin DateTime, Bemerkung varchar, DatumLeihe DateTime)");
     Abfrage.exec("create table Kleidungstyp(id integer primary key AUTOINCREMENT,Name varchar,AnNummer integer,EndNummer integer)");
     Abfrage.exec("create table Personen(id integer primary key AUTOINCREMENT,Nachname varchar,Vorname varchar,Jf integer)");
     Abfrage.exec("create table Jugendfeuerwehr(id integer primary key AUTOINCREMENT,Name varchar)");
@@ -300,7 +301,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger,QStrin
 {
     KleiderTabelle *Ausgabe=new KleiderTabelle;
     Ausgabe->Anzahl=0;
-    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
+    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung,Kleidungsstuecke.DatumLeihe FROM Kleidungsstuecke ,Groessen,Kleidungstyp WHERE Kleidungsstuecke.Groesse=Groessen.id AND Kleidungsstuecke.Typ=Kleidungstyp.id";
     if(Typ>0)
         SQLString=SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
     if (Groesse>=0)
@@ -321,6 +322,7 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger,QStrin
         Ausgabe->AnzahlAusleihen.append(Abfrage.value(4).toInt());
         Ausgabe->Anschaffung.append(Abfrage.value(5).toDateTime());
         Ausgabe->Bemerkung.append(Abfrage.value(6).toString());
+        Ausgabe->DatumLeihen.append(Abfrage.value(7).toDateTime());
         if (Groesse.isEmpty())
             Ausgabe->Groesseunbekannt.append(true);
         else
@@ -357,10 +359,10 @@ bool SQLiteQuelle::getKleidungsInfoByID(int ID, int *Nummer, int *Typ, int *Groe
     return FehlerAusgabe(Abfrage);
 }
 
-int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl)
+int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Groesse, QDate *Datum, QString *Traeger,int *TraegerID, QString *Gruppe, QString *Bemerkung,int *Anzahl,QDateTime *LeihDatum)
 {
     int ID=-1;
-    QSqlQuery Abfrage(QString("SELECT Kleidungsstuecke.id, Kleidungstyp.Name, Kleidungsstuecke.Groesse, Kleidungsstuecke.Traeger, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung FROM Kleidungsstuecke, Kleidungstyp WHERE Nummer=%1 AND Kleidungstyp.id=Kleidungsstuecke.Typ").arg(Nummer),Datenbank);
+    QSqlQuery Abfrage(QString("SELECT Kleidungsstuecke.id, Kleidungstyp.Name, Kleidungsstuecke.Groesse, Kleidungsstuecke.Traeger, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung, Kleidungsstuecke.DatumLeihe FROM Kleidungsstuecke, Kleidungstyp WHERE Nummer=%1 AND Kleidungstyp.id=Kleidungsstuecke.Typ").arg(Nummer),Datenbank);
     if (Abfrage.next())
     {
         ID=Abfrage.value(0).toInt();
@@ -397,6 +399,7 @@ int SQLiteQuelle::getKleidungsInfoByNummer(int Nummer, QString *Typ, QString *Gr
         *Anzahl=Abfrage.value(4).toInt();
         *Datum=Abfrage.value(5).toDate();
         *Bemerkung=Abfrage.value(6).toString();
+        *LeihDatum=Abfrage.value(7).toDateTime();
     }
     else
         FehlerAusgabe(Abfrage);
@@ -457,14 +460,18 @@ bool SQLiteQuelle::KleidungsstueckzuordnenbyID(int ID, int Traeger)
     FehlerAusgabe(Abfrage);
     if(Abfrage.next())
     {
-        if (Abfrage.value(0).toInt()>0)//Prüft ob das Kleidungsstück scon verlienen ist.
+        if (Abfrage.value(0).toInt()>0)//Prüft ob das Kleidungsstück schon verlienen ist.
             return false;
         Abfrage.clear();
-        Abfrage.exec(QString("UPDATE Kleidungsstuecke SET 'Traeger'=%1,'AnzAusleih'=AnzAusleih+1 WHERE id=%2").arg(Traeger).arg(ID));
-        //std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
+        Abfrage.prepare("UPDATE Kleidungsstuecke SET 'Traeger'=:Trager,'AnzAusleih'=AnzAusleih+1,'DatumLeihe'=:Date WHERE id=:ID");
+        Abfrage.bindValue(0,Traeger);
+        Abfrage.bindValue(1,QDateTime::currentDateTime());
+        Abfrage.bindValue(2,ID);
+        Abfrage.exec();
+        FehlerAusgabe(Abfrage);
         return true;
     }
-    std::cerr<<Abfrage.lastError().text().toStdString()<<std::endl;
+    FehlerAusgabe(Abfrage);
     return false;
 }
 
@@ -594,7 +601,11 @@ bool SQLiteQuelle::removePerson(int ID)
 
 void SQLiteQuelle::rueckgabeKleidungsstueck(int ID)
 {
-    QSqlQuery Abfrage(QString("UPDATE Kleidungsstuecke SET 'Traeger'=0 WHERE id=%1").arg(ID),Datenbank);
+    QSqlQuery Abfrage(Datenbank);
+    Abfrage.prepare(QString("UPDATE Kleidungsstuecke SET 'Traeger'=0 , 'DatumLeihe'=:Date WHERE id=:ID"));
+    Abfrage.bindValue(0,QDateTime::currentDateTime());
+    Abfrage.bindValue(1,ID);
+    Abfrage.exec();
     FehlerAusgabe(Abfrage);
 }
 

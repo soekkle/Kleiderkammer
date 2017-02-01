@@ -53,6 +53,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role=Qt::EditRole);
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    //! Setzt den Titel der Spalte der Datums der Letzten Leih Aktion.
+    void setDateTitel(QString Titel);
     void setFilterTyp(int Typ);
     void setFilterPerson(int Person);
     void setFilterGroesse(int Groesse);
@@ -65,6 +67,7 @@ public slots:
 
 private:
     KleiderTabelle* Kleidung;
+    QString DatumTitle;
     int FilterTyp, FilterGroesse, FilterPerson;
     int Modus;
     DatenQuelle* Daten;

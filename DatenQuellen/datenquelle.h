@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Sören Krecker
+ * Copyright (C) 2014-2017 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *

@@ -42,6 +42,7 @@ KleidungsTableview::KleidungsTableview(DatenQuelle *Daten, int Modus, QObject *p
     FilterGroesse=-1;
     FilterPerson=0;
     Kleidung=Daten->getKleiderinKammer(0,0);
+    DatumTitle=QString::fromUtf8("Letzte Änderung");
 }
 
 int KleidungsTableview::columnCount(const QModelIndex &) const
@@ -126,7 +127,7 @@ QVariant KleidungsTableview::headerData(int section, Qt::Orientation orientation
                 case 2:
                     return QString::fromUtf8("Größe");
                 case 3:
-                    return QString::fromUtf8("Änderung");
+                    return DatumTitle;
                 case 4:
                     return QString("Alter");
                 case 5:
@@ -177,6 +178,12 @@ bool KleidungsTableview::setData(const QModelIndex &index, const QVariant &value
         }
     }
     return true ;
+}
+
+void KleidungsTableview::setDateTitel(QString Titel)
+{
+    if (!Titel.isEmpty())
+        DatumTitle=Titel;
 }
 
 void KleidungsTableview::setFilterGroesse(int Groesse)

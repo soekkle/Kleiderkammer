@@ -41,6 +41,8 @@ WidgetEinkleidenTab::WidgetEinkleidenTab(DatenQuelle *Daten,QWidget *parent) :
     this->Daten=Daten;
     KleiderAus = new KleidungsTableview(Daten,0,this);
     PerKleider = new KleidungsTableview(Daten,1,this);
+    KleiderAus->setDateTitel(QString::fromUtf8("Zurückgegeben"));
+    PerKleider->setDateTitel(QString::fromUtf8("Ausgeliehen"));
 
     ComboBox=new ComboboxGroessenDelegate(Daten,this);
 

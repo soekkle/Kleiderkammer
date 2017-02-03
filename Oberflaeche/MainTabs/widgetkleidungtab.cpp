@@ -10,6 +10,7 @@ WidgetKleidungTab::WidgetKleidungTab(DatenQuelle *Daten, QWidget *parent) :
     ComboBox=new ComboboxGroessenDelegate(Daten,this);
 
     Kleidungstuecke = new KleidungsTableview(Daten,0,this);// Erzeugen des DatenModells
+    Kleidungstuecke->setDateTitel(QString::fromUtf8("Zurückgegeben"));
     ProKleidungstuecke.setSourceModel(Kleidungstuecke);//Verbinden Des Proxiemodell mit dem Datenmodell.
     ui->tableKleidung->setModel(&ProKleidungstuecke);//Setzt die Modelle zur Anzeige der Daten.
     ui->tableKleidung->setItemDelegateForColumn(2,ComboBox);// Setzen der Combobox für die Größen

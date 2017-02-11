@@ -97,7 +97,7 @@ QVariant KleidungsTableview::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KleidungsTableview::flags(const QModelIndex &index) const
 {
-    if (index.column()==5)
+    if (index.column()==6)
         return Qt::ItemIsEditable|Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     if (index.column()==2)
         if (Kleidung->Groesseunbekannt[index.row()])

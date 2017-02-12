@@ -64,7 +64,7 @@ QString Bericht::generiereKammerListe()
         for(int j=0;j<Groessen->Anzahl;++j)
         {
             delete Kleider;
-            Kleider=Daten->getKleiderinKammer(Typ,Groessen->IDs[j]);
+            Kleider=Daten->getKleiderinKammer(Typ,Groessen->IDs[j],QString(),true);
             if (j%2==0)
                 HTML.append("<tr class=\"UZeile\">");
             else
@@ -81,7 +81,7 @@ QString Bericht::generiereKammerListe()
             HTML.append("</td></tr>");
         }
         delete Kleider;
-        Kleider=Daten->getKleiderinKammer(Typ,0);
+        Kleider=Daten->getKleiderinKammer(Typ,0,QString(),true);
         if (Kleider->Anzahl>0)
         {
             if (Groessen->Anzahl%2==0)

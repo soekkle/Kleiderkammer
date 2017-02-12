@@ -224,9 +224,11 @@ public:
      * Kleiderkammer sind und den übergebenen Filtern entsprechen, zurück.
      * \param Typ Kleidungstyp nach dem gefilter wird.
      * \param Groesse Größe nach der Gefilter wird.
+     * \param Nummer Optional Nummer nach der Gefilter werden soll.
+     * \param Sort Optonal Sortirt Liste nach Nummer
      * \return Pointer auf die Liste mit den Kleidungsstücken.
      */
-    virtual KleiderTabelle *getKleiderinKammer(int Typ, int Groesse, QString Nummer=QString())=0;
+    virtual KleiderTabelle *getKleiderinKammer(int Typ, int Groesse, QString Nummer=QString(),bool Sort=false)=0;
     //! Liefert Informationen zu dem Kleidungsstück mit der ID.
     /*!
      * \brief getKleidungsInfoByID liefert einige Informationen zu dem Kleidungsstück mit der übergebenen ID

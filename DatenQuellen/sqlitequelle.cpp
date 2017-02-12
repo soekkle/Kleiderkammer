@@ -297,7 +297,7 @@ int SQLiteQuelle::getGroessenID(QString Groesse, int TypID)
  * \param Traeger Filter für den Träger der Kleidungsstücke
  * \return Lister der Kleiderstücke.
  */
-KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger,QString Nummer)
+KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse, int Traeger, QString Nummer, bool Sort)
 {
     KleiderTabelle *Ausgabe=new KleiderTabelle;
     Ausgabe->Anzahl=0;
@@ -309,6 +309,8 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger,QStrin
     SQLString=SQLString.append(" AND Kleidungsstuecke.Traeger=%1").arg(Traeger);
     if (!Nummer.isEmpty())
         SQLString=SQLString.append(" AND Kleidungsstuecke.Nummer LIKE '%%1%'").arg(Nummer);
+    if(Sort)
+        SQLString=SQLString.append(" ORDER BY Kleidungsstuecke.Nummer ASC");
     QSqlQuery Abfrage(SQLString,Datenbank);
     FehlerAusgabe(Abfrage);
     while (Abfrage.next())
@@ -337,14 +339,14 @@ KleiderTabelle *SQLiteQuelle::getKleider(int Typ, int Groesse,int Traeger,QStrin
  * \param Groesse Groeße die nur angezeigt werden soll.
  * \return Liste aller Kleidungsstücke in der Kammer mit den Geforderten eigenschaften.
  */
-KleiderTabelle *SQLiteQuelle::getKleiderinKammer(int Typ, int Groesse, QString Nummer)
+KleiderTabelle *SQLiteQuelle::getKleiderinKammer(int Typ, int Groesse, QString Nummer,bool Sort)
 {
-    return getKleider(Typ,Groesse,0,Nummer);
+    return getKleider(Typ,Groesse,0,Nummer,Sort);
 }
 
 KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id, int Typ)
 {
-    return getKleider(Typ,-1,id,QString());
+    return getKleider(Typ,-1,id,QString(),false);
 }
 
 bool SQLiteQuelle::getKleidungsInfoByID(int ID, int *Nummer, int *Typ, int *Groesse)

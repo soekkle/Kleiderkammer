@@ -43,6 +43,8 @@
 #include "MainTabs/widgeteinkleidentab.h"
 #include "MainTabs/widgetkleidungtab.h"
 #include "MainTabs/widgetpersonentab.h"
+// Einbinden der Einstellungen
+#include "einstellungen.h"
 
 #include "kleidersuche.h"
 #include "kleidungstypenverwaltung.h"
@@ -78,6 +80,7 @@ private:
     WidgetPersonenTab *PersonenTab;
 
 
+    Einstellungen *EinstellungenWindow;
     SQLiteQuelle *Daten;
     KleiderSuche *KleiderInfoSuchen;
     KleidungsTypenVerwaltung *Typen;

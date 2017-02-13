@@ -43,13 +43,15 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
     <property name="title">
      <string>Datei</string>
     </property>
+    <addaction name="actionEinstellungen"/>
+    <addaction name="separator"/>
     <addaction name="actionBeenden"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
@@ -109,6 +111,11 @@
   <action name="action_ber_QT">
    <property name="text">
     <string>Über Qt</string>
+   </property>
+  </action>
+  <action name="actionEinstellungen">
+   <property name="text">
+    <string>Einstellungen</string>
    </property>
   </action>
  </widget>

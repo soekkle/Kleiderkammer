@@ -26,7 +26,9 @@ SOURCES += main.cpp\
     Oberflaeche/MainTabs/widgetberichttab.cpp \
     Oberflaeche/MainTabs/widgetkleidungtab.cpp \
     Oberflaeche/MainTabs/widgeteinkleidentab.cpp \
-    Oberflaeche/MainTabs/widgetpersonentab.cpp
+    Oberflaeche/MainTabs/widgetpersonentab.cpp \
+    Oberflaeche/einstellungen.cpp \
+    Oberflaeche/EinstellungenTabs/widgeteincsstab.cpp
 
 HEADERS  += Oberflaeche/mainwindow.h \
     DatenQuellen/datenquelle.h \
@@ -43,7 +45,9 @@ HEADERS  += Oberflaeche/mainwindow.h \
     Oberflaeche/MainTabs/widgetberichttab.h \
     Oberflaeche/MainTabs/widgetkleidungtab.h \
     Oberflaeche/MainTabs/widgeteinkleidentab.h \
-    Oberflaeche/MainTabs/widgetpersonentab.h
+    Oberflaeche/MainTabs/widgetpersonentab.h \
+    Oberflaeche/einstellungen.h \
+    Oberflaeche/EinstellungenTabs/widgeteincsstab.h
 
 FORMS    += Oberflaeche/mainwindow.ui \
     Oberflaeche/kleidungstypenverwaltung.ui \
@@ -53,7 +57,9 @@ FORMS    += Oberflaeche/mainwindow.ui \
     Oberflaeche/MainTabs/widgetberichttab.ui \
     Oberflaeche/MainTabs/widgetkleidungtab.ui \
     Oberflaeche/MainTabs/widgeteinkleidentab.ui \
-    Oberflaeche/MainTabs/widgetpersonentab.ui
+    Oberflaeche/MainTabs/widgetpersonentab.ui \
+    Oberflaeche/einstellungen.ui \
+    Oberflaeche/EinstellungenTabs/widgeteincsstab.ui
 # Setzen der VersionsInfos
 VERSION= 0.4.0
 

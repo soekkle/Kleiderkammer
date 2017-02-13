@@ -73,10 +73,11 @@ MainWindow::MainWindow(QWidget *parent) :
     Ort.append("Daten.sqlite");
     std::clog <<Ort.toStdString()<<std::endl;
     Daten=new SQLiteQuelle(Ort);//Stellt die verbindung zur Datenbank her.
+    // Erzeugen der Objekte der Unterfenster
     Typen=new KleidungsTypenVerwaltung(Daten,this);//Erzeugt die Modelle zur Anzeige der Daten.
     Gruppen=new Gruppenverwaltung(Daten,this);
     KleiderInfoSuchen=new KleiderSuche(Daten,this);
-
+    EinstellungenWindow=new Einstellungen(this);
     // Einsetzen der ausgelagreten Tabs
     PersonenTab=new WidgetPersonenTab(Daten,0);
     ui->tabWidget->addTab(PersonenTab,"Jugendliche");
@@ -102,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(PersonenTab,SIGNAL(showPerson(int)),this,SLOT(ZeigePersonKleider(int)));
     // Verbinden der Mainmenü einträgen
     connect(ui->actionBeenden,SIGNAL(triggered()),this,SLOT(close()));
+    connect(ui->actionEinstellungen,SIGNAL(triggered()),EinstellungenWindow,SLOT(exec()));
     connect(ui->actionKleidungsst_ck,SIGNAL(triggered()),KleiderInfoSuchen,SLOT(exec()));
     connect(ui->action_ber,SIGNAL(triggered()),this,SLOT(ZeigeInfo()));
     connect(ui->action_ber_QT,SIGNAL(triggered()),this,SLOT(ZeigeQTInfo()));

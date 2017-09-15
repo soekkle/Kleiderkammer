@@ -229,6 +229,14 @@ public:
      * \return Pointer auf die Liste mit den Kleidungsstücken.
      */
     virtual KleiderTabelle *getKleiderinKammer(int Typ, int Groesse, QString Nummer=QString(),bool Sort=false)=0;
+    //! Giebt eine Liste mit den Kleidungsstücken zurück, die von Jugendlichen einer Jugendfeuerwehr ausgeliehen sind.
+    /*!
+     * \brief getKleiderinJF liefert einen Pointer auf ein Structure of Arrays, mit den Kleidungsstücken, die von Jugendlichen
+     *  aus Jugendfeuerwehr ausgeliehen wurden, zurück.
+     *
+     */
+    virtual KleiderTabelle *getKleiderinJF(int JFID, int Typ, int Groesse, QString Nummer=QString(),bool Sort=false)=0;
+
     //! Liefert Informationen zu dem Kleidungsstück mit der ID.
     /*!
      * \brief getKleidungsInfoByID liefert einige Informationen zu dem Kleidungsstück mit der übergebenen ID

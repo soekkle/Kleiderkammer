@@ -56,6 +56,11 @@ WidgetBerichtTab::WidgetBerichtTab(DatenQuelle *Daten,QString Ort, QWidget *pare
 #ifdef NOPRINT
     ui->pushButton_BeDr->close();
 #endif
+    ui->comboBox_BeJF->setMaximumSize(0,0);
+    ui->label_8->setMaximumSize(0,0);
+    ui->groupBox_BeTyp->setMaximumSize(0,0);
+    ui->label_11->setMaximumSize(0,0);
+    ui->groupBoxInv->setMaximumSize(0,0);
 }
 
 WidgetBerichtTab::~WidgetBerichtTab()
@@ -92,7 +97,7 @@ void WidgetBerichtTab::BerichtAnzeigen()
     QUrl Url=QUrl::fromLocalFile(Ort);
     int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
     if (ui->radioButton->isChecked())
-        ui->webView->setHtml(Drucken->generiereKammerListe(),Url);
+        ui->webView->setHtml(Drucken->generiereKammerListe(ui->radioButtonOrtUber->isChecked()),Url);
     if (ui->radioButton_2->isChecked())
         ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe,BerichtSpalten()),Url);
 }
@@ -111,7 +116,7 @@ void WidgetBerichtTab::BerichtDrucken()
     int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
     QString HTML="";
     if (ui->radioButton->isChecked())
-        HTML=Drucken->generiereKammerListe();
+        HTML=Drucken->generiereKammerListe(ui->radioButtonOrtUber->isChecked());
     if (ui->radioButton_2->isChecked())
         HTML=Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
     QWebView* Flaeche=new QWebView;
@@ -141,7 +146,7 @@ void WidgetBerichtTab::BerichtSpeichern()
     HTML.setCodec("UTF-8");
     Drucken->CSSextern=false;
     if (ui->radioButton->isChecked())
-        HTML<<Drucken->generiereKammerListe();
+        HTML<<Drucken->generiereKammerListe(ui->radioButtonOrtUber->isChecked());
     if (ui->radioButton_2->isChecked())
         HTML<< Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
     HDD_Datei.close();
@@ -197,13 +202,25 @@ void WidgetBerichtTab::RadiobuttomCilcked()
     if (ui->radioButton->isChecked())
     {
         ui->comboBox_BeJF->setEnabled(false);
+        ui->comboBox_BeJF->setMaximumSize(0,0);
+        ui->label_8->setMaximumSize(0,0);
         ui->groupBox_BeTyp->setChecked(false);
+        ui->groupBox_BeTyp->setMaximumSize(0,0);
+        ui->label_11->setMaximumSize(0,0);
         ui->groupBox_BeTyp->setEnabled(false);
+        ui->groupBoxInv->setEnabled(true);
+        ui->groupBoxInv->setMaximumSize(0xFFFFFF,0xFFFFFF);
         Groupchecked(false);
     }
     else
     {
         ui->comboBox_BeJF->setEnabled(true);
+        ui->comboBox_BeJF->setMaximumSize(0xFFFFFF,0xFFFFFF);
+        ui->label_8->setMaximumSize(0xFFFFFF,0xFFFFFF);
         ui->groupBox_BeTyp->setEnabled(true);
+        ui->groupBox_BeTyp->setMaximumSize(0xFFFFFF,0xFFFFFF);
+        ui->label_11->setMaximumSize(0xFFFFFF,0xFFFFFF);
+        ui->groupBoxInv->setEnabled(false);
+        ui->groupBoxInv->setMaximumSize(0,0);
     }
 }

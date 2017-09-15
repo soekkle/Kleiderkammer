@@ -344,6 +344,42 @@ KleiderTabelle *SQLiteQuelle::getKleiderinKammer(int Typ, int Groesse, QString N
     return getKleider(Typ,Groesse,0,Nummer,Sort);
 }
 
+KleiderTabelle *SQLiteQuelle::getKleiderinJF(int JFID, int Typ, int Groesse, QString Nummer,bool Sort)
+{
+    KleiderTabelle *Ausgabe=new KleiderTabelle;
+    Ausgabe->Anzahl=0;
+    QString SQLString="SELECT Kleidungsstuecke.id,  Nummer, Groessen.Groesse , Kleidungstyp.Name, Kleidungsstuecke.AnzAusleih, Kleidungsstuecke.DatumHin, Kleidungsstuecke.Bemerkung,Kleidungsstuecke.DatumLeihe FROM Kleidungsstuecke  INNER JOIN Groessen ON Kleidungsstuecke.Groesse=Groessen.id INNER JOIN Kleidungstyp ON Kleidungsstuecke.Typ=Kleidungstyp.id INNER JOIN Personen ON Kleidungsstuecke.Traeger=Personen.id INNER JOIN Jugendfeuerwehr ON Personen.JF=Jugendfeuerwehr.id WHERE Jugendfeuerwehr.id=%1";
+    SQLString=SQLString.arg(JFID);
+    if(Typ>0)
+        SQLString=SQLString.append(" AND Kleidungsstuecke.Typ=%1").arg(Typ);
+    if (Groesse>=0)
+        SQLString=SQLString.append(" AND Kleidungsstuecke.Groesse=%1").arg(Groesse);
+    if (!Nummer.isEmpty())
+        SQLString=SQLString.append(" AND Kleidungsstuecke.Nummer LIKE '%%1%'").arg(Nummer);
+    if(Sort)
+        SQLString=SQLString.append(" ORDER BY Kleidungsstuecke.Nummer ASC");
+    QSqlQuery Abfrage(SQLString,Datenbank);
+    FehlerAusgabe(Abfrage);
+    while (Abfrage.next())
+    {
+        ++Ausgabe->Anzahl;
+        Ausgabe->ID.append(Abfrage.value(0).toInt());
+        Ausgabe->Nummer.append(Abfrage.value(1).toInt());
+        QString Groesse=Abfrage.value(2).toString();
+        Ausgabe->Groesse.append(Groesse);
+        Ausgabe->Typ.append(Abfrage.value(3).toString());
+        Ausgabe->AnzahlAusleihen.append(Abfrage.value(4).toInt());
+        Ausgabe->Anschaffung.append(Abfrage.value(5).toDateTime());
+        Ausgabe->Bemerkung.append(Abfrage.value(6).toString());
+        Ausgabe->DatumLeihen.append(Abfrage.value(7).toDateTime());
+        if (Groesse.isEmpty())
+            Ausgabe->Groesseunbekannt.append(true);
+        else
+            Ausgabe->Groesseunbekannt.append(false);
+    }
+    return Ausgabe;
+}
+
 KleiderTabelle *SQLiteQuelle::getKleidervonPerson(int id, int Typ)
 {
     return getKleider(Typ,-1,id,QString(),false);

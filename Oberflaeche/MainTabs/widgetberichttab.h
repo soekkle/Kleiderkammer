@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Sören Krecker
+ * Copyright (C) 2016-2017 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -72,6 +72,8 @@ private:
 
     //! Die Fuktion liefert die Ausgwählten Spalten für den Bericht
     QVector<int> BerichtSpalten();
+
+    QString GetBerichtsCode();
 
 private slots:
     //! Slot zum Anzagen des Beichtes

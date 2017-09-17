@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Sören Krecker
+ * Copyright (C) 2016-2017 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -95,11 +95,7 @@ QVector<int> WidgetBerichtTab::BerichtSpalten()
 void WidgetBerichtTab::BerichtAnzeigen()
 {
     QUrl Url=QUrl::fromLocalFile(Ort);
-    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
-    if (ui->radioButton->isChecked())
-        ui->webView->setHtml(Drucken->generiereKammerListe(ui->radioButtonOrtUber->isChecked()),Url);
-    if (ui->radioButton_2->isChecked())
-        ui->webView->setHtml(Drucken->generierenPersonenListe(Gruppe,BerichtSpalten()),Url);
+    ui->webView->setHtml(GetBerichtsCode(),Url);
 }
 
 #ifndef NOPRINT
@@ -113,12 +109,7 @@ void WidgetBerichtTab::BerichtDrucken()
     QPrintDialog DruckDialog(&Drucker,this);
     if (DruckDialog.exec()!= QDialog::Accepted)//Öffnet den Druckendialog und prüft ob gedruckt werden soll.
         return ;
-    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
-    QString HTML="";
-    if (ui->radioButton->isChecked())
-        HTML=Drucken->generiereKammerListe(ui->radioButtonOrtUber->isChecked());
-    if (ui->radioButton_2->isChecked())
-        HTML=Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
+    QString HTML=GetBerichtsCode();
     QWebView* Flaeche=new QWebView;
     QEventLoop Loop;
     connect(Flaeche,SIGNAL(loadFinished(bool)),&Loop,SLOT(quit()));
@@ -134,7 +125,6 @@ void WidgetBerichtTab::BerichtDrucken()
  */
 void WidgetBerichtTab::BerichtSpeichern()
 {
-    int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
     QString Datei=QFileDialog::getSaveFileName(this,tr("Bericht Speichern"),QString(),tr("Webseite(*.html)"));
     // Prüft ob ein eine Dateiendung entahlten ist. Wenn nicht wird sie Gesetzt
     if (!Datei.endsWith(".html",Qt::CaseInsensitive))
@@ -145,12 +135,26 @@ void WidgetBerichtTab::BerichtSpeichern()
     QTextStream HTML(&HDD_Datei);
     HTML.setCodec("UTF-8");
     Drucken->CSSextern=false;
-    if (ui->radioButton->isChecked())
-        HTML<<Drucken->generiereKammerListe(ui->radioButtonOrtUber->isChecked());
-    if (ui->radioButton_2->isChecked())
-        HTML<< Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
+    HTML<<GetBerichtsCode();
     HDD_Datei.close();
     Drucken->CSSextern=true;
+}
+
+QString WidgetBerichtTab::GetBerichtsCode()
+{
+    if (ui->radioButton->isChecked())
+    {
+        if(ui->radioButtonOrtKlei->isChecked())
+            return Drucken->generiereKammerListe();
+        if(ui->radioButtonOrtUber->isChecked())
+            return Drucken->generiereKleiderListe();
+    }
+    if (ui->radioButton_2->isChecked())
+    {
+        int Gruppe=ui->comboBox_BeJF->itemData(ui->comboBox_BeJF->currentIndex()).toInt();
+        return  Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
+    }
+    return QString();
 }
 
 void WidgetBerichtTab::Groupchecked(bool checked)

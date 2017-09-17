@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Sören Krecker
+ * Copyright (C) 2015,2017 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -53,8 +53,10 @@ public:
     bool CSSextern;
     //! Gibt den HTML-Code für die Personenliste für die Angegebene Gruppe zurück
     QString generierenPersonenListe(int Gruppe, QVector<int> TypenListe=QVector<int>());
-    //! Gibt den HTML-Code für die Inventurliste zurück.
-    QString generiereKammerListe(bool alles=false);
+    //! Gibt den HTML-Code für die Inventurliste der Kleiderkammer zurück.
+    QString generiereKammerListe();
+    //! Gibt den HTML-Code für die Liste aller Kleidungsstücke Zurück
+    QString generiereKleiderListe();
     //! Setzt den Pfard auf die zu verwendene CSS-Datei
     bool setCSS(QString Ort);
 

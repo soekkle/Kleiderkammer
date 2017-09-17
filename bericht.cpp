@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Sören Krecker
+ * Copyright (C) 2015,2017 Sören Krecker
  *
  * This file is part of Kleiderkammer.
  *
@@ -45,7 +45,7 @@ Bericht::~Bericht()
 {
 }
 
-QString Bericht::generiereKammerListe(bool alles)
+QString Bericht::generiereKammerListe()
 {
     QString HTML="<!DOCTYPE html >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de-DE\" prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#\">\n<head >\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
     HTML.append(CSSHeader());
@@ -98,37 +98,76 @@ QString Bericht::generiereKammerListe(bool alles)
             }
         }
         HTML.append("</td></tr></tbody></table>");
-        if (alles)
-        {
-            JugendFeuerwehrTabelle *JfDaten=Daten->getJugendfeuerwehr();
-            HTML.append("<p> Verliehen sind</p>");
-            HTML.append(QString::fromUtf8("<table border=\"1\"><thead><tr><th>Größe</th>"));
-            for (int j=0;j<JfDaten->Anzahl;++j)
-            {
-                HTML=HTML.append("<th>%1</th>").arg(JfDaten->Name[j]);
-            }
-            HTML.append("</tr></thead><tbody>");
-            for(int j=0;j<Groessen->Anzahl;++j)
-            {
-                if (j%2==0)
-                    HTML.append("<tr class=\"UZeile\">");
-                else
-                    HTML.append("<tr class=\"GZeile\">");
-                HTML=HTML.append(QString::fromUtf8("<td class=\"Name\">%1</td>")).arg(
-                            Groessen->Namen[j]);
-                for (int k=0;k<JfDaten->Anzahl;++k)
-                {
-                    delete Kleider;
-                    Kleider=Daten->getKleiderinJF(JfDaten->ID[k],Typ,Groessen->IDs[j]);
-                    HTML=HTML.append("<td>%1</td>").arg(Kleider->Anzahl);
-                }
-                HTML.append("</tr>");
-            }
-            HTML.append("</tbody></table>");
-            delete JfDaten;
-        }
         delete Groessen;
         delete Kleider;
+    }
+    delete Typen;
+    return HTML.append("</body></html>");
+}
+
+/*!
+ *
+ */
+QString Bericht::generiereKleiderListe()
+{
+    QString HTML="<!DOCTYPE html >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"de-DE\" prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#\">\n<head >\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
+    HTML.append(CSSHeader());
+    HTML.append("<title> Inventurliste von %1 </title>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
+    HTML.append("</head><body>");
+    HTML=HTML.append("<h1> Inventurliste von %1 <h1>").arg(QDate::currentDate().toString("dd.MM.yyyy"));
+    Kleidungstypentabelle *Typen=Daten->getKleidungstypen();
+    for (int i=0;i<Typen->Anzahl;++i)
+    {
+        HTML=HTML.append("<h2>%1. %2</h2>").arg(QString::number(i+1),Typen->Name[i]);
+        int Typ=Typen->ID[i];
+        GroessenTabelle *Groessen=Daten->getGroessen(&Typ,1);
+        JugendFeuerwehrTabelle *JfDaten=Daten->getJugendfeuerwehr();
+        HTML.append(QString::fromUtf8("<table border=\"1\"><thead><tr><th>Größe</th><th>Kleiderkammer</th>"));
+        for (int j=0;j<JfDaten->Anzahl;++j)
+        {
+            HTML=HTML.append("<th>%1</th>").arg(JfDaten->Name[j]);
+        }
+        HTML.append("<th>Gesamt</th></tr></thead><tbody>");
+        KleiderTabelle* Kleider;
+        for(int j=0;j<Groessen->Anzahl;++j)
+        {
+            if (j%2==0)
+                HTML.append("<tr class=\"UZeile\">");
+            else
+                HTML.append("<tr class=\"GZeile\">");
+            HTML=HTML.append(QString::fromUtf8("<td class=\"Name\">%1</td>")).arg(
+                        Groessen->Namen[j]);
+            int GID=Groessen->IDs[j];
+            Kleider=Daten->getKleiderinKammer(Typ,GID,QString(),true);
+            HTML=HTML.append("<td>%1</td>").arg(Kleider->Anzahl);
+            int GesAnz=Kleider->Anzahl;
+            for (int k=0;k<JfDaten->Anzahl;++k)
+            {
+                delete Kleider;
+                Kleider=Daten->getKleiderinJF(JfDaten->ID[k],Typ,GID);
+                HTML=HTML.append("<td>%1</td>").arg(Kleider->Anzahl);
+                GesAnz+=Kleider->Anzahl;
+            }
+            HTML=HTML.append("<td>%1</td></tr>").arg(GesAnz);
+        }
+        if (Groessen->Anzahl%2==0)
+            HTML.append("<tr class=\"UZeile\">");
+        else
+            HTML.append("<tr class=\"GZeile\">");
+        Kleider=Daten->getKleiderinKammer(Typ,-1);
+        HTML=HTML.append("<td class=\"Name\">Gesamt</td><td>%1</td>").arg(Kleider->Anzahl);
+        int GesAnz=Kleider->Anzahl;
+        for (int k=0;k<JfDaten->Anzahl;++k)
+        {
+            delete Kleider;
+            Kleider=Daten->getKleiderinJF(JfDaten->ID[k],Typ,-1);
+            HTML=HTML.append("<td>%1</td>").arg(Kleider->Anzahl);
+            GesAnz+=Kleider->Anzahl;
+        }
+        HTML=HTML.append("<td>%1</td></tr></tbody></table>").arg(GesAnz);
+        delete JfDaten;
+        delete Kleider;
+        delete Groessen;
     }
     delete Typen;
     return HTML.append("</body></html>");

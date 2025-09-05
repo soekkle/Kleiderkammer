@@ -49,16 +49,16 @@ void ComboboxGroessenDelegate::setEditorData(QWidget *editor, const QModelIndex 
 {
     QString Wert =index.data(Qt::DisplayRole).toString();
     QComboBox *Box=static_cast<QComboBox*>(editor);
-    QModelIndex IndexTyp=index.child(index.row(),1);
-    const QAbstractItemModel *model=index.model();
-    QString Typ=model->data(IndexTyp).toString();
-    int TypID=Daten->getKleidungsTypID(Typ);
-    GroessenTabelle *Groessen=Daten->getGroessen(&TypID,1);
-    for (int i=0;i<Groessen->Anzahl;++i)
-    {
-        Box->addItem(Groessen->Namen[i]);
-    }
-    delete Groessen;
+//    QModelIndex IndexTyp=index.child(index.row(),1);
+//    const QAbstractItemModel *model=index.model();
+//    QString Typ=model->data(IndexTyp).toString();
+//    int TypID=Daten->getKleidungsTypID(Typ);
+//    GroessenTabelle *Groessen=Daten->getGroessen(&TypID,1);
+//    for (int i=0;i<Groessen->Anzahl;++i)
+//    {
+//        Box->addItem(Groessen->Namen[i]);
+//    }
+//    delete Groessen;
     Box->setEditText(Wert);
 }
 

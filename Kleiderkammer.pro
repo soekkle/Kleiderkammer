@@ -4,9 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql webkit
+QT       += core gui sql
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport webkitwidgets
+equals(QT_MAJOR_VERSION, 6): QT += widgets printsupport webenginewidgets
 
 TARGET = Kleiderkammer
 TEMPLATE = app

@@ -114,7 +114,7 @@ void WidgetBerichtTab::BerichtDrucken()
         HTML=Drucken->generiereKammerListe();
     if (ui->radioButton_2->isChecked())
         HTML=Drucken->generierenPersonenListe(Gruppe,BerichtSpalten());
-    QWebView* Flaeche=new QWebView;
+    QWebEngineView* Flaeche=new QWebEngineView;
     QEventLoop Loop;
     connect(Flaeche,SIGNAL(loadFinished(bool)),&Loop,SLOT(quit()));
     Flaeche->setHtml(HTML,Url);
@@ -138,7 +138,7 @@ void WidgetBerichtTab::BerichtSpeichern()
     if (!HDD_Datei.open(QIODevice::WriteOnly | QIODevice::Text))//Prüft ob die Datei geöffnet werden kann.
         return;
     QTextStream HTML(&HDD_Datei);
-    HTML.setCodec("UTF-8");
+    // HTML.setCodec("UTF-8");
     Drucken->CSSextern=false;
     if (ui->radioButton->isChecked())
         HTML<<Drucken->generiereKammerListe();

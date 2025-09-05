@@ -105,7 +105,7 @@ private:
     QSqlDatabase Datenbank;
     //! Erstellt die Datenbank.
     void createDB();
-    bool FehlerAusgabe(QSqlQuery Abfrage);
+    bool FehlerAusgabe(const QSqlQuery &Abfrage);
     KleiderTabelle* getKleider(int Typ, int Groesse, int Traeger, QString Nummer,bool Sort);
 };
 

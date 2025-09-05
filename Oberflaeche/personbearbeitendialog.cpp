@@ -88,7 +88,7 @@ bool PersonBearbeitenDialog::bearbeiten(int ID)
 
 void PersonBearbeitenDialog::Buttons(QAbstractButton *button)
 {
-    QFlag standardButton = ui->buttonBox->standardButton(button);
+    auto standardButton = ui->buttonBox->standardButton(button);
     if (standardButton==QDialogButtonBox::Reset)
         DatenZuruecksetzen();
     else if (standardButton==QDialogButtonBox::Discard)

@@ -166,7 +166,7 @@ void SQLiteQuelle::createDB()
  * \param Abfrage
  * \return true Wenn kein Fehler Aufgetreten ist.
  */
-bool SQLiteQuelle::FehlerAusgabe(QSqlQuery Abfrage)
+bool SQLiteQuelle::FehlerAusgabe(const QSqlQuery& Abfrage)
 {
     if (Abfrage.lastError().type()!=QSqlError::NoError)
     {

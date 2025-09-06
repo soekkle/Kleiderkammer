@@ -220,10 +220,13 @@ void KleidungsTableview::update()
     int anz_Alt=0;
     if (Kleidung!=NULL)
     {
-        anz_Alt=Kleidung->Anzahl-1;
-        beginRemoveRows(QModelIndex(),0,anz_Alt);
-        delete Kleidung;
-        endRemoveRows();
+        if (Kleidung->Anzahl>0)
+        {
+            anz_Alt=Kleidung->Anzahl-1;
+            beginRemoveRows(QModelIndex(),0,anz_Alt);
+            delete Kleidung;
+            endRemoveRows();
+        }
     }
     if (Modus==0)
         Kleidung=Daten->getKleiderinKammer(FilterTyp,FilterGroesse,FilterNummer);
